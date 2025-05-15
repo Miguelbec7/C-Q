@@ -5,34 +5,159 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>C&Q Finanças & Soluções | Intermediação de Crédito</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #222; background: #f7f7f7;}
-    header { background: #0a2f5c; color: #fff; padding: 30px 0; text-align: center;}
-    nav { background: #163a5c; text-align: center; }
-    nav a { color: #fff; text-decoration: none; margin: 0 15px; font-weight: bold; padding: 12px 0; display: inline-block;}
-    nav a:hover { text-decoration: underline; }
-    .container { max-width: 900px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);}
-    h1, h2 { color: #163a5c; }
-    .servicos { display: flex; flex-wrap: wrap; gap: 20px; }
-    .servico { flex: 1 1 250px; background: #eaf1fa; padding: 20px; border-radius: 6px; }
+    :root {
+      --teal: #2ed7b4;
+      --teal-dark: #009e81;
+      --teal-light: #e9f9f6;
+      --gray-light: #f5f7fa;
+      --gray: #e0e4ea;
+      --black: #222;
+      --white: #fff;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--black);
+      background: var(--gray-light);
+    }
+    header {
+      background: var(--teal);
+      color: var(--white);
+      padding: 32px 0 24px 0;
+      border-bottom: 4px solid var(--teal-dark);
+    }
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start; /* Alinha à esquerda */
+    }
+    .logo {
+      height: 64px; /* Ajusta conforme necessário */
+      width: auto;
+      display: block;
+      background: transparent;
+      margin-bottom: 0;
+    }
+    .slogan {
+      margin-left: 18px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    nav {
+      background: var(--white);
+      box-shadow: 0 2px 8px rgba(46, 215, 180, 0.07);
+      text-align: center;
+      padding: 0;
+    }
+    nav a {
+      color: var(--teal-dark);
+      text-decoration: none;
+      margin: 0 18px;
+      font-weight: 600;
+      padding: 16px 0;
+      display: inline-block;
+      transition: color 0.2s;
+      letter-spacing: 0.5px;
+    }
+    nav a:hover {
+      color: var(--black);
+      border-bottom: 2px solid var(--teal-dark);
+    }
+    .container {
+      max-width: 900px;
+      margin: 36px auto;
+      background: var(--white);
+      padding: 36px 32px;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(46, 215, 180, 0.04);
+    }
+    h1, h2 {
+      color: var(--teal-dark);
+      font-weight: 700;
+      margin-top: 0;
+    }
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 18px;
+    }
+    .servicos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+    }
+    .servico {
+      flex: 1 1 250px;
+      background: var(--teal-light);
+      padding: 22px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(46, 215, 180, 0.04);
+      min-width: 220px;
+    }
     form label { display: block; margin: 15px 0 5px; }
-    form input, form textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;}
-    form button { background: #163a5c; color: #fff; border: none; padding: 12px 25px; border-radius: 4px; margin-top: 15px; cursor: pointer;}
-    form button:hover { background: #0a2f5c; }
-    footer { background: #163a5c; color: #fff; text-align: center; padding: 20px 0; margin-top: 40px;}
+    form input, form textarea {
+      width: 100%;
+      padding: 9px;
+      border: 1px solid var(--gray);
+      border-radius: 4px;
+      background: var(--gray-light);
+      margin-bottom: 8px;
+    }
+    form button {
+      background: var(--teal-dark);
+      color: var(--white);
+      border: none;
+      padding: 13px 28px;
+      border-radius: 4px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    form button:hover {
+      background: var(--teal);
+    }
+    footer {
+      background: var(--teal-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 24px 0;
+      margin-top: 40px;
+      font-size: 1rem;
+    }
     @media (max-width: 700px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .logo {
+        height: 48px;
+      }
+      .slogan {
+        margin-left: 0;
+        margin-top: 10px;
+        font-size: 1rem;
+      }
       .servicos { flex-direction: column; }
-      .container { padding: 15px; }
+      .container { padding: 16px; }
+      nav a { margin: 0 8px; padding: 12px 0; font-size: 1rem; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>C&Q <span style="color: #4db6ac;">|</span> Finanças & Soluções</h1>
-    <p>Intermediação de Crédito - Slogan: Intermediários de Crédito</p>
+    <div class="header-content">
+      <img src="logo-transparente.png" alt="C&Q Finanças & Soluções" class="logo">
+      <!-- <span class="slogan">Intermediação de Crédito</span> -->
+    </div>
   </header>
   <nav>
     <a href="#inicio">Início</a>
-    <a href="#sobre">Sobre</a>
+    <a href="#quem-somos">Quem somos?</a>
     <a href="#servicos">Serviços</a>
     <a href="#informacao">Informação Legal</a>
     <a href="#contacto">Contacto</a>
@@ -41,9 +166,18 @@
     <h2>Bem-vindo à C&Q Finanças & Soluções</h2>
     <p>Somos especialistas em intermediação de crédito, ajudando particulares e empresas a encontrar as melhores soluções financeiras do mercado, com transparência, responsabilidade e acompanhamento personalizado.</p>
   </div>
-  <div class="container" id="sobre">
-    <h2>Sobre Nós</h2>
-    <p>A <strong>C&Q Finanças & Soluções</strong> atua como intermediário de crédito, registado no Banco de Portugal, oferecendo consultoria independente e acesso a várias instituições financeiras. A nossa missão é simplificar o acesso ao crédito, proporcionando confiança e segurança em todas as etapas do processo.</p>
+  <div class="container" id="quem-somos">
+    <h2>Quem somos?</h2>
+    <p>
+      Somos dois jovens empreendedores dedicados a ajudar pessoas a obter um ajuste nas suas finanças, com acompanhamento personalizado e transparente. Estamos registados no Banco de Portugal como intermediários de crédito, garantindo confiança e profissionalismo em todo o processo.
+    </p>
+  </div>
+  <div class="container" id="parceiros">
+    <h2>Parceiros</h2>
+    <img src="ParceirosC&Q.png" alt="Parceiros C&Q Finanças & Soluções" style="width:100%; max-width:900px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.06); margin-bottom:20px;">
+    <p>
+      Trabalhamos com uma vasta rede de parceiros bancários e financeiros de referência em Portugal, o que nos permite apresentar sempre as melhores soluções de crédito para cada perfil. A nossa ligação a estas instituições reforça a confiança e a qualidade do serviço que prestamos aos nossos clientes.
+    </p>
   </div>
   <div class="container" id="servicos">
     <h2>Serviços</h2>
