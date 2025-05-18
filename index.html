@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>C&Q Finanças & Soluções | Intermediação de Crédito</title>
+  <title>C&Q Finanças & Soluções | Início</title>
   <style>
     :root {
       --teal: #2ed7b4;
@@ -32,21 +32,14 @@
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: flex-start; /* Alinha à esquerda */
+      justify-content: flex-start;
     }
     .logo {
-      height: 200px; /* Ajusta conforme necessário */
+      height: 200px;
       width: auto;
       display: block;
       background: transparent;
       margin-bottom: 0;
-    }
-    .slogan {
-      margin-left: 18px;
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 500;
-      letter-spacing: 0.5px;
     }
     nav {
       background: var(--white);
@@ -76,50 +69,81 @@
       border-radius: 14px;
       box-shadow: 0 2px 12px rgba(46, 215, 180, 0.04);
     }
-    h1, h2 {
+    h2 {
       color: var(--teal-dark);
       font-weight: 700;
-      margin-top: 0;
-    }
-    h2 {
       font-size: 2rem;
       margin-bottom: 18px;
+      margin-top: 0;
     }
-    .servicos {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 22px;
+    /* Notícias */
+    .noticias {
+      background: #e9f9f6;
+      border-left: 5px solid #2ed7b4;
+      padding: 22px 24px;
+      border-radius: 10px;
+      margin-bottom: 32px;
     }
-    .servico {
-      flex: 1 1 250px;
-      background: var(--teal-light);
-      padding: 22px;
-      border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(46, 215, 180, 0.04);
-      min-width: 220px;
+    .noticias h3 {
+      margin-top: 0;
+      color: #009e81;
     }
-    form label { display: block; margin: 15px 0 5px; }
-    form input, form textarea {
-      width: 100%;
-      padding: 9px;
-      border: 1px solid var(--gray);
-      border-radius: 4px;
-      background: var(--gray-light);
-      margin-bottom: 8px;
+    .noticias ul {
+      margin: 0;
+      padding-left: 18px;
     }
-    form button {
-      background: var(--teal-dark);
-      color: var(--white);
-      border: none;
-      padding: 13px 28px;
-      border-radius: 4px;
-      margin-top: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
+    .noticias li {
+      margin-bottom: 10px;
+      font-size: 1.05em;
     }
-    form button:hover {
-      background: var(--teal);
+    .noticias a {
+      color: #009e81;
+      text-decoration: underline;
+    }
+    /* Testemunhos */
+    .testemunhos {
+      background: #f5f7fa;
+      border-left: 5px solid #009e81;
+      padding: 22px 24px;
+      border-radius: 10px;
+      margin-bottom: 32px;
+    }
+    .testemunhos h3 {
+      margin-top: 0;
+      color: #009e81;
+    }
+    .testemunhos blockquote {
+      margin: 0 0 12px 0;
+      font-style: italic;
+      color: #444;
+    }
+    .testemunhos span {
+      font-size: 0.95em;
+      color: #009e81;
+    }
+    /* Call to Action */
+    .cta {
+      background: #009e81;
+      color: #fff;
+      padding: 28px 24px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #fff;
+      color: #009e81;
+      padding: 12px 28px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 12px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cta-btn:hover {
+      background: #2ed7b4;
+      color: #fff;
     }
     footer {
       background: var(--teal-dark);
@@ -130,19 +154,8 @@
       font-size: 1rem;
     }
     @media (max-width: 700px) {
-      .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .logo {
-        height: 48px;
-      }
-      .slogan {
-        margin-left: 0;
-        margin-top: 10px;
-        font-size: 1rem;
-      }
-      .servicos { flex-direction: column; }
+      .header-content { flex-direction: column; align-items: flex-start; }
+      .logo { height: 48px; }
       .container { padding: 16px; }
       nav a { margin: 0 8px; padding: 12px 0; font-size: 1rem; }
     }
@@ -152,81 +165,52 @@
   <header>
     <div class="header-content">
       <img src="logo-transparente2.png" alt="C&Q Finanças & Soluções" class="logo">
-      <!-- <span class="slogan">Intermediação de Crédito</span> -->
     </div>
   </header>
-<nav>
-  <a href="index.html">Início</a>
-  <a href="quem-somos.html">Quem somos?</a>
-  <a href="servicos.html">Serviços</a>
-  <a href="parceiros.html">Parceiros</a>
-  <a href="informacao.html">Informação Legal</a>
-  <a href="contacto.html">Contacto</a>
-</nav>
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="quem-somos.html">Quem somos?</a>
+    <a href="servicos.html">Serviços</a>
+    <a href="parceiros.html">Parceiros</a>
+    <a href="informacao.html">Informação Legal</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
   <div class="container" id="inicio">
     <h2>Bem-vindo à C&Q Finanças & Soluções</h2>
-    <p>Somos especialistas em intermediação de crédito, ajudando particulares e empresas a encontrar as melhores soluções financeiras do mercado, com transparência, responsabilidade e acompanhamento personalizado.</p>
-  </div>
-  <div class="container" id="quem-somos">
-    <h2>Quem somos?</h2>
     <p>
-      Somos dois jovens empreendedores dedicados a ajudar pessoas a obter um ajuste nas suas finanças, com acompanhamento personalizado e transparente. Estamos registados no Banco de Portugal como intermediários de crédito, garantindo confiança e profissionalismo em todo o processo.
+      Somos especialistas em intermediação de crédito, ajudando particulares e empresas a encontrar as melhores soluções financeiras do mercado, com transparência, responsabilidade e acompanhamento personalizado.
     </p>
-  </div>
-  <div class="container" id="parceiros">
-    <h2>Parceiros</h2>
-    <img src="ParceirosC&Q.png" alt="Parceiros C&Q Finanças & Soluções" style="width:100%; max-width:900px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.06); margin-bottom:20px;">
-    <p>
-      Trabalhamos com uma vasta rede de parceiros bancários e financeiros de referência em Portugal, o que nos permite apresentar sempre as melhores soluções de crédito para cada perfil. A nossa ligação a estas instituições reforça a confiança e a qualidade do serviço que prestamos aos nossos clientes.
-    </p>
-  </div>
-  <div class="container" id="servicos">
-    <h2>Serviços</h2>
-    <div class="servicos">
-      <div class="servico">
-        <h3>Intermediação de Crédito</h3>
-        <p>Análise e apresentação de propostas de crédito pessoal, automóvel e habitação, com soluções ajustadas ao seu perfil.</p>
-      </div>
-      <div class="servico">
-        <h3>Consultoria Financeira</h3>
-        <p>Aconselhamento personalizado para tomada de decisão informada e sustentável, com foco na sua estabilidade financeira.</p>
-      </div>
-      <div class="servico">
-        <h3>Renegociação de Crédito</h3>
-        <p>Apoio na renegociação de condições de crédito existentes para melhorar taxas, prazos e aliviar encargos mensais.</p>
-      </div>
+    <div class="noticias">
+      <h3>Notícias & Dicas Financeiras</h3>
+      <ul>
+        <li>
+          <strong>15/05/2025:</strong> <a href="https://clientebancario.bportugal.pt/pt-pt/noticias/novas-regras-credito-habitacao" target="_blank">Novas regras para crédito à habitação entram em vigor</a>
+        </li>
+        <li>
+          <strong>Dica:</strong> Compare sempre a <strong>TAEG</strong> antes de escolher um crédito!
+        </li>
+        <li>
+          <strong>Parceria:</strong> Agora também trabalhamos com o Banco XPTO para melhores soluções de crédito automóvel.
+        </li>
+      </ul>
     </div>
-  </div>
-  <div class="container" id="informacao">
-    <h2>Informação Legal ao Consumidor</h2>
-    <p><strong>Denominação:</strong> C&Q Finanças & Soluções</p>
-    <p><strong>Sede Social:</strong> [Inserir endereço]</p>
-    <p><strong>Número de registo Banco de Portugal:</strong> [Inserir número]</p>
-    <p><strong>Contacto telefónico:</strong> [Inserir contacto]</p>
-    <p><strong>Email:</strong> [Inserir email]</p>
-    <p><strong>Categoria:</strong> Intermediário de crédito não vinculado</p>
-    <p><strong>Serviços de intermediação de crédito:</strong> [Descrever]</p>
-    <p><strong>Serviços de consultoria:</strong> [Descrever]</p>
-    <p><strong>Entidade que garante a responsabilidade civil:</strong> [Inserir entidade]</p>
-    <p><strong>Número dos contratos de seguro:</strong> [Inserir número]</p>
-    <p><strong>Período de validade dos contratos de seguro:</strong> De [data início] até [data fim]</p>
-    <p>O registo do intermediário de crédito pode ser consultado no Portal do Cliente Bancário em <a href="https://clientebancario.bportugal.pt/" target="_blank">https://clientebancario.bportugal.pt/</a>.</p>
-    <p style="color:#b71c1c;"><strong>Aviso:</strong> É proibido ao intermediário de crédito receber ou entregar quaisquer valores relacionados com a formação, execução e cumprimento antecipado dos contratos de crédito, exceto remuneração pelos seus serviços. A atividade está sujeita à supervisão do Banco de Portugal.</p>
-  </div>
-  <div class="container" id="contacto">
-    <h2>Contacto</h2>
-    <form action="https://formspree.io/f/manoldwz" method="POST">
-      <label>Nome:
-        <input type="text" name="nome" required>
-      </label>
-      <label>Email:
-        <input type="email" name="email" required>
-      </label>
-      <label>Mensagem:
-        <textarea name="mensagem" required></textarea>
-      </label>
-      <button type="submit">Enviar</button>
-    </form>
+    <div class="testemunhos">
+      <h3>O que dizem os nossos clientes</h3>
+      <blockquote>
+        "Excelente acompanhamento e rapidez no processo! Recomendo a 100%." <br><span>- João M., Elvas</span>
+      </blockquote>
+      <blockquote>
+        "Conseguiram uma solução melhor do que o meu banco habitual. Muito obrigado!" <br><span>- Maria S., Portalegre</span>
+      </blockquote>
+    </div>
+    <div class="cta">
+      <h3>Precisa de ajuda com crédito?</h3>
+      <p>Fale connosco para uma análise gratuita e sem compromisso.</p>
+      <a href="contacto.html" class="cta-btn">Pedir contacto</a>
+    </div>
+    <p style="margin-top:28px;">
+      <a href="informacao.html" style="color: #b71c1c; font-weight: bold;">Informação legal ao consumidor</a>
+    </p>
   </div>
   <footer>
     &copy; 2025 C&Q Finanças & Soluções. Todos os direitos reservados.
