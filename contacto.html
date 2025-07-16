@@ -5,27 +5,182 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>C&Q Finanças & Soluções | Contacto</title>
   <style>
-    /* Copia aqui o <style> do index.html */
-    :root { --teal: #2ed7b4; --teal-dark: #009e81; --teal-light: #e9f9f6; --gray-light: #f5f7fa; --gray: #e0e4ea; --black: #222; --white: #fff; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; color: var(--black); background: var(--gray-light); }
-    header { background: var(--teal); color: var(--white); padding: 32px 0 24px 0; border-bottom: 4px solid var(--teal-dark); }
-    .header-content { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: flex-start; }
-    .logo { height: 200px; width: auto; display: block; background: transparent; margin-bottom: 0; }
-    nav { background: var(--white); box-shadow: 0 2px 8px rgba(46, 215, 180, 0.07); text-align: center; padding: 0; }
-    nav a { color: var(--teal-dark); text-decoration: none; margin: 0 18px; font-weight: 600; padding: 16px 0; display: inline-block; transition: color 0.2s; letter-spacing: 0.5px; }
-    nav a:hover { color: var(--black); border-bottom: 2px solid var(--teal-dark); }
-    .container { max-width: 900px; margin: 36px auto; background: var(--white); padding: 36px 32px; border-radius: 14px; box-shadow: 0 2px 12px rgba(46, 215, 180, 0.04); }
-    h2 { color: var(--teal-dark); font-weight: 700; font-size: 2rem; margin-bottom: 18px; margin-top: 0; }
-    form label { display: block; margin: 15px 0 5px; }
-    form input, form textarea { width: 100%; padding: 9px; border: 1px solid var(--gray); border-radius: 4px; background: var(--gray-light); margin-bottom: 8px; }
-    form button { background: var(--teal-dark); color: var(--white); border: none; padding: 13px 28px; border-radius: 4px; margin-top: 10px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
-    form button:hover { background: var(--teal); }
-    footer { background: var(--teal-dark); color: var(--white); text-align: center; padding: 24px 0; margin-top: 40px; font-size: 1rem; }
+    :root {
+      --teal: #2ed7b4;
+      --teal-dark: #009e81;
+      --teal-light: #e9f9f6;
+      --gray-light: #f5f7fa;
+      --gray: #e0e4ea;
+      --black: #222;
+      --white: #fff;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--black);
+      background: var(--gray-light);
+    }
+
+    header {
+      background: var(--teal);
+      color: var(--white);
+      padding: 32px 0 24px;
+      border-bottom: 4px solid var(--teal-dark);
+    }
+
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .logo {
+      height: 200px;
+      width: auto;
+      display: block;
+      background: transparent;
+      margin-bottom: 0;
+      max-width: 100%;
+    }
+
+    nav {
+      background: var(--white);
+      box-shadow: 0 2px 8px rgba(46, 215, 180, 0.07);
+      text-align: center;
+      padding: 0;
+    }
+
+    nav a {
+      color: var(--teal-dark);
+      text-decoration: none;
+      margin: 0 18px;
+      font-weight: 600;
+      padding: 16px 0;
+      display: inline-block;
+      transition: color 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    nav a:hover {
+      color: var(--black);
+      border-bottom: 2px solid var(--teal-dark);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 36px auto;
+      background: var(--white);
+      padding: 36px 32px;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(46, 215, 180, 0.04);
+    }
+
+    h2 {
+      color: var(--teal-dark);
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 18px;
+      margin-top: 0;
+    }
+
+    form label {
+      display: block;
+      margin: 15px 0 5px;
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 9px;
+      border: 1px solid var(--gray);
+      border-radius: 4px;
+      background: var(--gray-light);
+      margin-bottom: 8px;
+    }
+
+    form button {
+      background: var(--teal-dark);
+      color: var(--white);
+      border: none;
+      padding: 13px 28px;
+      border-radius: 4px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    form button:hover {
+      background: var(--teal);
+    }
+
+    footer {
+      background: var(--teal-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 30px 24px;
+      margin-top: 40px;
+      font-size: 1rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    nav.footer-nav {
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    nav.footer-nav a {
+      color: #d4f1ec !important;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      margin: 6px 0;
+      transition: text-decoration 0.2s;
+    }
+
+    nav.footer-nav a:hover {
+      text-decoration: underline;
+    }
+
     @media (max-width: 700px) {
-      .header-content { flex-direction: column; align-items: flex-start; }
-      .logo { height: 48px; }
-      .container { padding: 16px; }
-      nav a { margin: 0 8px; padding: 12px 0; font-size: 1rem; }
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .logo {
+        height: 48px;
+      }
+
+      .container {
+        padding: 16px;
+      }
+
+      nav a {
+        margin: 0 8px;
+        padding: 12px 0;
+        font-size: 1rem;
+      }
+
+      nav.footer-nav {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      footer div[style*="white-space: nowrap"] {
+        margin-top: 12px;
+        text-align: center;
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -35,6 +190,7 @@
       <img src="logo-transparente2.png" alt="C&Q Finanças & Soluções" class="logo">
     </div>
   </header>
+
   <nav>
     <a href="index.html">Início</a>
     <a href="quem-somos.html">Quem somos?</a>
@@ -43,6 +199,7 @@
     <a href="informacao.html">Informação Legal</a>
     <a href="contacto.html">Contacto</a>
   </nav>
+
   <div class="container">
     <h2>Contacto</h2>
     <form action="https://formspree.io/f/manoldwz" method="POST">
@@ -58,23 +215,24 @@
       <button type="submit">Enviar</button>
     </form>
   </div>
+
   <footer>
-  <div style="max-width: 1100px; margin: 0 auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 18px;">
-      <nav class="footer-nav">
-        <a href="termos.html">Termos & Condições</a>
-        <a href="privacidade.html">Política de Privacidade</a>
-        <a href="cookies.html">Política de Cookies</a>
-        <a href="https://www.livroreclamacoes.pt/inicio" target="_blank">Livro de Reclamações Online</a>
-      </nav>
-      <div style="font-size: 0.9rem; font-weight: 400; color: #d4f1ec; white-space: nowrap; margin-top: 4px;">
-        &copy; 2025 C&amp;Q Finanças &amp; Soluções
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 18px;">
+        <nav class="footer-nav">
+          <a href="termos.html">Termos & Condições</a>
+          <a href="privacidade.html">Política de Privacidade</a>
+          <a href="cookies.html">Política de Cookies</a>
+          <a href="https://www.livroreclamacoes.pt/inicio" target="_blank">Livro de Reclamações Online</a>
+        </nav>
+        <div style="font-size: 0.9rem; font-weight: 400; color: #d4f1ec; white-space: nowrap; margin-top: 4px;">
+          &copy; 2025 C&amp;Q Finanças &amp; Soluções
+        </div>
+      </div>
+      <div style="color: #d4f1ec; font-size: 0.88rem; line-height: 1.55; max-width: 1100px; text-align: left;">
+        C&amp;Q Finanças &amp; Soluções, Lda, com sede Rua Dom Augusto Eduardo Nunes, Nº 51 7350-128 Elvas, registado como intermediário de crédito junto do Banco de Portugal sob o n.º (telefone ; email), registo que pode ser confirmado através da hiperligação, intermediário de crédito vinculado sem exclusividade, com contratos com as entidades mutuantes. Autorizado a prestar serviços de apresentação ou proposta de contratos de créditos a consumidores, assistência a consumidores, mediante a realização de atos preparatórios ou de outros trabalhos de gestão pré-contratual relativamente a contratos de créditos que não tenham sido por si apresentados ou propostos. Atividade sujeita à supervisão do Banco de Portugal. Seguros de responsabilidade civil junto da Zurich Insurance Europe AG, Sucursal em Portugal com a apólice n.º 010032971, válido até 12/06/2026. Os serviços prestados, nos termos da legislação aplicável, são gratuitos para o consumidor.
       </div>
     </div>
-    <div style="color: #d4f1ec; font-size: 0.88rem; line-height: 1.55; max-width: 1100px; text-align: left;">
-      C&amp;Q Finanças &amp; Soluções, Lda, com sede Rua Dom Augusto Eduardo Nunes, Nº 51 7350-128 Elvas, registado como intermediário de crédito junto do Banco de Portugal sob o n.º (telefone ; email), registo que pode ser confirmado através da hiperligação, intermediário de crédito vinculado sem exclusividade, com contratos com as entidades mutuantes. Autorizado a prestar serviços de apresentação ou proposta de contratos de créditos a consumidores, assistência a consumidores, mediante a realização de atos preparatórios ou de outros trabalhos de gestão pré-contratual relativamente a contratos de créditos que não tenham sido por si apresentados ou propostos. Atividade sujeita à supervisão do Banco de Portugal. Seguros de responsabilidade civil junto da Zurich Insurance Europe AG, Sucursal em Portugal com a apólice n.º 010032971, válido até 12/06/2026. Os serviços prestados, nos termos da legislação aplicável, são gratuitos para o consumidor.
-    </div>
-  </div>
   </footer>
 </body>
 </html>
