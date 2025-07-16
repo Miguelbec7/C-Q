@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>C&Q Finanças & Soluções | Início</title>
+  <!-- Meta description para SEO -->
+  <meta name="description" content="Especialistas em intermediação de crédito para particulares e empresas - C&Q Finanças & Soluções">
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <style>
     :root {
       --teal: #2ed7b4;
@@ -40,6 +44,8 @@
       display: block;
       background: transparent;
       margin-bottom: 0;
+      /* Ajuste de responsividade extra */
+      max-width: 100%;
     }
     nav {
       background: var(--white);
@@ -68,6 +74,14 @@
       padding: 36px 32px;
       border-radius: 14px;
       box-shadow: 0 2px 12px rgba(46, 215, 180, 0.04);
+    }
+    /* Novo: Heading principal como H1 para SEO */
+    h1 {
+      color: var(--teal-dark);
+      font-weight: 700;
+      font-size: 2.3rem;
+      margin-bottom: 18px;
+      margin-top: 0;
     }
     h2 {
       color: var(--teal-dark);
@@ -121,6 +135,15 @@
       background: #2ed7b4;
       color: #fff;
     }
+    /* Novo: Link informação legal externalizado */
+    .informacao-legal-link {
+      color: #b71c1c;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .informacao-legal-link:hover {
+      text-decoration: underline;
+    }
     footer {
       background: var(--teal-dark);
       color: var(--white);
@@ -152,7 +175,8 @@
     <a href="contacto.html">Contacto</a>
   </nav>
   <div class="container" id="inicio">
-    <h2>Bem-vindo à C&Q Finanças & Soluções</h2>
+    <!-- Heading principal agora é h1 para SEO -->
+    <h1>Bem-vindo à C&Q Finanças & Soluções</h1>
     <p>
       Somos especialistas em intermediação de crédito, ajudando particulares e empresas a encontrar as melhores soluções financeiras do mercado, com transparência, responsabilidade e acompanhamento personalizado.
     </p>
@@ -171,7 +195,7 @@
       <a href="contacto.html" class="cta-btn">Pedir contacto</a>
     </div>
     <p style="margin-top:28px;">
-      <a href="informacao.html" style="color: #b71c1c; font-weight: bold;">Informação legal ao consumidor</a>
+      <a href="informacao.html" class="informacao-legal-link">Informação legal ao consumidor</a>
     </p>
   </div>
   <footer>
