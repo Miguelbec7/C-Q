@@ -16,7 +16,6 @@
       --black: #222;
       --white: #fff;
     }
-
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
@@ -24,14 +23,12 @@
       color: var(--black);
       background: var(--gray-light);
     }
-
     header {
       background: var(--teal);
       color: var(--white);
-      padding: 32px 0 24px 0;
+      padding: 32px 0 24px;
       border-bottom: 4px solid var(--teal-dark);
     }
-
     .header-content {
       max-width: 900px;
       margin: 0 auto;
@@ -39,7 +36,6 @@
       align-items: center;
       justify-content: flex-start;
     }
-
     .logo {
       height: 200px;
       width: auto;
@@ -48,25 +44,12 @@
       margin-bottom: 0;
       max-width: 100%;
     }
-
     nav {
       background: var(--white);
       box-shadow: 0 2px 8px rgba(46, 215, 180, 0.07);
       text-align: center;
       padding: 0;
     }
-
-    nav.footer-nav {
-      background: transparent !important;
-      box-shadow: none !important;
-      padding: 0 !important;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
     nav a {
       color: var(--teal-dark);
       text-decoration: none;
@@ -77,25 +60,10 @@
       transition: color 0.2s;
       letter-spacing: 0.5px;
     }
-
-    nav.footer-nav a {
-      color: #d4f1ec !important;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 1rem;
-      margin: 6px 0;
-      transition: text-decoration 0.2s;
-    }
-
-    nav.footer-nav a:hover {
-      text-decoration: underline;
-    }
-
     nav a:hover {
       color: var(--black);
       border-bottom: 2px solid var(--teal-dark);
     }
-
     .container {
       max-width: 900px;
       margin: 36px auto;
@@ -104,179 +72,11 @@
       border-radius: 14px;
       box-shadow: 0 2px 12px rgba(46, 215, 180, 0.04);
     }
-
+    h1, h2 {
+      color: var(--teal-dark);
+      font-weight: 700;
+      margin-top: 0;
+    }
     h1 {
-      color: var(--teal-dark);
-      font-weight: 700;
       font-size: 2.3rem;
-      margin-bottom: 18px;
-      margin-top: 0;
-    }
-
-    h2 {
-      color: var(--teal-dark);
-      font-weight: 700;
-      font-size: 2rem;
-      margin-bottom: 18px;
-      margin-top: 0;
-    }
-
-    .testemunhos {
-      background: #f5f7fa;
-      border-left: 5px solid #009e81;
-      padding: 22px 24px;
-      border-radius: 10px;
-      margin-bottom: 32px;
-    }
-
-    .testemunhos h3 {
-      margin-top: 0;
-      color: #009e81;
-    }
-
-    .testemunhos blockquote {
-      margin: 0 0 12px 0;
-      font-style: italic;
-      color: #444;
-    }
-
-    .testemunhos span {
-      font-size: 0.95em;
-      color: #009e81;
-    }
-
-    .cta {
-      background: #009e81;
-      color: #fff;
-      padding: 28px 24px;
-      border-radius: 10px;
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    .cta-btn {
-      display: inline-block;
-      background: #fff;
-      color: #009e81;
-      padding: 12px 28px;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-      margin-top: 12px;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .cta-btn:hover {
-      background: #2ed7b4;
-      color: #fff;
-    }
-
-    .informacao-legal-link {
-      color: #b71c1c;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    .informacao-legal-link:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      background: var(--teal-dark);
-      color: var(--white);
-      text-align: center;
-      padding: 30px 24px;
-      font-size: 1rem;
-      margin-top: 40px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .legal-subtitle {
-      font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-      color: #d4f1ec;
-    }
-
-    @media (max-width: 700px) {
-      .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .logo {
-        height: 48px;
-      }
-
-      .container {
-        padding: 16px;
-      }
-
-      nav a {
-        margin: 0 8px;
-        padding: 12px 0;
-        font-size: 1rem;
-      }
-
-      nav.footer-nav {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      footer div[style*="white-space: nowrap"] {
-        margin-top: 12px;
-        text-align: center;
-        width: 100%;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="header-content">
-      <img src="logo-transparente2.png" alt="C&Q Finanças & Soluções" class="logo">
-    </div>
-  </header>
-
-  <nav>
-    <a href="index.html">Início</a>
-    <a href="quem-somos.html">Quem somos?</a>
-    <a href="servicos.html">Serviços</a>
-    <a href="parceiros.html">Parceiros</a>
-    <a href="informacao.html">Informação Legal</a>
-    <a href="contacto.html">Contacto</a>
-  </nav>
-
-  <div class="container" id="inicio">
-    <h1>Bem-vindo à C&Q Finanças & Soluções</h1>
-    <p>Somos especialistas em intermediação de crédito, ajudando particulares e empresas a encontrar as melhores soluções financeiras do mercado, com transparência, responsabilidade e acompanhamento personalizado.</p>
-
-    <div class="testemunhos">
-      <h3>O que dizem os nossos clientes</h3>
-      <blockquote>
-        "Excelente acompanhamento e rapidez no processo! Recomendo a 100%." <br><span>- João M., Elvas</span>
-      </blockquote>
-      <blockquote>
-        "Conseguiram uma solução melhor do que o meu banco habitual. Muito obrigado!" <br><span>- Maria S., Portalegre</span>
-      </blockquote>
-    </div>
-
-    <div class="cta">
-      <h3>Precisa de ajuda com crédito?</h3>
-      <p>Fale connosco para uma análise gratuita e sem compromisso.</p>
-      <a href="contacto.html" class="cta-btn">Pedir contacto</a>
-    </div>
-
-    <p style="margin-top:28px;">
-      <a href="informacao.html" class="informacao-legal-link">Informação legal ao consumidor</a>
-    </p>
-  </div>
-
-  <footer>
-    <div style="max-width: 1100px; margin: 0 auto;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 18px;">
-        </div>
-  </div>
-  </footer>
-</body>
-</html>
+      margin
