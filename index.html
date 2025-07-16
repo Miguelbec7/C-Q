@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>C&Q Finanças & Soluções | Início</title>
-  <!-- Meta description para SEO -->
   <meta name="description" content="Especialistas em intermediação de crédito para particulares e empresas - C&Q Finanças & Soluções">
-  <!-- Favicon -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <style>
     :root {
@@ -18,6 +16,7 @@
       --black: #222;
       --white: #fff;
     }
+
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
@@ -25,12 +24,14 @@
       color: var(--black);
       background: var(--gray-light);
     }
+
     header {
       background: var(--teal);
       color: var(--white);
       padding: 32px 0 24px 0;
       border-bottom: 4px solid var(--teal-dark);
     }
+
     .header-content {
       max-width: 900px;
       margin: 0 auto;
@@ -38,26 +39,34 @@
       align-items: center;
       justify-content: flex-start;
     }
+
     .logo {
       height: 200px;
       width: auto;
       display: block;
       background: transparent;
       margin-bottom: 0;
-      /* Ajuste de responsividade extra */
       max-width: 100%;
     }
+
     nav {
       background: var(--white);
       box-shadow: 0 2px 8px rgba(46, 215, 180, 0.07);
       text-align: center;
       padding: 0;
     }
+
     nav.footer-nav {
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-}
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
     nav a {
       color: var(--teal-dark);
       text-decoration: none;
@@ -68,10 +77,25 @@
       transition: color 0.2s;
       letter-spacing: 0.5px;
     }
+
+    nav.footer-nav a {
+      color: #d4f1ec !important;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      margin: 6px 0;
+      transition: text-decoration 0.2s;
+    }
+
+    nav.footer-nav a:hover {
+      text-decoration: underline;
+    }
+
     nav a:hover {
       color: var(--black);
       border-bottom: 2px solid var(--teal-dark);
     }
+
     .container {
       max-width: 900px;
       margin: 36px auto;
@@ -80,7 +104,7 @@
       border-radius: 14px;
       box-shadow: 0 2px 12px rgba(46, 215, 180, 0.04);
     }
-    /* Novo: Heading principal como H1 para SEO */
+
     h1 {
       color: var(--teal-dark);
       font-weight: 700;
@@ -88,6 +112,7 @@
       margin-bottom: 18px;
       margin-top: 0;
     }
+
     h2 {
       color: var(--teal-dark);
       font-weight: 700;
@@ -95,7 +120,7 @@
       margin-bottom: 18px;
       margin-top: 0;
     }
-    /* Testemunhos */
+
     .testemunhos {
       background: #f5f7fa;
       border-left: 5px solid #009e81;
@@ -103,20 +128,23 @@
       border-radius: 10px;
       margin-bottom: 32px;
     }
+
     .testemunhos h3 {
       margin-top: 0;
       color: #009e81;
     }
+
     .testemunhos blockquote {
       margin: 0 0 12px 0;
       font-style: italic;
       color: #444;
     }
+
     .testemunhos span {
       font-size: 0.95em;
       color: #009e81;
     }
-    /* Call to Action */
+
     .cta {
       background: #009e81;
       color: #fff;
@@ -125,6 +153,7 @@
       text-align: center;
       margin-top: 40px;
     }
+
     .cta-btn {
       display: inline-block;
       background: #fff;
@@ -136,32 +165,69 @@
       margin-top: 12px;
       transition: background 0.2s, color 0.2s;
     }
+
     .cta-btn:hover {
       background: #2ed7b4;
       color: #fff;
     }
-    /* Novo: Link informação legal externalizado */
+
     .informacao-legal-link {
       color: #b71c1c;
       font-weight: bold;
       text-decoration: none;
     }
+
     .informacao-legal-link:hover {
       text-decoration: underline;
     }
+
     footer {
       background: var(--teal-dark);
       color: var(--white);
       text-align: center;
-      padding: 24px 0;
-      margin-top: 40px;
+      padding: 30px 24px;
       font-size: 1rem;
+      margin-top: 40px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
+    .legal-subtitle {
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      color: #d4f1ec;
+    }
+
     @media (max-width: 700px) {
-      .header-content { flex-direction: column; align-items: flex-start; }
-      .logo { height: 48px; }
-      .container { padding: 16px; }
-      nav a { margin: 0 8px; padding: 12px 0; font-size: 1rem; }
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .logo {
+        height: 48px;
+      }
+
+      .container {
+        padding: 16px;
+      }
+
+      nav a {
+        margin: 0 8px;
+        padding: 12px 0;
+        font-size: 1rem;
+      }
+
+      nav.footer-nav {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      footer div[style*="white-space: nowrap"] {
+        margin-top: 12px;
+        text-align: center;
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -171,6 +237,7 @@
       <img src="logo-transparente2.png" alt="C&Q Finanças & Soluções" class="logo">
     </div>
   </header>
+
   <nav>
     <a href="index.html">Início</a>
     <a href="quem-somos.html">Quem somos?</a>
@@ -179,12 +246,11 @@
     <a href="informacao.html">Informação Legal</a>
     <a href="contacto.html">Contacto</a>
   </nav>
+
   <div class="container" id="inicio">
-    <!-- Heading principal agora é h1 para SEO -->
     <h1>Bem-vindo à C&Q Finanças & Soluções</h1>
-    <p>
-      Somos especialistas em intermediação de crédito, ajudando particulares e empresas a encontrar as melhores soluções financeiras do mercado, com transparência, responsabilidade e acompanhamento personalizado.
-    </p>
+    <p>Somos especialistas em intermediação de crédito, ajudando particulares e empresas a encontrar as melhores soluções financeiras do mercado, com transparência, responsabilidade e acompanhamento personalizado.</p>
+
     <div class="testemunhos">
       <h3>O que dizem os nossos clientes</h3>
       <blockquote>
@@ -194,26 +260,27 @@
         "Conseguiram uma solução melhor do que o meu banco habitual. Muito obrigado!" <br><span>- Maria S., Portalegre</span>
       </blockquote>
     </div>
+
     <div class="cta">
       <h3>Precisa de ajuda com crédito?</h3>
       <p>Fale connosco para uma análise gratuita e sem compromisso.</p>
       <a href="contacto.html" class="cta-btn">Pedir contacto</a>
     </div>
+
     <p style="margin-top:28px;">
       <a href="informacao.html" class="informacao-legal-link">Informação legal ao consumidor</a>
     </p>
   </div>
-   <footer style="background-color: #009e81; color: #d4f1ec; padding: 30px 24px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1rem;">
-  <div style="max-width: 1100px; margin: 0 auto;">
-    <!-- Linha topo: links à esquerda, copyright à direita -->
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 18px;">
-      <!-- ATUALIZAÇÃO: Adicionada classe para nav -->
-      <nav class="footer-nav">
-        <a href="termos.html" style="color:#d4f1ec; text-decoration:none; margin-right: 20px; font-weight: 500; font-size: 1rem;">Termos & Condições</a>
-        <a href="privacidade.html" style="color:#d4f1ec; text-decoration:none; margin-right: 20px; font-weight: 500; font-size: 1rem;">Política de Privacidade</a>
-        <a href="cookies.html" style="color:#d4f1ec; text-decoration:none; margin-right: 20px; font-weight: 500; font-size: 1rem;">Política de Cookies</a>
-        <a href="https://www.livroreclamacoes.pt/inicio" target="_blank" style="color:#d4f1ec; text-decoration:none; font-weight: 500; font-size: 1rem;">Livro de Reclamações Online</a>
-      </nav>
+
+  <footer>
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 18px;">
+        <nav class="footer-nav">
+          <a href="termos.html">Termos & Condições</a>
+          <a href="privacidade.html">Política de Privacidade</a>
+          <a href="cookies.html">Política de Cookies</a>
+          <a href="https://www.livroreclamacoes.pt/inicio" target="_blank">Livro de Reclamações Online</a>
+        </nav>
       <div style="font-size: 0.9rem; font-weight: 400; color: #d4f1ec; white-space: nowrap; margin-top: 4px;">
         &copy; 2025 C&amp;Q Finanças &amp; Soluções
       </div>
