@@ -1,13 +1,167 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Simulador CQ Finanças & Soluções</title>
-  </head>
-  <body>
-    <!-- Widget do Elfsight -->
-    <div class="elfsight-app-461a2b7c-0e92-4446-ace4-fbd76ed5b712" data-elfsight-app-lazy></div>
-    <script src="https://elfsightcdn.com/platform.js" async></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C&Q – Calculadora Crédito</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 16px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    h1 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    h2 {
+      font-size: 1rem;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+    label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #10b981; /* verde tipo C&Q, ajusta à vontade */
+      color: #fff;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .results {
+      margin-top: 16px;
+      padding: 12px;
+      background: #f0fdf4;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .disclaimer {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>C&Q – Calculadora de Transferência</h1>
+
+    <h2>Situação atual</h2>
+    <label>Montante em dívida (€)</label>
+    <input id="currentPrincipal" type="number" step="0.01" placeholder="Ex.: 330000" />
+
+    <label>TAN anual atual (%)</label>
+    <input id="currentRate" type="number" step="0.01" placeholder="Ex.: 2.855" />
+
+    <label>Prazo remanescente (meses)</label>
+    <input id="currentMonths" type="number" step="1" placeholder="Ex.: 387" />
+
+    <h2>Nova situação</h2>
+    <label>Nova TAN anual (%)</label>
+    <input id="newRate" type="number" step="0.01" placeholder="Ex.: 2" />
+
+    <label>Novo prazo (meses)</label>
+    <input id="newMonths" type="number" step="1" placeholder="Ex.: 384" />
+
+    <button onclick="calcular()">Calcular poupança</button>
+
+    <div id="results" class="results" style="display:none;"></div>
+
+    <div class="disclaimer">
+      ⚠️ Os valores apresentados são estimativas simplificadas e não substituem a análise detalhada das condições de crédito pelas instituições financeiras nem constituem proposta contratual.
+    </div>
+  </div>
+
+  <script>
+    function formatCurrency(value) {
+      return value.toLocaleString("pt-PT", {
+        style: "currency",
+        currency: "EUR",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function calcularPrestacaoEJuros(principal, annualRatePercent, months) {
+      const monthlyRate = (annualRatePercent / 100) / 12;
+      let payment;
+
+      if (monthlyRate === 0) {
+        payment = principal / months;
+      } else {
+        const factor = Math.pow(1 + monthlyRate, months);
+        payment = principal * monthlyRate * factor / (factor - 1);
+      }
+
+      const totalPaid = payment * months;
+      const totalInterest = totalPaid - principal;
+
+      return { payment, totalInterest };
+    }
+
+    function calcular() {
+      const principal = parseFloat(document.getElementById("currentPrincipal").value.replace(",", "."));
+      const currentRate = parseFloat(document.getElementById("currentRate").value.replace(",", "."));
+      const currentMonths = parseInt(document.getElementById("currentMonths").value, 10);
+      const newRate = parseFloat(document.getElementById("newRate").value.replace(",", "."));
+      const newMonths = parseInt(document.getElementById("newMonths").value, 10);
+
+      const resultsDiv = document.getElementById("results");
+
+      if (isNaN(principal) || isNaN(currentRate) || isNaN(currentMonths) ||
+          isNaN(newRate) || isNaN(newMonths)) {
+        resultsDiv.style.display = "block";
+        resultsDiv.innerHTML = "Por favor preencha todos os campos com valores válidos.";
+        return;
+      }
+
+      const atual = calcularPrestacaoEJuros(principal, currentRate, currentMonths);
+      const novo = calcularPrestacaoEJuros(principal, newRate, newMonths);
+
+      const diffMensal = novo.payment - atual.payment;
+      const labelMensal = diffMensal < 0 ? "Poupança mensal estimada" : "Acréscimo mensal estimado";
+
+      const diffTotal = novo.totalInterest - atual.totalInterest;
+      const labelTotal = diffTotal < 0 ? "Poupança total em juros (estimada)" : "Acréscimo total em juros (estimado)";
+
+      resultsDiv.style.display = "block";
+      resultsDiv.innerHTML = `
+        <div>Prestação atual: <strong>${formatCurrency(atual.payment)}</strong></div>
+        <div>Prestação nova: <strong>${formatCurrency(novo.payment)}</strong></div>
+        <div style="margin-top:6px;">${labelMensal}: <strong>${formatCurrency(Math.abs(diffMensal))}</strong></div>
+        <hr style="margin:8px 0;">
+        <div>Juros totais (situação atual): <strong>${formatCurrency(atual.totalInterest)}</strong></div>
+        <div>Juros totais (situação nova): <strong>${formatCurrency(novo.totalInterest)}</strong></div>
+        <div style="margin-top:6px;">${labelTotal}: <strong>${formatCurrency(Math.abs(diffTotal))}</strong></div>
+      `;
+    }
+  </script>
+</body>
 </html>
