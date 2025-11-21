@@ -222,23 +222,6 @@
       background: #f9fafb;
       font-size: 0.9rem;
     }
-    .results-buy-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .results-buy-label {
-      color: var(--cq-text-muted);
-    }
-    .results-buy-value {
-      font-weight: 700;
-    }
-    .results-buy-tag {
-      margin-top: 8px;
-      font-size: 0.9rem;
-      color: var(--cq-text-main);
-    }
-
     .results-buy-menu {
       margin-top: 10px;
       padding-top: 8px;
@@ -249,6 +232,11 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 4px;
+    }
+    .results-buy-tag {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: var(--cq-text-main);
     }
 
     .results-buy-flags {
@@ -414,6 +402,20 @@
       <select id="buyMaxEffort">
         <option value="35">35% – Cenário recomendado C&Q</option>
         <option value="40">40% – Cenário limite</option>
+        <option value="custom">Outro valor (definido pelo banco)</option>
+      </select>
+      <input
+        id="buyMaxEffortCustom"
+        type="number"
+        step="0.1"
+        placeholder="Ex.: 33 (para 33%)"
+        style="display:none; margin-top:-4px; margin-bottom:10px;"
+      />
+
+      <label>LTV máximo do banco</label>
+      <select id="ltvMode">
+        <option value="auto">Padrão C&Q (até 90% HPP / 80% outras finalidades)</option>
+        <option value="85">Banco conservador – máximo 85%</option>
       </select>
 
       <label>TAN anual estimada (%)</label>
@@ -427,7 +429,7 @@
       </label>
 
       <div class="info-notes">
-        <strong>Garantia Pública Jovem – requisitos base:</strong>
+        <strong>Garantia Pública Jovem – requisitos base (simplificados):</strong>
         <ul>
           <li>Idade entre 18 e 35 anos;</li>
           <li>Rendimentos anuais até ao 8.º escalão (≈ 81&nbsp;199€);</li>
@@ -444,15 +446,14 @@
       </select>
 
       <div class="info-notes">
-        <strong>IMT Jovem – linhas gerais:</strong>
+        <strong>IMT Jovem – linhas gerais (simplificadas):</strong>
         <ul>
-          <li>Idade até 35 anos, não ser dependente para efeitos de IRS;</li>
+          <li>Idade até 35 anos e não ser dependente para efeitos de IRS;</li>
           <li>Não ser proprietário (nem ter sido nos últimos 3 anos) de habitação ou fração;</li>
-          <li>Isenção total de IMT e imposto de selo para imóveis até ~316&nbsp;772€;</li>
+          <li>Isenção total de IMT/IS para imóveis até ~316&nbsp;772€;</li>
           <li>Entre ~316&nbsp;772€ e ~633&nbsp;453€ pode existir isenção/benefício parcial;</li>
           <li>Acima de ~633&nbsp;453€ paga-se IMT e imposto de selo na totalidade.</li>
         </ul>
-        <p style="margin-top:4px;">Quando só um dos titulares cumpre os critérios, a situação pode traduzir-se numa isenção parcial (por ex., cerca de 50% do IMT).</p>
       </div>
 
       <button onclick="calcularCompra()">Calcular capacidade de compra</button>
@@ -510,7 +511,7 @@
       });
     });
 
-    // Atualizar TAN conforme tipo de taxa
+    // TAN automática por tipo de taxa
     const rateTypeSelect = document.getElementById("buyRateType");
     const buyRateInput = document.getElementById("buyRate");
     rateTypeSelect.addEventListener("change", () => {
@@ -518,6 +519,18 @@
       if (type === "fixa") buyRateInput.value = "4.10";
       if (type === "mista") buyRateInput.value = "3.70";
       if (type === "variavel") buyRateInput.value = "2.86";
+    });
+
+    // Mostrar input de taxa de esforço manual
+    const maxEffortSelect = document.getElementById("buyMaxEffort");
+    const maxEffortCustomInput = document.getElementById("buyMaxEffortCustom");
+    maxEffortSelect.addEventListener("change", () => {
+      if (maxEffortSelect.value === "custom") {
+        maxEffortCustomInput.style.display = "block";
+      } else {
+        maxEffortCustomInput.style.display = "none";
+        maxEffortCustomInput.value = "";
+      }
     });
 
     // ---- CALCULADORA TRANSFERÊNCIA ----
@@ -614,10 +627,42 @@
       `;
     }
 
+    // ---- IMT Portugal Continental (HPP – simplificado) ----
+    function calcularIMTContinentalHPP(price) {
+      if (price <= 0 || isNaN(price)) return 0;
+
+      if (price <= 101917) return 0;
+      if (price <= 139412) return price * 0.02 - 2038.34;
+      if (price <= 190086) return price * 0.05 - 6220.70;
+      if (price <= 316772) return price * 0.07 - 10022.42;
+      if (price <= 633453) return price * 0.08 - 13190.14;
+      if (price <= 1102920) return price * 0.06;
+      return price * 0.075;
+    }
+
+    function makeCostFn(imtMode) {
+      return function (price) {
+        if (price <= 0 || isNaN(price)) return 0;
+        const imtBase = calcularIMTContinentalHPP(price); // HPP simplificado
+        const otherCosts = price * 0.01; // escrituras/registos (aprox. 1%)
+
+        let imtFinal;
+        if (imtMode === "total") {
+          imtFinal = 0;
+        } else if (imtMode === "parcial") {
+          imtFinal = imtBase * 0.5; // benefício parcial (ex.: 50%)
+        } else {
+          imtFinal = imtBase;
+        }
+
+        return imtFinal + otherCosts;
+      };
+    }
+
     // ---- helper para cenário de compra ----
-    function resolverCenario(maxLoan, capital, ltvMax, costRate, rate, months, netIncome, otherLoans) {
+    function resolverCenario(maxLoan, capital, ltvMax, rate, months, netIncome, otherLoans, costFn) {
       function isFeasible(x) {
-        const costs = costRate * x;
+        const costs = costFn(x);
         const loanMaxByIncome = maxLoan;
         const loanMaxByLTV = ltvMax * x;
         const loanMax = Math.min(loanMaxByIncome, loanMaxByLTV);
@@ -636,7 +681,7 @@
       }
 
       const housePrice = low;
-      const costs = costRate * housePrice;
+      const costs = costFn(housePrice);
       let loan = Math.min(maxLoan, ltvMax * housePrice);
       if (loan < 0) loan = 0;
 
@@ -686,15 +731,25 @@
         document.getElementById("buyCapital").value.replace(",", ".")
       ) || 0;
       const purpose = document.getElementById("buyPurpose").value;
-      const maxEffort = parseFloat(
-        document.getElementById("buyMaxEffort").value.replace(",", ".")
-      );
       const rateType = document.getElementById("buyRateType").value;
       let rate = parseFloat(
         document.getElementById("buyRate").value.replace(",", ".")
       );
       const gpConfirm = document.getElementById("gpConfirm").checked;
       const imtMode = document.getElementById("imtMode").value;
+      const ltvMode = document.getElementById("ltvMode").value;
+
+      const maxEffortSelectValue = document.getElementById("buyMaxEffort").value;
+      let maxEffort;
+      if (maxEffortSelectValue === "custom") {
+        maxEffort = parseFloat(
+          document
+            .getElementById("buyMaxEffortCustom")
+            .value.replace(",", ".")
+        );
+      } else {
+        maxEffort = parseFloat(maxEffortSelectValue.replace(",", "."));
+      }
 
       const resultsDiv = document.getElementById("results-buy");
 
@@ -712,9 +767,11 @@
         resultsDiv.className = "results-buy";
         resultsDiv.innerHTML =
           "<div class='results-buy-header'><span>Dados em falta</span><span>–</span></div>" +
-          "<div class='results-buy-body'>Por favor preencha rendimento, idade, finalidade, tipo de taxa, taxa de esforço e TAN estimada para a C&Q poder simular.</div>";
+          "<div class='results-buy-body'>Por favor preencha rendimento, idade, taxa de esforço, finalidade, tipo de taxa e TAN estimada para a C&Q poder simular.</div>";
         return;
       }
+
+      const costFn = makeCostFn(imtMode);
 
       // Prestação máxima para crédito habitação (limite de esforço)
       const maxHousingEffort = netIncome * (maxEffort / 100) - otherLoans;
@@ -727,10 +784,10 @@
         return;
       }
 
-      // Prazo máximo (regras simples por idade + limite 75 anos)
+      // Prazo máximo (regras que combinámos)
       let baseYears;
       if (age < 30) baseYears = 40;
-      else if (age <= 35) baseYears = 32;
+      else if (age <= 35) baseYears = 37;
       else baseYears = 35;
 
       let maxYears = Math.min(baseYears, 75 - age);
@@ -750,30 +807,21 @@
       // LTV base por finalidade
       let baseLTV = 0.9; // HPP
       if (purpose !== "hpp") baseLTV = 0.8;
+      if (ltvMode === "85") baseLTV = 0.85;
 
-      // Custos (IMT, selo, escrituras) – simplificado, ajustado ao IMT Jovem
-      let costRate;
-      if (imtMode === "total") {
-        costRate = 0.015; // isenção forte, só escrituras / custos residuais
-      } else if (imtMode === "parcial") {
-        costRate = 0.025; // benefício parcial (por ex. só um titular elegível)
-      } else {
-        costRate = 0.04; // cenário padrão sem benefício
-      }
-
-      // Primeiro cenário sem aplicar garantia pública (LTV base)
+      // Primeiro cenário com LTV base (sem garantia)
       const baseScenario = resolverCenario(
         maxLoan,
         capital,
         baseLTV,
-        costRate,
         rate,
         months,
         netIncome,
-        otherLoans
+        otherLoans,
+        costFn
       );
 
-      // Ver se cumpre critérios base para garantia pública
+      // Garantia pública – ver critérios base
       const annualIncome = netIncome * 14;
       const meetsAgeGuarantee = age >= 18 && age <= 35;
       const meetsIncomeGuarantee = annualIncome <= 81199;
@@ -788,23 +836,26 @@
 
       let scenario = baseScenario;
       let guaranteeText;
+      let ltvUsed = baseLTV;
+
       if (guaranteeApplied) {
         const ltvWithGuarantee = Math.min(1.0, baseLTV + 0.15); // até 100%
+        ltvUsed = ltvWithGuarantee;
         scenario = resolverCenario(
           maxLoan,
           capital,
           ltvWithGuarantee,
-          costRate,
           rate,
           months,
           netIncome,
-          otherLoans
+          otherLoans,
+          costFn
         );
         guaranteeText =
           "Assinalou que o cliente reúne os restantes requisitos da Garantia Pública Jovem. A simulação C&Q considera um financiamento de maior percentagem do valor do imóvel (até 15% adicionais, até ao limite legal).";
       } else if (guaranteeBaseOk && !gpConfirm) {
         guaranteeText =
-          "Pelos dados de idade, rendimento e valor do imóvel, pode existir elegibilidade à Garantia Pública Jovem, mas a opção não foi assinalada. A simulação utiliza apenas as regras padrão de LTV.";
+          "Pelos dados de idade, rendimento e valor do imóvel, pode existir elegibilidade à Garantia Pública Jovem, mas a opção não foi assinalada. A simulação utiliza apenas as regras padrão de LTV do banco.";
       } else {
         guaranteeText =
           "Pelos dados de idade, rendimento anual, finalidade ou valor estimado do imóvel, a Garantia Pública Jovem poderá não ser aplicável. A simulação C&Q considera as regras padrão de LTV.";
@@ -856,13 +907,13 @@
       let imtText;
       if (imtMode === "nenhum") {
         imtText =
-          "Foi selecionada a opção sem IMT Jovem. A simulação considera uma estimativa padrão de IMT, imposto de selo e escrituras.";
+          "Foi selecionada a opção sem IMT Jovem. A simulação considera uma estimativa padrão de IMT, imposto de selo e escrituras, com base na tabela em vigor para Portugal Continental.";
       } else if (imtMode === "total") {
         imtText =
-          "Selecionada a opção IMT Jovem – benefício/isenção total. A simulação considera custos médios mais baixos, compatíveis com isenção de IMT e imposto de selo até aos limites legais (por ex., imóveis até ~316&nbsp;772€).";
+          "Selecionada a opção IMT Jovem – benefício/isenção total. A simulação considera que não há IMT nem imposto de selo sobre a compra, apenas custos médios de escrituras/registos.";
       } else {
         imtText =
-          "Selecionada a opção IMT Jovem parcial (apenas um titular elegível). A simulação assume uma redução intermédia de custos, aproximando-se de uma isenção parcial do IMT (por ex., cerca de 50%).";
+          "Selecionada a opção IMT Jovem parcial (apenas um titular elegível). A simulação assume aproximadamente 50% do IMT devido, refletindo uma isenção parcial, e mantém uma estimativa de custos de escrituras/registos.";
       }
       if (!imtJovemOk && imtMode !== "nenhum") {
         imtText +=
@@ -880,6 +931,35 @@
       )}%(1) | Prazo: ${maxYears} anos | LTV estimado: ${ltvReal.toFixed(2)}%`;
       if (rateType === "fixa" || rateType === "variavel") {
         condicoesText += " | Spread indicativo: 0,80% | Euribor a 6 Meses: 2,06%";
+      }
+
+      // Cenário com +1 000€ de capitais
+      const extraCapital = capital + 1000;
+      let extraCapitalHtml = "";
+      if (extraCapital > 0) {
+        const scenarioMoreCap = resolverCenario(
+          maxLoan,
+          extraCapital,
+          ltvUsed,
+          rate,
+          months,
+          netIncome,
+          otherLoans,
+          costFn
+        );
+        if (scenarioMoreCap.housePrice > scenario.housePrice + 1) {
+          extraCapitalHtml = `
+            <div class="results-buy-tag" style="margin-top:8px;">
+              <em>Exemplo C&Q:</em> se, em vez de ${formatCurrency(
+                capital
+              )}, tivesse ${formatCurrency(
+            extraCapital
+          )} de capitais próprios, o valor indicativo do imóvel poderia subir para cerca de ${formatCurrency(
+            scenarioMoreCap.housePrice
+          )} (prestação estimada ${formatCurrency(scenarioMoreCap.payment)}).
+            </div>
+          `;
+        }
       }
 
       // Construir resultado C&Q style
@@ -934,6 +1014,8 @@
             </div>
           </div>
 
+          ${extraCapitalHtml}
+
           <div class="results-buy-flags">
             <strong>Condições da simulação:</strong><br/>
             ${condicoesText}<br/>
@@ -959,12 +1041,24 @@
             </ul>
             ${
               guaranteeApplied
-                ? `<p style="margin-top:6px;"><strong>Para Garantia Pública Jovem</strong> podem ser necessários ainda: declaração de não propriedade, comprovativo de rendimentos dentro dos limites legais e eventuais declarações adicionais exigidas pelo banco/Estado.</p>`
+                ? `<p style="margin-top:6px;">
+                    <strong>Para Garantia Pública Jovem</strong> podem ser necessários, entre outros, os seguintes documentos adicionais:
+                    declaração de não propriedade (certidão de registo predial negativa),
+                    comprovativos de rendimentos dentro dos limites legais,
+                    comprovativos de situação fiscal e contributiva regularizada junto da AT e da Segurança Social,
+                    bem como eventuais declarações adicionais exigidas pelo banco/Estado.
+                  </p>`
                 : ""
             }
             ${
               imtMode !== "nenhum"
-                ? `<p style="margin-top:6px;"><strong>Para IMT Jovem</strong> a AT poderá exigir: comprovativos de idade, declarações de não propriedade nos últimos 3 anos e documentação do imóvel para cálculo do benefício.</p>`
+                ? `<p style="margin-top:6px;">
+                    <strong>Para IMT Jovem</strong> a Autoridade Tributária poderá exigir, entre outros:
+                    comprovativos de idade,
+                    declarações de não propriedade nos últimos 3 anos (certidões de registo predial negativas),
+                    documentação do imóvel para cálculo do benefício
+                    e comprovativos de situação fiscal e contributiva regularizada.
+                  </p>`
                 : ""
             }
           </div>
