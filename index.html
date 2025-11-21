@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>C&Q – Calculadora Crédito</title>
+  <title>C&Q – Calculadoras Crédito</title>
 
   <!-- Ícone iOS -->
   <link rel="apple-touch-icon" sizes="180x180" href="Logo.png?v=2" />
 
   <style>
     :root {
-      /* Cores estilo C&Q */
       --cq-green: #10b981;
       --cq-green-dark: #0f766e;
       --cq-red: #ef4444;
@@ -62,7 +61,7 @@
       font-size: 0.9rem;
       margin-bottom: 4px;
     }
-    input {
+    input, select {
       width: 100%;
       padding: 8px;
       font-size: 1rem;
@@ -70,8 +69,9 @@
       border: 1px solid #d4d4d8;
       box-sizing: border-box;
       margin-bottom: 10px;
+      background: #fff;
     }
-    input:focus {
+    input:focus, select:focus {
       outline: none;
       border-color: var(--cq-green);
       box-shadow: 0 0 0 1px var(--cq-green);
@@ -90,13 +90,46 @@
       margin-top: 4px;
     }
 
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      background: #e5e7eb;
+      padding: 4px;
+      border-radius: 999px;
+    }
+    .tab {
+      flex: 1;
+      border: none;
+      border-radius: 999px;
+      padding: 8px;
+      font-size: 0.9rem;
+      background: transparent;
+      cursor: pointer;
+      color: var(--cq-text-muted);
+      font-weight: 500;
+    }
+    .tab.active {
+      background: #ffffff;
+      color: var(--cq-green-dark);
+      box-shadow: 0 2px 6px rgba(15,23,42,0.12);
+    }
+
+    .calc-section {
+      display: none;
+    }
+    .calc-section.active {
+      display: block;
+    }
+
+    /* Card resultados transferência */
     .results {
       margin-top: 16px;
       border-radius: 14px;
       overflow: hidden;
       display: none;
     }
-
     .results-header {
       padding: 10px 14px;
       display: flex;
@@ -106,11 +139,9 @@
       font-weight: 600;
       font-size: 0.95rem;
     }
-
     .results-header-amount {
       font-size: 1.1rem;
     }
-
     .results-body {
       background: #f9fafb;
       padding: 12px 14px;
@@ -119,28 +150,23 @@
       flex-wrap: wrap;
       font-size: 0.9rem;
     }
-
     .results-column {
       flex: 1 1 150px;
     }
-
     .results-label {
       color: var(--cq-text-muted);
       margin-bottom: 4px;
     }
-
     .results-value-main {
       font-weight: 700;
       font-size: 1rem;
     }
-
     .results-value-muted {
       text-decoration: line-through;
       color: #9ca3af;
       margin-left: 4px;
       font-size: 0.85rem;
     }
-
     .results-tag {
       display: inline-flex;
       align-items: center;
@@ -148,20 +174,15 @@
       font-size: 0.85rem;
       margin-top: 6px;
     }
-
     .results-tag-icon {
       font-size: 1.1rem;
     }
-
-    /* cores do cabeçalho conforme prestação */
     .results.savings .results-header {
       background: var(--cq-green);
     }
     .results.increase .results-header {
       background: var(--cq-red);
     }
-
-    /* cores específicas para a coluna de juros */
     .juros-block.juros-saving .results-value-main,
     .juros-block.juros-saving .results-tag {
       color: var(--cq-green-dark);
@@ -169,6 +190,47 @@
     .juros-block.juros-increase .results-value-main,
     .juros-block.juros-increase .results-tag {
       color: var(--cq-red);
+    }
+
+    /* Card resultados compra casa */
+    .results-buy {
+      margin-top: 16px;
+      border-radius: 14px;
+      overflow: hidden;
+      display: none;
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
+    }
+    .results-buy-header {
+      padding: 10px 14px;
+      background: var(--cq-green);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .results-buy-body {
+      padding: 12px 14px;
+      background: #f9fafb;
+      font-size: 0.9rem;
+    }
+    .results-buy-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .results-buy-label {
+      color: var(--cq-text-muted);
+    }
+    .results-buy-value {
+      font-weight: 700;
+    }
+    .results-buy-tag {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--cq-text-muted);
     }
 
     .disclaimer {
@@ -186,31 +248,79 @@
       <img src="Logo.png?v=2" alt="C&Q Finanças & Soluções" />
     </div>
 
-    <h1>C&Q – Calculadora de Transferência</h1>
+    <h1>C&Q – Calculadoras de Crédito</h1>
 
-    <h2>Situação atual</h2>
-    <label>Montante em dívida (€)</label>
-    <input id="currentPrincipal" type="number" step="0.01" placeholder="Ex.: 330000" />
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" data-target="transfer">Transferência de crédito</button>
+      <button class="tab" data-target="compra">Compra de casa</button>
+    </div>
 
-    <label>TAN anual atual (%)</label>
-    <input id="currentRate" type="number" step="0.01" placeholder="Ex.: 2.855" />
+    <!-- CALCULADORA TRANSFERÊNCIA -->
+    <div id="calc-transfer" class="calc-section active">
+      <h2>Situação atual</h2>
+      <label>Montante em dívida (€)</label>
+      <input id="currentPrincipal" type="number" step="0.01" placeholder="Ex.: 330000" />
 
-    <label>Prazo remanescente (meses)</label>
-    <input id="currentMonths" type="number" step="1" placeholder="Ex.: 387" />
+      <label>TAN anual atual (%)</label>
+      <input id="currentRate" type="number" step="0.01" placeholder="Ex.: 2.855" />
 
-    <h2>Nova situação</h2>
-    <label>Novo montante em dívida (€)</label>
-    <input id="newPrincipal" type="number" step="0.01" placeholder="Ex.: 330000 ou 350000 se pedir mais" />
+      <label>Prazo remanescente (meses)</label>
+      <input id="currentMonths" type="number" step="1" placeholder="Ex.: 387" />
 
-    <label>Nova TAN anual (%)</label>
-    <input id="newRate" type="number" step="0.01" placeholder="Ex.: 2" />
+      <h2>Nova situação</h2>
+      <label>Novo montante em dívida (€)</label>
+      <input id="newPrincipal" type="number" step="0.01" placeholder="Ex.: 330000 ou 350000 se pedir mais" />
 
-    <label>Novo prazo (meses)</label>
-    <input id="newMonths" type="number" step="1" placeholder="Ex.: 384" />
+      <label>Nova TAN anual (%)</label>
+      <input id="newRate" type="number" step="0.01" placeholder="Ex.: 2" />
 
-    <button onclick="calcular()">Calcular poupança</button>
+      <label>Novo prazo (meses)</label>
+      <input id="newMonths" type="number" step="1" placeholder="Ex.: 384" />
 
-    <div id="results" class="results"></div>
+      <button onclick="calcularTransfer()">Calcular poupança</button>
+
+      <div id="results" class="results"></div>
+    </div>
+
+    <!-- CALCULADORA COMPRA CASA -->
+    <div id="calc-compra" class="calc-section">
+      <h2>Dados do agregado</h2>
+
+      <label>Rendimento líquido mensal do agregado (€)</label>
+      <input id="buyNetIncome" type="number" step="1" placeholder="Ex.: 1 200" />
+
+      <label>Prestação mensal de outros créditos (€)</label>
+      <input id="buyOtherLoans" type="number" step="1" placeholder="Ex.: 0" />
+
+      <label>Número de titulares</label>
+      <select id="buyNumBorrowers">
+        <option value="1">1 titular</option>
+        <option value="2">2 titulares</option>
+        <option value="3">3 ou mais titulares</option>
+      </select>
+
+      <label>Idade do titular mais velho (anos)</label>
+      <input id="buyAge" type="number" step="1" placeholder="Ex.: 26" />
+
+      <label>Entrada / capitais próprios (€)</label>
+      <input id="buyDownPayment" type="number" step="1" placeholder="Ex.: 20 000" />
+
+      <h2>Parâmetros do crédito</h2>
+
+      <label>Taxa de esforço máxima considerada (%)</label>
+      <select id="buyMaxEffort">
+        <option value="35">35% (mais conservador)</option>
+        <option value="40">40% (mais agressivo)</option>
+      </select>
+
+      <label>TAN anual estimada (%)</label>
+      <input id="buyRate" type="number" step="0.01" placeholder="Ex.: 3" />
+
+      <button onclick="calcularCompra()">Calcular capacidade de compra</button>
+
+      <div id="results-buy" class="results-buy"></div>
+    </div>
 
     <div class="disclaimer">
       ⚠️ Os valores apresentados são estimativas simplificadas e não substituem a análise detalhada das condições de crédito pelas instituições financeiras nem constituem proposta contratual.
@@ -218,6 +328,7 @@
   </div>
 
   <script>
+    // ---- Funções comuns ----
     function formatCurrency(value) {
       return value.toLocaleString("pt-PT", {
         style: "currency",
@@ -244,7 +355,23 @@
       return { payment, totalInterest };
     }
 
-    function calcular() {
+    // ---- Tabs ----
+    document.querySelectorAll(".tab").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+        btn.classList.add("active");
+
+        const target = btn.getAttribute("data-target");
+        document.querySelectorAll(".calc-section").forEach((sec) => {
+          sec.classList.remove("active");
+        });
+        document.getElementById(target === "transfer" ? "calc-transfer" : "calc-compra")
+          .classList.add("active");
+      });
+    });
+
+    // ---- CALCULADORA TRANSFERÊNCIA ----
+    function calcularTransfer() {
       const principal = parseFloat(
         document.getElementById("currentPrincipal").value.replace(",", ".")
       );
@@ -280,7 +407,6 @@
         return;
       }
 
-      // Se não preencher novo montante, assume o montante atual
       let newPrincipal = parseFloat(newPrincipalRaw.replace(",", "."));
       if (isNaN(newPrincipal)) {
         newPrincipal = principal;
@@ -298,7 +424,6 @@
         : "Prestação mensal aumenta em:";
       const headerAmount = formatCurrency(Math.abs(diffMensal));
 
-      // Juros: bom = verde, mau = vermelho
       const isJurosSaving = diffTotal < 0;
       const jurosLabel = isJurosSaving
         ? "Valor dos juros totais diminui em:"
@@ -307,7 +432,6 @@
       const jurosTrendClass = isJurosSaving ? "juros-saving" : "juros-increase";
       const jurosIcon = isJurosSaving ? "⬇️" : "⬆️";
 
-      // definir classes para o cabeçalho (com base na prestação)
       resultsDiv.className = "results " + (isSavingPrest ? "savings" : "increase");
       resultsDiv.style.display = "block";
 
@@ -335,6 +459,107 @@
               <span class="results-tag-icon">${jurosIcon}</span>
               <span>${jurosLabel}</span>
             </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---- CALCULADORA COMPRA CASA ----
+    function calcularCompra() {
+      const netIncome = parseFloat(
+        document.getElementById("buyNetIncome").value.replace(",", ".")
+      );
+      const otherLoans = parseFloat(
+        document.getElementById("buyOtherLoans").value.replace(",", ".")
+      ) || 0;
+      const numBorrowers = parseInt(
+        document.getElementById("buyNumBorrowers").value, 10
+      );
+      const age = parseInt(
+        document.getElementById("buyAge").value, 10
+      );
+      const downPayment = parseFloat(
+        document.getElementById("buyDownPayment").value.replace(",", ".")
+      ) || 0;
+      const maxEffort = parseFloat(
+        document.getElementById("buyMaxEffort").value.replace(",", ".")
+      );
+      const rate = parseFloat(
+        document.getElementById("buyRate").value.replace(",", ".")
+      );
+
+      const resultsDiv = document.getElementById("results-buy");
+
+      if (
+        isNaN(netIncome) ||
+        isNaN(age) ||
+        isNaN(maxEffort) ||
+        isNaN(rate)
+      ) {
+        resultsDiv.style.display = "block";
+        resultsDiv.innerHTML =
+          "<div class='results-buy-header'><span>Dados em falta</span><span>–</span></div>" +
+          "<div class='results-buy-body'>Por favor preencha pelo menos: rendimento, idade, taxa de esforço e TAN estimada.</div>";
+        return;
+      }
+
+      // Prestação máxima para crédito habitação
+      const maxHousingEffort = netIncome * (maxEffort / 100) - otherLoans;
+
+      if (maxHousingEffort <= 0) {
+        resultsDiv.style.display = "block";
+        resultsDiv.innerHTML =
+          "<div class='results-buy-header'><span>Sem margem para nova prestação</span><span>⚠️</span></div>" +
+          "<div class='results-buy-body'>Com os dados inseridos, a prestação máxima disponível para crédito habitação é nula ou negativa. Será necessário rever rendimentos/despesas.</div>";
+        return;
+      }
+
+      // Prazo máximo: até 75 anos, máximo 40 anos
+      let maxYears = 75 - age;
+      if (maxYears > 40) maxYears = 40;
+      if (maxYears < 5) maxYears = 5;
+      const months = maxYears * 12;
+
+      // Montante máximo financiado (resolvendo pelo capital)
+      const monthlyRate = (rate / 100) / 12;
+      let maxLoan = 0;
+      if (monthlyRate === 0) {
+        maxLoan = maxHousingEffort * months;
+      } else {
+        const factor = Math.pow(1 + monthlyRate, months);
+        maxLoan = maxHousingEffort * (factor - 1) / (monthlyRate * factor);
+      }
+
+      if (maxLoan < 0) maxLoan = 0;
+
+      const housePrice = maxLoan + downPayment;
+
+      resultsDiv.style.display = "block";
+      resultsDiv.innerHTML = `
+        <div class="results-buy-header">
+          <span>Estimativa de capacidade de compra</span>
+          <span>${formatCurrency(housePrice)}</span>
+        </div>
+        <div class="results-buy-body">
+          <div class="results-buy-row">
+            <span class="results-buy-label">Prestação máxima de crédito:</span>
+            <span class="results-buy-value">${formatCurrency(maxHousingEffort)}</span>
+          </div>
+          <div class="results-buy-row">
+            <span class="results-buy-label">Montante máximo de financiamento:</span>
+            <span class="results-buy-value">${formatCurrency(maxLoan)}</span>
+          </div>
+          <div class="results-buy-row">
+            <span class="results-buy-label">Valor indicativo máximo de compra:</span>
+            <span class="results-buy-value">${formatCurrency(housePrice)}</span>
+          </div>
+          <div class="results-buy-row">
+            <span class="results-buy-label">Prazo considerado:</span>
+            <span class="results-buy-value">${maxYears} anos</span>
+          </div>
+          <div class="results-buy-tag">
+            Cálculo efetuado com taxa de esforço de ${maxEffort}% e TAN estimada de ${rate}%,
+            assumindo um prazo até aos ${75} anos de idade do titular mais velho (máx. 40 anos).
           </div>
         </div>
       `;
