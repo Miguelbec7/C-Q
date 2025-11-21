@@ -6,9 +6,8 @@
   <title>C&Q – Calculadora Crédito</title>
 
   <!-- Ícone iOS -->
-  <link rel="apple-touch-icon" sizes="180x180" href="Logo.png" />
-  ...
-</head>
+  <link rel="apple-touch-icon" sizes="180x180" href="Logo.png?v=2" />
+
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -30,7 +29,7 @@
       margin-bottom: 8px;
     }
     .logo img {
-      max-width: 140px; /* ajusta ao gosto */
+      max-width: 140px;
       height: auto;
     }
     h1 {
@@ -64,7 +63,7 @@
       border-radius: 8px;
       border: none;
       cursor: pointer;
-      background: #10b981; /* verde tipo C&Q, ajusta à vontade */
+      background: #10b981;
       color: #fff;
       font-weight: 600;
       margin-top: 4px;
@@ -88,8 +87,7 @@
 
     <!-- LOGO C&Q -->
     <div class="logo">
-      <!-- mete aqui o nome do teu ficheiro de logo, por ex. logo-cq.png -->
-      <img src="logo-cq.png" alt="C&Q Finanças & Soluções" />
+      <img src="Logo.png?v=2" alt="C&Q Finanças & Soluções" />
     </div>
 
     <h1>C&Q – Calculadora de Transferência</h1>
@@ -106,116 +104,5 @@
 
     <h2>Nova situação</h2>
     <label>Novo montante em dívida (€)</label>
-    <input id="newPrincipal" type="number" step="0.01" placeholder="Ex.: 330000 ou 350000 se pedir mais" />
+    <input id="newPrincipal" type="number" step="0.01" placeholder="Ex.: 330000 ou 3500
 
-    <label>Nova TAN anual (%)</label>
-    <input id="newRate" type="number" step="0.01" placeholder="Ex.: 2" />
-
-    <label>Novo prazo (meses)</label>
-    <input id="newMonths" type="number" step="1" placeholder="Ex.: 384" />
-
-    <button onclick="calcular()">Calcular poupança</button>
-
-    <div id="results" class="results" style="display:none;"></div>
-
-    <div class="disclaimer">
-      ⚠️ Os valores apresentados são estimativas simplificadas e não substituem a análise detalhada das condições de crédito pelas instituições financeiras nem constituem proposta contratual.
-    </div>
-  </div>
-
-  <script>
-    function formatCurrency(value) {
-      return value.toLocaleString("pt-PT", {
-        style: "currency",
-        currency: "EUR",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-    }
-
-    function calcularPrestacaoEJuros(principal, annualRatePercent, months) {
-      const monthlyRate = (annualRatePercent / 100) / 12;
-      let payment;
-
-      if (monthlyRate === 0) {
-        payment = principal / months;
-      } else {
-        const factor = Math.pow(1 + monthlyRate, months);
-        payment = principal * monthlyRate * factor / (factor - 1);
-      }
-
-      const totalPaid = payment * months;
-      const totalInterest = totalPaid - principal;
-
-      return { payment, totalInterest };
-    }
-
-    function calcular() {
-      const principal = parseFloat(
-        document.getElementById("currentPrincipal").value.replace(",", ".")
-      );
-      const currentRate = parseFloat(
-        document.getElementById("currentRate").value.replace(",", ".")
-      );
-      const currentMonths = parseInt(
-        document.getElementById("currentMonths").value, 10
-      );
-
-      const newPrincipalRaw = document.getElementById("newPrincipal").value;
-      const newRate = parseFloat(
-        document.getElementById("newRate").value.replace(",", ".")
-      );
-      const newMonths = parseInt(
-        document.getElementById("newMonths").value, 10
-      );
-
-      const resultsDiv = document.getElementById("results");
-
-      if (
-        isNaN(principal) ||
-        isNaN(currentRate) ||
-        isNaN(currentMonths) ||
-        isNaN(newRate) ||
-        isNaN(newMonths)
-      ) {
-        resultsDiv.style.display = "block";
-        resultsDiv.innerHTML = "Por favor preencha todos os campos com valores válidos (exceto o novo montante, que é opcional).";
-        return;
-      }
-
-      // Se não preencher novo montante, assume o montante atual
-      let newPrincipal = parseFloat(newPrincipalRaw.replace(",", "."));
-      if (isNaN(newPrincipal)) {
-        newPrincipal = principal;
-      }
-
-      const atual = calcularPrestacaoEJuros(principal, currentRate, currentMonths);
-      const novo = calcularPrestacaoEJuros(newPrincipal, newRate, newMonths);
-
-      const diffMensal = novo.payment - atual.payment;
-      const labelMensal =
-        diffMensal < 0 ? "Poupança mensal estimada" : "Acréscimo mensal estimado";
-
-      const diffTotal = novo.totalInterest - atual.totalInterest;
-      const labelTotal =
-        diffTotal < 0 ? "Poupança total em juros (estimada)" : "Acréscimo total em juros (estimado)";
-
-      resultsDiv.style.display = "block";
-      resultsDiv.innerHTML = `
-        <div><strong>Situação atual</strong></div>
-        <div>Montante: <strong>${formatCurrency(principal)}</strong></div>
-        <div>Prestação atual: <strong>${formatCurrency(atual.payment)}</strong></div>
-        <hr style="margin:8px 0;">
-        <div><strong>Nova situação</strong></div>
-        <div>Montante: <strong>${formatCurrency(newPrincipal)}</strong></div>
-        <div>Prestação nova: <strong>${formatCurrency(novo.payment)}</strong></div>
-        <div style="margin-top:6px;">${labelMensal}: <strong>${formatCurrency(Math.abs(diffMensal))}</strong></div>
-        <hr style="margin:8px 0;">
-        <div>Juros totais (situação atual): <strong>${formatCurrency(atual.totalInterest)}</strong></div>
-        <div>Juros totais (situação nova): <strong>${formatCurrency(novo.totalInterest)}</strong></div>
-        <div style="margin-top:6px;">${labelTotal}: <strong>${formatCurrency(Math.abs(diffTotal))}</strong></div>
-      `;
-    }
-  </script>
-</body>
-</html>
