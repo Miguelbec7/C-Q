@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>C&Q – Calculadoras Crédito</title>
+  <title>C&Q – Simuladores Crédito Habitação</title>
 
   <!-- Ícone iOS -->
   <link rel="apple-touch-icon" sizes="180x180" href="Logo.png?v=2" />
@@ -210,7 +210,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: var(--cq-green);
     }
     .results-buy-body {
       padding: 12px 14px;
@@ -291,7 +290,7 @@
       <img src="Logo.png?v=2" alt="C&Q Finanças & Soluções" />
     </div>
 
-    <h1>C&Q – Calculadoras de Crédito</h1>
+    <h1>C&Q – Simuladores de Crédito Habitação</h1>
 
     <!-- TABS -->
     <div class="tabs">
@@ -301,7 +300,7 @@
 
     <!-- CALCULADORA TRANSFERÊNCIA -->
     <div id="calc-transfer" class="calc-section active">
-      <h2>Situação atual</h2>
+      <h2>1. Situação atual</h2>
       <label>Montante em dívida (€)</label>
       <input id="currentPrincipal" type="number" step="0.01" placeholder="Ex.: 330000" />
 
@@ -311,7 +310,7 @@
       <label>Prazo remanescente (meses)</label>
       <input id="currentMonths" type="number" step="1" placeholder="Ex.: 387" />
 
-      <h2>Nova situação</h2>
+      <h2>2. Nova situação (simulação C&Q)</h2>
       <label>Novo montante em dívida (€)</label>
       <input id="newPrincipal" type="number" step="0.01" placeholder="Ex.: 330000 ou 350000 se pedir mais" />
 
@@ -321,14 +320,14 @@
       <label>Novo prazo (meses)</label>
       <input id="newMonths" type="number" step="1" placeholder="Ex.: 384" />
 
-      <button onclick="calcularTransfer()">Calcular poupança</button>
+      <button onclick="calcularTransfer()">Calcular impacto na prestação</button>
 
       <div id="results" class="results"></div>
     </div>
 
     <!-- CALCULADORA COMPRA CASA -->
     <div id="calc-compra" class="calc-section">
-      <h2>Dados do agregado</h2>
+      <h2>1. Dados do agregado</h2>
 
       <label>Rendimento líquido mensal do agregado (€)</label>
       <input id="buyNetIncome" type="number" step="1" placeholder="Ex.: 1 200" />
@@ -349,7 +348,7 @@
       <label>Capitais próprios disponíveis (€)</label>
       <input id="buyCapital" type="number" step="1" placeholder="Ex.: 20 000" />
 
-      <h2>Parâmetros do crédito</h2>
+      <h2>2. Informação sobre o imóvel</h2>
 
       <label>Finalidade do imóvel</label>
       <select id="buyPurpose">
@@ -358,17 +357,7 @@
         <option value="arrendamento">Arrendamento</option>
       </select>
 
-      <label>Garantia pública até 15%?</label>
-      <select id="buyGuarantee">
-        <option value="nao" selected>Não</option>
-        <option value="sim">Sim</option>
-      </select>
-
-      <label>IMT Jovem (isenção de IMT e IS)?</label>
-      <select id="buyImtJovem">
-        <option value="nao" selected>Não</option>
-        <option value="sim">Sim</option>
-      </select>
+      <h2>3. Parâmetros do crédito</h2>
 
       <label>Tipo de taxa de juro</label>
       <select id="buyRateType">
@@ -377,14 +366,14 @@
         <option value="variavel">Variável</option>
       </select>
 
-      <label>Taxa de esforço máxima considerada (%)</label>
+      <label>Taxa de esforço a considerar</label>
       <select id="buyMaxEffort">
-        <option value="35">35% (cenário recomendado)</option>
-        <option value="40">40% (cenário limite)</option>
+        <option value="35">35% – Cenário recomendado C&Q</option>
+        <option value="40">40% – Cenário limite</option>
       </select>
 
       <label>TAN anual estimada (%)</label>
-      <input id="buyRate" type="number" step="0.01" value="3.7" />
+      <input id="buyRate" type="number" step="0.01" value="3.70" />
 
       <button onclick="calcularCompra()">Calcular capacidade de compra</button>
 
@@ -392,7 +381,8 @@
     </div>
 
     <div class="disclaimer">
-      ⚠️ Os valores apresentados são estimativas simplificadas e não substituem a análise detalhada das condições de crédito pelas instituições financeiras nem constituem proposta contratual.
+      ⚠️ Simulações meramente indicativas, baseadas em pressupostos simplificados. Não dispensam a análise detalhada das condições de crédito pelas instituições financeiras nem constituem proposta contratual.<br>
+      Para uma análise personalizada fale com a <strong>C&Q Finanças &amp; Soluções</strong>.
     </div>
   </div>
 
@@ -434,9 +424,9 @@
         document.querySelectorAll(".calc-section").forEach((sec) => {
           sec.classList.remove("active");
         });
-        document.getElementById(
-          target === "transfer" ? "calc-transfer" : "calc-compra"
-        ).classList.add("active");
+        document
+          .getElementById(target === "transfer" ? "calc-transfer" : "calc-compra")
+          .classList.add("active");
       });
     });
 
@@ -500,14 +490,14 @@
 
       const isSavingPrest = diffMensal < 0;
       const headerTitle = isSavingPrest
-        ? "Poupança mensal estimada:"
-        : "Prestação mensal aumenta em:";
+        ? "Poupança mensal estimada pela C&Q:"
+        : "A C&Q estima que a prestação aumente em:";
       const headerAmount = formatCurrency(Math.abs(diffMensal));
 
       const isJurosSaving = diffTotal < 0;
       const jurosLabel = isJurosSaving
-        ? "Valor dos juros totais diminui em:"
-        : "Valor dos juros totais aumenta em:";
+        ? "Juros totais diminuem (estimativa):"
+        : "Juros totais aumentam (estimativa):";
       const jurosAmount = formatCurrency(Math.abs(diffTotal));
       const jurosTrendClass = isJurosSaving ? "juros-saving" : "juros-increase";
       const jurosIcon = isJurosSaving ? "⬇️" : "⬆️";
@@ -529,7 +519,7 @@
             </div>
             <div class="results-tag">
               <span class="results-tag-icon">${isSavingPrest ? "✅" : "⚠️"}</span>
-              <span>${isSavingPrest ? "Prestação mais baixa" : "Prestação mais elevada"}</span>
+              <span>${isSavingPrest ? "Prestação mais baixa" : "Prestação mais elevada face à situação atual"}</span>
             </div>
           </div>
           <div class="results-column juros-block ${jurosTrendClass}">
@@ -542,6 +532,60 @@
           </div>
         </div>
       `;
+    }
+
+    // ---- helper para cenário de compra ----
+    function resolverCenario(maxLoan, capital, ltvMax, costRate, rate, months, netIncome, otherLoans) {
+      function isFeasible(x) {
+        const costs = costRate * x;
+        const loanMaxByIncome = maxLoan;
+        const loanMaxByLTV = ltvMax * x;
+        const loanMax = Math.min(loanMaxByIncome, loanMaxByLTV);
+        if (loanMax <= 0) return false;
+        const loanMin = x + costs - capital;
+        const needed = loanMin < 0 ? 0 : loanMin;
+        return loanMax >= needed;
+      }
+
+      let low = 0;
+      let high = (maxLoan + capital) * 3;
+      for (let i = 0; i < 40; i++) {
+        const mid = (low + high) / 2;
+        if (isFeasible(mid)) low = mid;
+        else high = mid;
+      }
+
+      const housePrice = low;
+      const costs = costRate * housePrice;
+      let loan = Math.min(maxLoan, ltvMax * housePrice);
+      if (loan < 0) loan = 0;
+
+      const entry = Math.max(0, housePrice - loan);
+      const capitalNeeded = entry + costs;
+      const shortage = Math.max(0, capitalNeeded - capital);
+
+      const monthlyRate = (rate / 100) / 12;
+      let payment;
+      if (monthlyRate === 0) {
+        payment = loan / months;
+      } else {
+        const factor = Math.pow(1 + monthlyRate, months);
+        payment = loan * monthlyRate * factor / (factor - 1);
+      }
+
+      const effortPercent =
+        netIncome > 0 ? ((otherLoans + payment) / netIncome) * 100 : 0;
+
+      return {
+        housePrice,
+        loan,
+        payment,
+        entry,
+        costs,
+        capitalNeeded,
+        shortage,
+        effortPercent
+      };
     }
 
     // ---- CALCULADORA COMPRA CASA ----
@@ -561,13 +605,11 @@
       const capital = parseFloat(
         document.getElementById("buyCapital").value.replace(",", ".")
       ) || 0;
+      const purpose = document.getElementById("buyPurpose").value;
       const maxEffort = parseFloat(
         document.getElementById("buyMaxEffort").value.replace(",", ".")
       );
       const rateType = document.getElementById("buyRateType").value;
-      const purpose = document.getElementById("buyPurpose").value;
-      const guarantee = document.getElementById("buyGuarantee").value;
-      const imtJovem = document.getElementById("buyImtJovem").value;
       let rate = parseFloat(
         document.getElementById("buyRate").value.replace(",", ".")
       );
@@ -588,176 +630,203 @@
         resultsDiv.className = "results-buy";
         resultsDiv.innerHTML =
           "<div class='results-buy-header'><span>Dados em falta</span><span>–</span></div>" +
-          "<div class='results-buy-body'>Por favor preencha pelo menos: rendimento, idade, finalidade, tipo de taxa, taxa de esforço e TAN estimada.</div>";
+          "<div class='results-buy-body'>Por favor preencha rendimento, idade, finalidade, tipo de taxa, taxa de esforço e TAN estimada para a C&Q poder simular.</div>";
         return;
       }
 
-      // Prestação máxima para crédito habitação
+      // Prestação máxima para crédito habitação (limite de esforço)
       const maxHousingEffort = netIncome * (maxEffort / 100) - otherLoans;
-
       if (maxHousingEffort <= 0) {
         resultsDiv.style.display = "block";
         resultsDiv.className = "results-buy red";
         resultsDiv.innerHTML =
           "<div class='results-buy-header'><span>Sem margem para nova prestação</span><span>⚠️</span></div>" +
-          "<div class='results-buy-body'>Com os dados inseridos, a prestação máxima disponível para crédito habitação é nula ou negativa. Será necessário rever rendimentos/despesas ou o valor pretendido.</div>";
+          "<div class='results-buy-body'>Com os dados inseridos, a C&Q estima que a prestação máxima disponível para crédito habitação seja nula ou negativa. Será necessário rever rendimentos/despesas ou o valor pretendido.</div>";
         return;
       }
 
-      // Prazo máximo: regra simplificada pela idade
-      let maxYears;
-      if (age < 30) {
-        maxYears = 40;
-      } else if (age <= 35) {
-        maxYears = 37;
-      } else {
-        maxYears = 35;
-      }
-      // Limite dos 75 anos
-      maxYears = Math.min(maxYears, 75 - age);
+      // Prazo máximo (regras simples por idade + limite 75 anos)
+      let baseYears;
+      if (age < 30) baseYears = 40;
+      else if (age <= 35) baseYears = 32;
+      else baseYears = 35;
+
+      let maxYears = Math.min(baseYears, 75 - age);
       if (maxYears < 5) maxYears = 5;
       const months = maxYears * 12;
 
-      // Montante máximo financiado pela capacidade de pagamento
+      // Montante máximo financiado assumindo prestação = maxHousingEffort
       const monthlyRate = (rate / 100) / 12;
-      let maxLoan = 0;
+      let maxLoan;
       if (monthlyRate === 0) {
         maxLoan = maxHousingEffort * months;
       } else {
         const factor = Math.pow(1 + monthlyRate, months);
         maxLoan = maxHousingEffort * (factor - 1) / (monthlyRate * factor);
       }
-      if (maxLoan < 0) maxLoan = 0;
 
-      // LTV conforme finalidade e garantia pública
-      let baseLTV = (purpose === "hpp") ? 0.90 : 0.80;
-      let LTV = baseLTV;
-      if (purpose === "hpp" && guarantee === "sim") {
-        LTV = 1.00; // até 100% do valor do imóvel
+      // LTV base por finalidade
+      let baseLTV = 0.9; // HPP
+      if (purpose !== "hpp") baseLTV = 0.8;
+
+      // Custos (IMT, selo, escrituras) – simplificado
+      const imtJovemOk = age <= 35;
+      const costRate = imtJovemOk ? 0.015 : 0.04;
+
+      // Primeiro cenário sem garantia pública
+      const baseScenario = resolverCenario(
+        maxLoan,
+        capital,
+        baseLTV,
+        costRate,
+        rate,
+        months,
+        netIncome,
+        otherLoans
+      );
+
+      // Ver se cumpre critérios para garantia pública
+      const annualIncome = netIncome * 14;
+      const meetsAgeGuarantee = age >= 18 && age <= 35;
+      const meetsIncomeGuarantee = annualIncome <= 81199;
+      const meetsPriceGuarantee = baseScenario.housePrice <= 450000;
+      const guaranteePossible =
+        purpose === "hpp" &&
+        meetsAgeGuarantee &&
+        meetsIncomeGuarantee &&
+        meetsPriceGuarantee;
+
+      let scenario = baseScenario;
+      let guaranteeText;
+      if (guaranteePossible) {
+        const ltvWithGuarantee = Math.min(1.0, baseLTV + 0.15); // até 100%
+        scenario = resolverCenario(
+          maxLoan,
+          capital,
+          ltvWithGuarantee,
+          costRate,
+          rate,
+          months,
+          netIncome,
+          otherLoans
+        );
+        guaranteeText =
+          "Potencialmente elegível para garantia pública até 15%, assumindo que não é proprietário e nunca beneficiou desta garantia. A simulação C&Q considera um financiamento de maior percentagem do valor do imóvel.";
+      } else {
+        guaranteeText =
+          "À luz da idade, rendimento anual, finalidade ou valor estimado do imóvel, poderá não cumprir os critérios base para a garantia pública até 15%. A simulação C&Q considera as regras padrão de LTV.";
       }
 
-      // Percentagem de despesas e impostos (simplificado)
-      let costPct = (imtJovem === "sim") ? 0.02 : 0.05;
-
-      const costFactor = (1 - LTV) + costPct; // % de capital que tem de ser próprio (entrada + custos)
-
-      let propertyPriceIncome = (LTV > 0) ? maxLoan / LTV : 0;
-      let propertyPriceCapital =
-        costFactor > 0 ? (capital / costFactor) : propertyPriceIncome;
-
-      if (propertyPriceCapital < 0 || !isFinite(propertyPriceCapital)) {
-        propertyPriceCapital = 0;
-      }
-
-      // Valor máximo de compra é o mínimo entre limite por rendimento e por capitais próprios
-      let propertyPrice = Math.min(propertyPriceIncome, propertyPriceCapital);
-      if (propertyPrice < 0) propertyPrice = 0;
-
-      const loanAmount = LTV * propertyPrice;
-
-      const paymentInfo = calcularPrestacaoEJuros(loanAmount, rate, months);
-      const payment = paymentInfo.payment;
-
-      const closingCosts = costPct * propertyPrice;
-      const requiredEntry = propertyPrice - loanAmount; // >= 0
-      const capitalsRequired = closingCosts + requiredEntry;
-      const extraCapitalNeeded = Math.max(0, capitalsRequired - capital);
-
-      // Taxa de esforço resultante (prestação usada, não a máxima)
-      const effortPercent = ((otherLoans + payment) / netIncome) * 100;
+      // Taxa de esforço real (com prestação do cenário)
+      const effortPercent = scenario.effortPercent;
 
       let effortClass = "green";
-      let effortMsgExtra = "A relação entre os rendimentos e os encargos mensais estará equilibrada.";
+      let effortLabel = `Taxa de esforço saudável de ${effortPercent.toFixed(0)}%`;
+      let effortMsg =
+        "A C&Q considera que a relação entre rendimentos e encargos mensais se mantém globalmente equilibrada.";
+
       if (effortPercent >= 45) {
         effortClass = "red";
-        effortMsgExtra = "A taxa de esforço é preocupante; em muitos casos a operação poderá não ser viável sem ajustes.";
+        effortLabel = `Taxa de esforço preocupante de ${effortPercent.toFixed(0)}%`;
+        effortMsg =
+          "A taxa de esforço é elevada. Qualquer imprevisto pode impactar a sua capacidade de cumprir a prestação. Aconselha-se análise detalhada com a C&Q antes de avançar.";
       } else if (effortPercent >= 35) {
         effortClass = "yellow";
-        effortMsgExtra = "A taxa de esforço é relativamente elevada; é importante analisar com detalhe as condições e a estabilidade dos rendimentos.";
+        effortLabel = `Taxa de esforço elevada de ${effortPercent.toFixed(0)}%`;
+        effortMsg =
+          "A taxa de esforço encontra-se num nível mais exigente. É importante avaliar margem financeira e estabilidade de rendimentos.";
       }
 
-      let effortTitle;
-      if (effortClass === "green") {
-        effortTitle = `Taxa de esforço saudável de ${effortPercent.toFixed(0)}%`;
-      } else if (effortClass === "yellow") {
-        effortTitle = `Taxa de esforço elevada de ${effortPercent.toFixed(0)}%`;
+      // Texto principal: precisa ou não de mais capitais
+      const shortage = scenario.shortage;
+      let mainSentence;
+      if (shortage <= 1) {
+        mainSentence = `Este valor permite-lhe, de forma indicativa, manter uma relação equilibrada entre os seus rendimentos e encargos. A C&Q estima que a sua prestação seja ${formatCurrency(
+          scenario.payment
+        )}.`;
       } else {
-        effortTitle = `Taxa de esforço preocupante de ${effortPercent.toFixed(0)}%`;
+        mainSentence = `Os seus rendimentos permitem-lhe comprar uma casa deste valor. No entanto, a C&Q estima que precise de mais ${formatCurrency(
+          shortage
+        )} de capitais próprios para cobrir entrada e custos. A prestação simulada é ${formatCurrency(
+          scenario.payment
+        )}.`;
       }
 
-      const textoIntro = extraCapitalNeeded > 0
-        ? `Os seus rendimentos permitem-lhe comprar uma casa deste valor. No entanto precisa de mais ${formatCurrency(extraCapitalNeeded)} de capitais próprios. A sua prestação será ${formatCurrency(payment)}.`
-        : `Este valor permite-lhe manter uma relação equilibrada entre os seus rendimentos e encargos. A sua prestação será ${formatCurrency(payment)}.`;
+      // IMT Jovem – só pela idade (resto em nota)
+      const imtText = imtJovemOk
+        ? "Poderá beneficiar do regime IMT Jovem se, além da idade, não for proprietário nem tiver sido proprietário de habitação (ou parte) nos últimos 3 anos."
+        : "Não cumpre a condição de idade para o regime IMT Jovem.";
 
-      // Notas de condições da simulação por tipo de taxa
-      let condicoesText = "";
-      if (rateType === "fixa") {
-        condicoesText = "Taxa de juro: 4,10%(1) | Prazo: 40 anos | LTV: 99,54% | Spread indicativo: 0,80% | Euribor a 6 Meses: 2,06%";
-      } else if (rateType === "mista") {
-        condicoesText = "Taxa de juro: 3,70%(1) | Prazo: 40 anos | LTV: 99,61%";
-      } else {
-        condicoesText = "Taxa de juro: 2,86%(1) | Prazo: 40 anos | LTV: 99,73% | Spread indicativo: 0,80% | Euribor a 6 Meses: 2,06%";
+      // Condições da simulação (agora com prazo dinâmico)
+      const ltvReal =
+        scenario.housePrice > 0
+          ? (scenario.loan / scenario.housePrice) * 100
+          : baseLTV * 100;
+
+      let condicoesText = `Taxa de juro: ${rate.toFixed(
+        2
+      )}%(1) | Prazo: ${maxYears} anos | LTV: ${ltvReal.toFixed(2)}%`;
+      if (rateType === "fixa" || rateType === "variavel") {
+        condicoesText += " | Spread indicativo: 0,80% | Euribor a 6 Meses: 2,06%";
       }
 
-      // Textos para garantia pública e IMT Jovem (conforme seleção)
-      const guaranteeText = (guarantee === "sim")
-        ? "Assinalou que cumpre (ou pretende beneficiar) da garantia pública até 15% do valor do imóvel, destinada a jovens entre os 18 e os 35 anos, com rendimentos até ao 8.º escalão e que não sejam ainda proprietários."
-        : "Assinalou que não cumpre, ou que não pretende utilizar, a garantia pública até 15%.";
-
-      const imtText = (imtJovem === "sim")
-        ? "Assinalou que cumpre (ou pretende beneficiar) do regime IMT Jovem, o que pode originar isenção de IMT e imposto do selo, desde que não seja proprietário nem tenha sido proprietário de habitação (ou parte) nos últimos três anos."
-        : "Assinalou que não cumpre, ou que não pretende utilizar, o regime IMT Jovem.";
-
+      // Construir resultado C&Q style
       resultsDiv.style.display = "block";
       resultsDiv.className = "results-buy " + effortClass;
 
       resultsDiv.innerHTML = `
         <div class="results-buy-header">
-          <span>Valor a considerar num cenário ${maxEffort >= 40 ? "limite" : "recomendado"}</span>
-          <span>${formatCurrency(propertyPrice)}</span>
+          <span>Valor a considerar num ${maxEffort === 35 ? "cenário recomendado C&Q" : "cenário limite"}</span>
+          <span>${formatCurrency(scenario.housePrice)}</span>
         </div>
         <div class="results-buy-body">
           <div class="results-buy-tag">
-            ${textoIntro}<br/>
-            ${effortTitle}<br/>
-            ${effortMsgExtra}
+            ${mainSentence}
+          </div>
+          <div class="results-buy-tag" style="margin-top:6px;">
+            <strong>${effortLabel}</strong><br/>
+            ${effortMsg}
           </div>
 
           <div class="results-buy-menu">
             <div class="results-buy-menu-row">
-              <span>Capitais próprios necessários:</span>
-              <span>${formatCurrency(capitalsRequired)}</span>
+              <span>Capitais próprios necessários (estimados):</span>
+              <span>${formatCurrency(scenario.capitalNeeded)}</span>
             </div>
             <div class="results-buy-menu-row">
-              <span>Entrada (estimada):</span>
-              <span>${formatCurrency(requiredEntry)}</span>
+              <span>Capitais próprios disponíveis:</span>
+              <span>${formatCurrency(capital)}</span>
+            </div>
+            <div class="results-buy-menu-row">
+              <span>Entrada:</span>
+              <span>${formatCurrency(scenario.entry)}</span>
             </div>
             <div class="results-buy-menu-row">
               <span>Despesas e impostos (estimados):</span>
-              <span>${formatCurrency(closingCosts)}</span>
+              <span>${formatCurrency(scenario.costs)}</span>
             </div>
             <div class="results-buy-menu-row">
               <span>Valor do empréstimo (estimado):</span>
-              <span>${formatCurrency(loanAmount)}</span>
+              <span>${formatCurrency(scenario.loan)}</span>
             </div>
             <div class="results-buy-menu-row">
-              <span>Valor do imóvel (estimado):</span>
-              <span>${formatCurrency(propertyPrice)}</span>
+              <span>Valor indicativo do imóvel:</span>
+              <span>${formatCurrency(scenario.housePrice)}</span>
             </div>
             <div class="results-buy-menu-row">
               <span>Prestação estimada:</span>
-              <span>${formatCurrency(payment)} (1)</span>
+              <span>${formatCurrency(scenario.payment)} (1)</span>
             </div>
           </div>
 
           <div class="results-buy-flags">
-            <strong>Condições da simulação</strong><br/>
+            <strong>Condições da simulação:</strong><br/>
             ${condicoesText}<br/>
-            (1) Aplicável apenas no primeiro período contratado.<br/><br/>
-
+            (1) Aplicável apenas no primeiro período contratado.
+            <br/><br/>
             <strong>Garantia pública até 15%:</strong><br/>
-            ${guaranteeText}<br/><br/>
-
+            ${guaranteeText}
+            <br/><br/>
             <strong>IMT Jovem:</strong><br/>
             ${imtText}
           </div>
