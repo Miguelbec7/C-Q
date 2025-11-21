@@ -412,12 +412,6 @@
         style="display:none; margin-top:-4px; margin-bottom:10px;"
       />
 
-      <label>LTV máximo do banco</label>
-      <select id="ltvMode">
-        <option value="auto">Padrão C&Q (até 90% HPP / 80% outras finalidades)</option>
-        <option value="85">Banco conservador – máximo 85%</option>
-      </select>
-
       <label>TAN anual estimada (%)</label>
       <input id="buyRate" type="number" step="0.01" value="3.70" />
 
@@ -640,36 +634,58 @@
       return price * 0.075;
     }
 
-    function makeCostFn(imtMode) {
-      return function (price) {
-        if (price <= 0 || isNaN(price)) return 0;
-        const imtBase = calcularIMTContinentalHPP(price); // HPP simplificado
-        const otherCosts = price * 0.01; // escrituras/registos (aprox. 1%)
+    // ---- helper para cenário de compra (com custos detalhados) ----
+    function resolverCenario(maxLoan, capital, ltvMax, rate, months, netIncome, otherLoans, imtMode) {
+      function calcularCustos(price, loan) {
+        const commissionAval = 250;
+        const commissionFormal = 750;
+        const direitoPref = 15;
+        const copiaContrato = 43;
+        const dpa = 20;
 
-        let imtFinal;
+        const fixedBank = commissionAval + commissionFormal;
+        const fixedEscritura = direitoPref + copiaContrato + dpa;
+
+        const seloCredito = loan * 0.006; // 0,6% do crédito (prazo >5 anos)
+
+        const imtBase = calcularIMTContinentalHPP(price);
+        let imtFinal, seloCompra;
         if (imtMode === "total") {
           imtFinal = 0;
+          seloCompra = 0;
         } else if (imtMode === "parcial") {
-          imtFinal = imtBase * 0.5; // benefício parcial (ex.: 50%)
+          imtFinal = imtBase * 0.5;
+          seloCompra = 0.5 * 0.008 * price; // 0,8% parcial
         } else {
           imtFinal = imtBase;
+          seloCompra = 0.008 * price;
         }
 
-        return imtFinal + otherCosts;
-      };
-    }
+        const custosTotais = fixedBank + fixedEscritura + seloCredito + imtFinal + seloCompra;
 
-    // ---- helper para cenário de compra ----
-    function resolverCenario(maxLoan, capital, ltvMax, rate, months, netIncome, otherLoans, costFn) {
-      function isFeasible(x) {
-        const costs = costFn(x);
-        const loanMaxByIncome = maxLoan;
-        const loanMaxByLTV = ltvMax * x;
-        const loanMax = Math.min(loanMaxByIncome, loanMaxByLTV);
-        if (loanMax <= 0) return false;
-        const loanMin = x + costs - capital;
-        const needed = loanMin < 0 ? 0 : loanMin;
-        return loanMax >= needed;
+        return {
+          custosTotais,
+          commissionAval,
+          commissionFormal,
+          direitoPref,
+          copiaContrato,
+          dpa,
+          fixedBank,
+          fixedEscritura,
+          seloCredito,
+          imtFinal,
+          seloCompra
+        };
+      }
+
+      function isFeasible(price) {
+        if (price <= 0) return false;
+        let loan = Math.min(maxLoan, ltvMax * price);
+        if (loan <= 0) return false;
+        const costData = calcularCustos(price, loan);
+        const entry = Math.max(0, price - loan);
+        const capitalNeeded = entry + costData.custosTotais;
+        return capital >= capitalNeeded;
       }
 
       let low = 0;
@@ -681,10 +697,11 @@
       }
 
       const housePrice = low;
-      const costs = costFn(housePrice);
       let loan = Math.min(maxLoan, ltvMax * housePrice);
-      if (loan < 0) loan = 0;
+      if (!isFinite(loan) || loan < 0) loan = 0;
 
+      const costData = calcularCustos(housePrice, loan);
+      const costs = costData.custosTotais;
       const entry = Math.max(0, housePrice - loan);
       const capitalNeeded = entry + costs;
       const shortage = Math.max(0, capitalNeeded - capital);
@@ -709,7 +726,8 @@
         costs,
         capitalNeeded,
         shortage,
-        effortPercent
+        effortPercent,
+        costBreakdown: costData
       };
     }
 
@@ -737,7 +755,6 @@
       );
       const gpConfirm = document.getElementById("gpConfirm").checked;
       const imtMode = document.getElementById("imtMode").value;
-      const ltvMode = document.getElementById("ltvMode").value;
 
       const maxEffortSelectValue = document.getElementById("buyMaxEffort").value;
       let maxEffort;
@@ -771,8 +788,6 @@
         return;
       }
 
-      const costFn = makeCostFn(imtMode);
-
       // Prestação máxima para crédito habitação (limite de esforço)
       const maxHousingEffort = netIncome * (maxEffort / 100) - otherLoans;
       if (maxHousingEffort <= 0) {
@@ -784,7 +799,7 @@
         return;
       }
 
-      // Prazo máximo (regras que combinámos)
+      // Prazo máximo (regras combinadas)
       let baseYears;
       if (age < 30) baseYears = 40;
       else if (age <= 35) baseYears = 37;
@@ -807,7 +822,6 @@
       // LTV base por finalidade
       let baseLTV = 0.9; // HPP
       if (purpose !== "hpp") baseLTV = 0.8;
-      if (ltvMode === "85") baseLTV = 0.85;
 
       // Primeiro cenário com LTV base (sem garantia)
       const baseScenario = resolverCenario(
@@ -818,7 +832,7 @@
         months,
         netIncome,
         otherLoans,
-        costFn
+        imtMode
       );
 
       // Garantia pública – ver critérios base
@@ -849,7 +863,7 @@
           months,
           netIncome,
           otherLoans,
-          costFn
+          imtMode
         );
         guaranteeText =
           "Assinalou que o cliente reúne os restantes requisitos da Garantia Pública Jovem. A simulação C&Q considera um financiamento de maior percentagem do valor do imóvel (até 15% adicionais, até ao limite legal).";
@@ -907,13 +921,13 @@
       let imtText;
       if (imtMode === "nenhum") {
         imtText =
-          "Foi selecionada a opção sem IMT Jovem. A simulação considera uma estimativa padrão de IMT, imposto de selo e escrituras, com base na tabela em vigor para Portugal Continental.";
+          "Foi selecionada a opção sem IMT Jovem. A simulação considera a tabela de IMT em vigor para Portugal Continental e o imposto de selo sobre a compra, de forma aproximada.";
       } else if (imtMode === "total") {
         imtText =
-          "Selecionada a opção IMT Jovem – benefício/isenção total. A simulação considera que não há IMT nem imposto de selo sobre a compra, apenas custos médios de escrituras/registos.";
+          "Selecionada a opção IMT Jovem – benefício/isenção total. A simulação considera que não há IMT nem imposto de selo sobre a compra, apenas imposto de selo sobre o crédito e custos bancários/escritura.";
       } else {
         imtText =
-          "Selecionada a opção IMT Jovem parcial (apenas um titular elegível). A simulação assume aproximadamente 50% do IMT devido, refletindo uma isenção parcial, e mantém uma estimativa de custos de escrituras/registos.";
+          "Selecionada a opção IMT Jovem parcial (apenas um titular elegível). A simulação assume aproximadamente 50% do IMT e 50% do imposto de selo sobre a compra, mantendo também o imposto de selo sobre o crédito e custos bancários/escritura.";
       }
       if (!imtJovemOk && imtMode !== "nenhum") {
         imtText +=
@@ -945,7 +959,7 @@
           months,
           netIncome,
           otherLoans,
-          costFn
+          imtMode
         );
         if (scenarioMoreCap.housePrice > scenario.housePrice + 1) {
           extraCapitalHtml = `
@@ -961,6 +975,17 @@
           `;
         }
       }
+
+      const breakdown = scenario.costBreakdown || {
+        commissionAval: 0,
+        commissionFormal: 0,
+        direitoPref: 0,
+        copiaContrato: 0,
+        dpa: 0,
+        seloCredito: 0,
+        imtFinal: 0,
+        seloCompra: 0
+      };
 
       // Construir resultado C&Q style
       resultsDiv.style.display = "block";
@@ -1026,6 +1051,18 @@
             <br/><br/>
             <strong>IMT Jovem:</strong><br/>
             ${imtText}
+            <br/><br/>
+            <strong>Despesas e impostos – desagregação C&Q (estimativa):</strong>
+            <ul>
+              <li>Comissão de avaliação: ${formatCurrency(breakdown.commissionAval)}</li>
+              <li>Comissão de formalização: ${formatCurrency(breakdown.commissionFormal)}</li>
+              <li>Declaração de Direito de Preferência: ${formatCurrency(breakdown.direitoPref)}</li>
+              <li>Cópia do contrato: ${formatCurrency(breakdown.copiaContrato)}</li>
+              <li>DPA / outros emolumentos: ${formatCurrency(breakdown.dpa)}</li>
+              <li>Imposto de selo sobre o crédito (≈0,6% do empréstimo): ${formatCurrency(breakdown.seloCredito)}</li>
+              <li>IMT estimado: ${formatCurrency(breakdown.imtFinal)}</li>
+              <li>Imposto de selo sobre a compra (quando aplicável): ${formatCurrency(breakdown.seloCompra)}</li>
+            </ul>
           </div>
 
           <div class="results-buy-docs">
