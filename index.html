@@ -13,6 +13,7 @@
       --cq-green: #10b981;
       --cq-green-dark: #0f766e;
       --cq-red: #ef4444;
+      --cq-amber: #f59e0b;
       --cq-bg: #f5f5f5;
       --cq-card: #ffffff;
       --cq-text-main: #0f172a;
@@ -198,18 +199,18 @@
       border-radius: 14px;
       overflow: hidden;
       display: none;
-      background: #ecfdf5;
       border: 1px solid #bbf7d0;
+      background: #ecfdf5;
     }
     .results-buy-header {
       padding: 10px 14px;
-      background: var(--cq-green);
       color: #fff;
       font-weight: 600;
       font-size: 0.95rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: var(--cq-green);
     }
     .results-buy-body {
       padding: 12px 14px;
@@ -231,6 +232,48 @@
       margin-top: 8px;
       font-size: 0.85rem;
       color: var(--cq-text-muted);
+    }
+
+    .results-buy-menu {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.9rem;
+    }
+    .results-buy-menu-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .results-buy-flags {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.85rem;
+    }
+
+    /* cores taxa de esforço */
+    .results-buy.green {
+      border-color: #bbf7d0;
+      background: #ecfdf5;
+    }
+    .results-buy.green .results-buy-header {
+      background: var(--cq-green);
+    }
+    .results-buy.yellow {
+      border-color: #fed7aa;
+      background: #fffbeb;
+    }
+    .results-buy.yellow .results-buy-header {
+      background: var(--cq-amber);
+    }
+    .results-buy.red {
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+    .results-buy.red .results-buy-header {
+      background: var(--cq-red);
     }
 
     .disclaimer {
@@ -303,10 +346,17 @@
       <label>Idade do titular mais velho (anos)</label>
       <input id="buyAge" type="number" step="1" placeholder="Ex.: 26" />
 
-      <label>Entrada / capitais próprios (€)</label>
-      <input id="buyDownPayment" type="number" step="1" placeholder="Ex.: 20 000" />
+      <label>Capitais próprios disponíveis (€)</label>
+      <input id="buyCapital" type="number" step="1" placeholder="Ex.: 20 000" />
 
       <h2>Parâmetros do crédito</h2>
+
+      <label>Tipo de taxa de juro</label>
+      <select id="buyRateType">
+        <option value="mista" selected>Mista</option>
+        <option value="fixa">Fixa</option>
+        <option value="variavel">Variável</option>
+      </select>
 
       <label>Taxa de esforço máxima considerada (%)</label>
       <select id="buyMaxEffort">
@@ -315,7 +365,7 @@
       </select>
 
       <label>TAN anual estimada (%)</label>
-      <input id="buyRate" type="number" step="0.01" placeholder="Ex.: 3" />
+      <input id="buyRate" type="number" step="0.01" placeholder="Ex.: 3,7" value="3.7" />
 
       <button onclick="calcularCompra()">Calcular capacidade de compra</button>
 
@@ -365,9 +415,20 @@
         document.querySelectorAll(".calc-section").forEach((sec) => {
           sec.classList.remove("active");
         });
-        document.getElementById(target === "transfer" ? "calc-transfer" : "calc-compra")
-          .classList.add("active");
+        document.getElementById(
+          target === "transfer" ? "calc-transfer" : "calc-compra"
+        ).classList.add("active");
       });
+    });
+
+    // Atualizar TAN conforme tipo de taxa
+    const rateTypeSelect = document.getElementById("buyRateType");
+    const buyRateInput = document.getElementById("buyRate");
+    rateTypeSelect.addEventListener("change", () => {
+      const type = rateTypeSelect.value;
+      if (type === "fixa") buyRateInput.value = "4.10";
+      if (type === "mista") buyRateInput.value = "3.70";
+      if (type === "variavel") buyRateInput.value = "2.86";
     });
 
     // ---- CALCULADORA TRANSFERÊNCIA ----
@@ -478,17 +539,22 @@
       const age = parseInt(
         document.getElementById("buyAge").value, 10
       );
-      const downPayment = parseFloat(
-        document.getElementById("buyDownPayment").value.replace(",", ".")
+      const capital = parseFloat(
+        document.getElementById("buyCapital").value.replace(",", ".")
       ) || 0;
       const maxEffort = parseFloat(
         document.getElementById("buyMaxEffort").value.replace(",", ".")
       );
-      const rate = parseFloat(
+      const rateType = document.getElementById("buyRateType").value;
+      let rate = parseFloat(
         document.getElementById("buyRate").value.replace(",", ".")
       );
 
       const resultsDiv = document.getElementById("results-buy");
+
+      if (rateType === "fixa" && isNaN(rate)) rate = 4.10;
+      if (rateType === "mista" && isNaN(rate)) rate = 3.70;
+      if (rateType === "variavel" && isNaN(rate)) rate = 2.86;
 
       if (
         isNaN(netIncome) ||
@@ -497,9 +563,10 @@
         isNaN(rate)
       ) {
         resultsDiv.style.display = "block";
+        resultsDiv.className = "results-buy";
         resultsDiv.innerHTML =
           "<div class='results-buy-header'><span>Dados em falta</span><span>–</span></div>" +
-          "<div class='results-buy-body'>Por favor preencha pelo menos: rendimento, idade, taxa de esforço e TAN estimada.</div>";
+          "<div class='results-buy-body'>Por favor preencha pelo menos: rendimento, idade, tipo de taxa, taxa de esforço e TAN estimada.</div>";
         return;
       }
 
@@ -508,15 +575,16 @@
 
       if (maxHousingEffort <= 0) {
         resultsDiv.style.display = "block";
+        resultsDiv.className = "results-buy red";
         resultsDiv.innerHTML =
           "<div class='results-buy-header'><span>Sem margem para nova prestação</span><span>⚠️</span></div>" +
-          "<div class='results-buy-body'>Com os dados inseridos, a prestação máxima disponível para crédito habitação é nula ou negativa. Será necessário rever rendimentos/despesas.</div>";
+          "<div class='results-buy-body'>Com os dados inseridos, a prestação máxima disponível para crédito habitação é nula ou negativa. Será necessário rever rendimentos/despesas ou o valor pretendido.</div>";
         return;
       }
 
-      // Prazo máximo: até 75 anos, máximo 40 anos
-      let maxYears = 75 - age;
-      if (maxYears > 40) maxYears = 40;
+      // Prazo máximo: regra simplificada pela idade que pediste
+      let baseYears = age < 30 ? 40 : 32;
+      let maxYears = Math.min(baseYears, 75 - age);
       if (maxYears < 5) maxYears = 5;
       const months = maxYears * 12;
 
@@ -529,12 +597,58 @@
         const factor = Math.pow(1 + monthlyRate, months);
         maxLoan = maxHousingEffort * (factor - 1) / (monthlyRate * factor);
       }
-
       if (maxLoan < 0) maxLoan = 0;
 
-      const housePrice = maxLoan + downPayment;
+      // Valor indicativo do imóvel: financiamento + capitais próprios
+      const housePrice = maxLoan + capital;
+
+      // Taxa de esforço resultante (incluindo outros créditos)
+      const effortPercent = ((otherLoans + maxHousingEffort) / netIncome) * 100;
+
+      let effortClass = "green";
+      let effortMsgExtra = "A relação entre os rendimentos e encargos mensais estará equilibrada.";
+      if (effortPercent >= 45) {
+        effortClass = "red";
+        effortMsgExtra = "A taxa de esforço é elevada; em muitos casos a operação poderá não ser viável sem ajustes.";
+      } else if (effortPercent >= 35) {
+        effortClass = "yellow";
+        effortMsgExtra = "A taxa de esforço é relativamente elevada; é importante analisar com detalhe as condições e estabilidade de rendimentos.";
+      }
+
+      const effortText = `Taxa de esforço saudável de ${effortPercent.toFixed(0)}%`;
+
+      // Notas de condições da simulação por tipo de taxa
+      let condicoesText = "";
+      if (rateType === "fixa") {
+        condicoesText = "Taxa de juro: 4,10%(1) | Prazo: 40 anos | LTV: 99,54% | Spread indicativo: 0,80% | Euribor a 6 Meses: 2,06%";
+      } else if (rateType === "mista") {
+        condicoesText = "Taxa de juro: 3,70%(1) | Prazo: 40 anos | LTV: 99,61%";
+      } else {
+        condicoesText = "Taxa de juro: 2,86%(1) | Prazo: 40 anos | LTV: 99,73% | Spread indicativo: 0,80% | Euribor a 6 Meses: 2,06%";
+      }
+
+      // Garantia pública – verificação simples (idade + rendimento + valor imóvel)
+      const annualIncome = netIncome * 14;
+      const meetsAgeGuarantee = age >= 18 && age <= 35;
+      const meetsIncomeGuarantee = annualIncome <= 81199;
+      const meetsPriceGuarantee = housePrice <= 450000;
+      const guaranteeOk = meetsAgeGuarantee && meetsIncomeGuarantee && meetsPriceGuarantee;
+
+      const guaranteeText = guaranteeOk
+        ? "Potencialmente elegível para garantia pública até 15%, assumindo que não é proprietário e nunca beneficiou desta garantia."
+        : "À luz da idade, rendimento anual ou valor estimado do imóvel, poderá não cumprir os critérios base para a garantia pública até 15%.";
+
+      // IMT Jovem – simplificado pela idade
+      const imtJovemOk = age <= 35;
+      const imtText = imtJovemOk
+        ? "Poderá beneficiar do regime IMT Jovem se, além da idade, não for proprietário nem tiver sido proprietário de habitação (ou parte) nos últimos 3 anos."
+        : "Não cumpre a condição de idade para o regime IMT Jovem.";
 
       resultsDiv.style.display = "block";
+      resultsDiv.className = "results-buy " + effortClass;
+
+      const prestacaoText = `Este valor permite-lhe manter uma relação equilibrada entre os seus rendimentos e encargos. A sua prestação será ${formatCurrency(maxHousingEffort)}.`;
+
       resultsDiv.innerHTML = `
         <div class="results-buy-header">
           <span>Estimativa de capacidade de compra</span>
@@ -557,9 +671,42 @@
             <span class="results-buy-label">Prazo considerado:</span>
             <span class="results-buy-value">${maxYears} anos</span>
           </div>
+
           <div class="results-buy-tag">
-            Cálculo efetuado com taxa de esforço de ${maxEffort}% e TAN estimada de ${rate}%,
-            assumindo um prazo até aos ${75} anos de idade do titular mais velho (máx. 40 anos).
+            ${prestacaoText}<br/>
+            ${effortText}<br/>
+            ${effortMsgExtra}
+          </div>
+
+          <div class="results-buy-menu">
+            <div class="results-buy-menu-row">
+              <span>Capitais próprios disponíveis:</span>
+              <span>${formatCurrency(capital)}</span>
+            </div>
+            <div class="results-buy-menu-row">
+              <span>Valor do empréstimo (estimado):</span>
+              <span>${formatCurrency(maxLoan)}</span>
+            </div>
+            <div class="results-buy-menu-row">
+              <span>Valor indicativo do imóvel:</span>
+              <span>${formatCurrency(housePrice)}</span>
+            </div>
+            <div class="results-buy-menu-row">
+              <span>Prestação estimada:</span>
+              <span>${formatCurrency(maxHousingEffort)}</span>
+            </div>
+          </div>
+
+          <div class="results-buy-flags">
+            <strong>Condições da simulação</strong><br/>
+            ${condicoesText}<br/>
+            (1) Aplicável apenas no primeiro período contratado.
+            <br/><br/>
+            <strong>Garantia pública até 15%:</strong><br/>
+            ${guaranteeText}
+            <br/><br/>
+            <strong>IMT Jovem:</strong><br/>
+            ${imtText}
           </div>
         </div>
       `;
