@@ -9,20 +9,34 @@
   <link rel="apple-touch-icon" sizes="180x180" href="Logo.png?v=2" />
 
   <style>
+    :root {
+      /* Cores estilo C&Q */
+      --cq-green: #10b981;
+      --cq-green-dark: #0f766e;
+      --cq-red: #ef4444;
+      --cq-bg: #f5f5f5;
+      --cq-card: #ffffff;
+      --cq-text-main: #0f172a;
+      --cq-text-muted: #6b7280;
+    }
+
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
       padding: 16px;
-      background-color: #f5f5f5;
+      background-color: var(--cq-bg);
+      color: var(--cq-text-main);
     }
+
     .container {
       max-width: 480px;
       margin: 0 auto;
-      background: #ffffff;
+      background: var(--cq-card);
       padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(15,23,42,0.08);
     }
+
     .logo {
       display: flex;
       justify-content: center;
@@ -32,6 +46,7 @@
       max-width: 140px;
       height: auto;
     }
+
     h1 {
       font-size: 1.2rem;
       margin-bottom: 8px;
@@ -52,29 +67,100 @@
       padding: 8px;
       font-size: 1rem;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      border: 1px solid #d4d4d8;
       box-sizing: border-box;
       margin-bottom: 10px;
     }
+    input:focus {
+      outline: none;
+      border-color: var(--cq-green);
+      box-shadow: 0 0 0 1px var(--cq-green);
+    }
+
     button {
       width: 100%;
       padding: 10px;
       font-size: 1rem;
-      border-radius: 8px;
+      border-radius: 999px;
       border: none;
       cursor: pointer;
-      background: #10b981;
+      background: linear-gradient(135deg, var(--cq-green), var(--cq-green-dark));
       color: #fff;
       font-weight: 600;
       margin-top: 4px;
     }
+
     .results {
       margin-top: 16px;
-      padding: 12px;
-      background: #f0fdf4;
-      border-radius: 8px;
+      border-radius: 14px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .results-header {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #ffffff;
+      font-weight: 600;
       font-size: 0.95rem;
     }
+
+    .results-header-amount {
+      font-size: 1.1rem;
+    }
+
+    .results-body {
+      background: #f9fafb;
+      padding: 12px 14px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+    }
+
+    .results-column {
+      flex: 1 1 150px;
+    }
+
+    .results-label {
+      color: var(--cq-text-muted);
+      margin-bottom: 4px;
+    }
+
+    .results-value-main {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .results-value-muted {
+      text-decoration: line-through;
+      color: #9ca3af;
+      margin-left: 4px;
+      font-size: 0.85rem;
+    }
+
+    .results-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      margin-top: 6px;
+    }
+
+    .results-tag-icon {
+      font-size: 1.1rem;
+    }
+
+    /* cores dinâmicas */
+    .results.savings .results-header {
+      background: var(--cq-green);
+    }
+    .results.increase .results-header {
+      background: var(--cq-red);
+    }
+
     .disclaimer {
       margin-top: 12px;
       font-size: 0.75rem;
@@ -114,7 +200,7 @@
 
     <button onclick="calcular()">Calcular poupança</button>
 
-    <div id="results" class="results" style="display:none;"></div>
+    <div id="results" class="results"></div>
 
     <div class="disclaimer">
       ⚠️ Os valores apresentados são estimativas simplificadas e não substituem a análise detalhada das condições de crédito pelas instituições financeiras nem constituem proposta contratual.
@@ -177,8 +263,10 @@
         isNaN(newMonths)
       ) {
         resultsDiv.style.display = "block";
+        resultsDiv.className = "results increase"; // só para ter estilo
         resultsDiv.innerHTML =
-          "Por favor preencha todos os campos com valores válidos (exceto o novo montante, que é opcional).";
+          "<div class='results-header'><span>Dados em falta</span><span class='results-header-amount'>–</span></div>" +
+          "<div class='results-body'><div class='results-column'>Por favor preencha todos os campos com valores válidos (exceto o novo montante, que é opcional).</div></div>";
         return;
       }
 
@@ -192,27 +280,49 @@
       const novo = calcularPrestacaoEJuros(newPrincipal, newRate, newMonths);
 
       const diffMensal = novo.payment - atual.payment;
-      const labelMensal =
-        diffMensal < 0 ? "Poupança mensal estimada" : "Acréscimo mensal estimado";
-
       const diffTotal = novo.totalInterest - atual.totalInterest;
-      const labelTotal =
-        diffTotal < 0 ? "Poupança total em juros (estimada)" : "Acréscimo total em juros (estimado)";
 
+      const isSaving = diffMensal < 0;
+      const headerTitle = isSaving
+        ? "Poupança mensal estimada:"
+        : "Prestação mensal aumenta em:";
+      const headerAmount = formatCurrency(Math.abs(diffMensal));
+
+      const jurosLabel = diffTotal < 0
+        ? "Valor dos juros totais diminui em:"
+        : "Valor dos juros totais aumenta em:";
+      const jurosAmount = formatCurrency(Math.abs(diffTotal));
+
+      // definir classes para cores
+      resultsDiv.className = "results " + (isSaving ? "savings" : "increase");
       resultsDiv.style.display = "block";
+
       resultsDiv.innerHTML = `
-        <div><strong>Situação atual</strong></div>
-        <div>Montante: <strong>${formatCurrency(principal)}</strong></div>
-        <div>Prestação atual: <strong>${formatCurrency(atual.payment)}</strong></div>
-        <hr style="margin:8px 0;">
-        <div><strong>Nova situação</strong></div>
-        <div>Montante: <strong>${formatCurrency(newPrincipal)}</strong></div>
-        <div>Prestação nova: <strong>${formatCurrency(novo.payment)}</strong></div>
-        <div style="margin-top:6px;">${labelMensal}: <strong>${formatCurrency(Math.abs(diffMensal))}</strong></div>
-        <hr style="margin:8px 0;">
-        <div>Juros totais (situação atual): <strong>${formatCurrency(atual.totalInterest)}</strong></div>
-        <div>Juros totais (situação nova): <strong>${formatCurrency(novo.totalInterest)}</strong></div>
-        <div style="margin-top:6px;">${labelTotal}: <strong>${formatCurrency(Math.abs(diffTotal))}</strong></div>
+        <div class="results-header">
+          <span>${headerTitle}</span>
+          <span class="results-header-amount">${headerAmount}</span>
+        </div>
+        <div class="results-body">
+          <div class="results-column">
+            <div class="results-label">Prestação mensal</div>
+            <div class="results-value-main">
+              ${formatCurrency(novo.payment)}
+              <span class="results-value-muted">${formatCurrency(atual.payment)}</span>
+            </div>
+            <div class="results-tag">
+              <span class="results-tag-icon">${isSaving ? "✅" : "⚠️"}</span>
+              <span>${isSaving ? "Prestação mais baixa" : "Prestação mais elevada"}</span>
+            </div>
+          </div>
+          <div class="results-column">
+            <div class="results-label">Juros totais do contrato</div>
+            <div class="results-value-main">${jurosAmount}</div>
+            <div class="results-tag">
+              <span class="results-tag-icon">📉</span>
+              <span>${jurosLabel}</span>
+            </div>
+          </div>
+        </div>
       `;
     }
   </script>
