@@ -153,12 +153,22 @@
       font-size: 1.1rem;
     }
 
-    /* cores dinâmicas */
+    /* cores do cabeçalho conforme prestação */
     .results.savings .results-header {
       background: var(--cq-green);
     }
     .results.increase .results-header {
       background: var(--cq-red);
+    }
+
+    /* cores específicas para a coluna de juros */
+    .juros-block.juros-saving .results-value-main,
+    .juros-block.juros-saving .results-tag {
+      color: var(--cq-green-dark);
+    }
+    .juros-block.juros-increase .results-value-main,
+    .juros-block.juros-increase .results-tag {
+      color: var(--cq-red);
     }
 
     .disclaimer {
@@ -263,7 +273,7 @@
         isNaN(newMonths)
       ) {
         resultsDiv.style.display = "block";
-        resultsDiv.className = "results increase"; // só para ter estilo
+        resultsDiv.className = "results increase";
         resultsDiv.innerHTML =
           "<div class='results-header'><span>Dados em falta</span><span class='results-header-amount'>–</span></div>" +
           "<div class='results-body'><div class='results-column'>Por favor preencha todos os campos com valores válidos (exceto o novo montante, que é opcional).</div></div>";
@@ -282,19 +292,23 @@
       const diffMensal = novo.payment - atual.payment;
       const diffTotal = novo.totalInterest - atual.totalInterest;
 
-      const isSaving = diffMensal < 0;
-      const headerTitle = isSaving
+      const isSavingPrest = diffMensal < 0;
+      const headerTitle = isSavingPrest
         ? "Poupança mensal estimada:"
         : "Prestação mensal aumenta em:";
       const headerAmount = formatCurrency(Math.abs(diffMensal));
 
-      const jurosLabel = diffTotal < 0
+      // Juros: bom = verde, mau = vermelho
+      const isJurosSaving = diffTotal < 0;
+      const jurosLabel = isJurosSaving
         ? "Valor dos juros totais diminui em:"
         : "Valor dos juros totais aumenta em:";
       const jurosAmount = formatCurrency(Math.abs(diffTotal));
+      const jurosTrendClass = isJurosSaving ? "juros-saving" : "juros-increase";
+      const jurosIcon = isJurosSaving ? "⬇️" : "⬆️";
 
-      // definir classes para cores
-      resultsDiv.className = "results " + (isSaving ? "savings" : "increase");
+      // definir classes para o cabeçalho (com base na prestação)
+      resultsDiv.className = "results " + (isSavingPrest ? "savings" : "increase");
       resultsDiv.style.display = "block";
 
       resultsDiv.innerHTML = `
@@ -310,15 +324,15 @@
               <span class="results-value-muted">${formatCurrency(atual.payment)}</span>
             </div>
             <div class="results-tag">
-              <span class="results-tag-icon">${isSaving ? "✅" : "⚠️"}</span>
-              <span>${isSaving ? "Prestação mais baixa" : "Prestação mais elevada"}</span>
+              <span class="results-tag-icon">${isSavingPrest ? "✅" : "⚠️"}</span>
+              <span>${isSavingPrest ? "Prestação mais baixa" : "Prestação mais elevada"}</span>
             </div>
           </div>
-          <div class="results-column">
+          <div class="results-column juros-block ${jurosTrendClass}">
             <div class="results-label">Juros totais do contrato</div>
             <div class="results-value-main">${jurosAmount}</div>
             <div class="results-tag">
-              <span class="results-tag-icon">📉</span>
+              <span class="results-tag-icon">${jurosIcon}</span>
               <span>${jurosLabel}</span>
             </div>
           </div>
