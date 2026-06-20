@@ -27,35 +27,52 @@ ficheiros JSON/MDX editáveis sem código.
 
 O Decap CMS usa o GitHub como "backend" (`public/admin/config.yml`): cada login em `/admin`
 autentica via OAuth do GitHub e cada gravação cria um commit no repositório
-`Miguelbec7/C-Q`. Isto exige um **provider OAuth** — um pequeno serviço que faz a troca do
-código de autorização do GitHub por um token de acesso, porque o GitHub não permite OAuth
-diretamente do browser por razões de segurança (client secret não pode ficar exposto).
+`Miguelbec7/C-Q`. Isto exige um **provider OAuth** — um serviço que faz a troca do código de
+autorização do GitHub por um token de acesso, porque o GitHub não permite OAuth diretamente
+do browser por razões de segurança (client secret não pode ficar exposto).
 
-Atualmente, `public/admin/config.yml` tem:
+Em vez de um Worker separado (mais infraestrutura para manter), o próprio site implementa
+este provider em duas rotas API do Next.js, que correm no mesmo Worker:
+
+- `src/app/api/decap-oauth/auth/route.ts` — inicia o login, redireciona para o GitHub.
+- `src/app/api/decap-oauth/callback/route.ts` — troca o `code` por um `access_token` e
+  devolve-o ao popup do `/admin` via `postMessage`.
+
+`public/admin/config.yml` aponta para isto:
 
 ```yaml
 backend:
   name: github
   repo: Miguelbec7/C-Q # TODO(cliente): confirmar organização/repositório definitivo
   branch: main # TODO(cliente): confirmar o branch de produção
-  base_url: https://auth.cqfinancas.pt # TODO(cliente): endpoint do provider OAuth GitHub
+  base_url: https://TODO-SUBSTITUIR-PELO-URL-DO-SITE # URL público atual do site
+  auth_endpoint: api/decap-oauth/auth
 ```
 
-`base_url` é um **placeholder** — `/admin` não vai funcionar em produção até este endpoint
-existir. Duas opções para o implementar:
+`base_url` deve ser o URL público **atual** do site (o `*.workers.dev` enquanto o domínio
+definitivo não estiver decidido; passa a ser o domínio definitivo depois, bastando atualizar
+esta linha e voltar a publicar).
 
-1. **Cloudflare Worker dedicado** (recomendado, já que o site está em Cloudflare Pages) —
-   usar o [`decap-cms-oauth-provider`](https://github.com/sterlingwes/decap-proxy) ou
-   equivalente, criar uma app OAuth em GitHub (`Settings → Developer settings → OAuth Apps`)
-   apontando o "Authorization callback URL" para `https://auth.cqfinancas.pt/callback`, e
-   guardar `OAUTH_GITHUB_CLIENT_ID` / `OAUTH_GITHUB_CLIENT_SECRET` (já documentados em
-   `.env.example`) como secrets do Worker.
-2. **Netlify Identity / serviço gerido equivalente** — alternativa mais rápida de configurar
-   mas acrescenta uma dependência fora do Cloudflare.
+Passos para ativar (feitos uma única vez, do lado da conta GitHub/Cloudflare do cliente):
 
-Até este endpoint estar ativo, `/admin` mostra um erro de autenticação — o site público
-(todas as outras páginas) funciona normalmente, pois é gerado de forma estática e não depende
-do CMS em runtime.
+1. No GitHub: **Settings → Developer settings → OAuth Apps → New OAuth App**.
+   - Homepage URL: o mesmo `base_url` de `config.yml`.
+   - Authorization callback URL: `<base_url>/api/decap-oauth/callback`.
+2. Copiar o **Client ID** e gerar um **Client Secret**.
+3. Guardar como secrets do Worker (Cloudflare → Settings → Variables and Secrets, ou
+   `npx wrangler secret put ...`):
+   - `OAUTH_GITHUB_CLIENT_ID`
+   - `OAUTH_GITHUB_CLIENT_SECRET`
+4. Publicar (`npm run cf:deploy` ou um novo push para `main`, conforme o deploy automático
+   configurado).
+
+Até este endpoint estar ativo e configurado, `/admin` mostra um erro de autenticação — o
+site público (todas as outras páginas) funciona normalmente, pois é gerado de forma estática
+e não depende do CMS em runtime.
+
+> Nota: se o domínio mudar mais tarde, é preciso atualizar tanto o `base_url` em
+> `config.yml` como a "Authorization callback URL" da app OAuth no GitHub, para que voltem a
+> corresponder.
 
 ## Fluxo de edição
 

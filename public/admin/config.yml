@@ -2,7 +2,8 @@ backend:
   name: github
   repo: Miguelbec7/C-Q # TODO(cliente): confirmar organização/repositório definitivo
   branch: main # TODO(cliente): confirmar o branch de produção
-  base_url: https://auth.cqfinancas.pt # TODO(cliente): endpoint do provider OAuth GitHub — ver docs/backoffice.md
+  base_url: https://TODO-SUBSTITUIR-PELO-URL-DO-SITE # TODO(cliente): URL público atual do site (ex.: o workers.dev, ou o domínio definitivo depois) — ver docs/backoffice.md
+  auth_endpoint: api/decap-oauth/auth
 
 publish_mode: editorial_workflow
 media_folder: "public/images/blog"
