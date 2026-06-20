@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Brand — Azul-marinho premium */
+  --color-navy-50: #f0f4f8;
+  --color-navy-100: #d9e3ec;
+  --color-navy-200: #b3c7d9;
+  --color-navy-300: #84a4c0;
+  --color-navy-400: #5780a3;
+  --color-navy-500: #3a6086;
+  --color-navy-600: #28486b;
+  --color-navy-700: #1d3650;
+  --color-navy-800: #14263a;
+  --color-navy-900: #0c1b2b;
+  --color-navy-950: #07111d;
+
+  /* Brand — Dourado premium */
+  --color-gold-50: #fdf8ec;
+  --color-gold-100: #faeec9;
+  --color-gold-200: #f3da93;
+  --color-gold-300: #ecc35d;
+  --color-gold-400: #e3ad38;
+  --color-gold-500: #c89a3f;
+  --color-gold-600: #ad8226;
+  --color-gold-700: #8a651e;
+  --color-gold-800: #6b4f1a;
+  --color-gold-900: #4d3815;
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-manrope);
+
+  --shadow-premium: 0 20px 50px -12px rgba(12, 27, 43, 0.18);
+  --shadow-premium-sm: 0 8px 24px -6px rgba(12, 27, 43, 0.14);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: #ffffff;
+    color: var(--color-navy-900);
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-grain {
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
