@@ -43,3 +43,8 @@ next-env.d.ts
 
 # leads store (local dev placeholder — replace with real DB in production)
 /.data
+
+# cloudflare (opennextjs-cloudflare / wrangler build output)
+/.open-next/
+/.wrangler/
+.dev.vars
