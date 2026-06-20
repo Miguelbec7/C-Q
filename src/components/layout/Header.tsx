@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { SearchBox } from "@/components/widgets/SearchBox";
 import { services } from "@/lib/data/services";
 import { simulators } from "@/lib/data/simuladores";
 import { siteConfig } from "@/lib/site-config";
@@ -88,6 +89,7 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <SearchBox />
           <Button
             href={`https://wa.me/${siteConfig.contact.whatsapp}`}
             external

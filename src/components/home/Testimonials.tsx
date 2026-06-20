@@ -1,28 +1,7 @@
 import { Star, Quote } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-
-// TODO(cliente): substituir por testemunhos reais de clientes.
-const testimonials = [
-  {
-    name: "Marta S.",
-    context: "Crédito Habitação",
-    quote:
-      "A equipa da C&Q acompanhou-nos do início ao fim e conseguiu condições muito melhores do que as que tínhamos no nosso banco. Recomendo vivamente.",
-  },
-  {
-    name: "Ricardo P.",
-    context: "Transferência de Crédito",
-    quote:
-      "Não sabia que valia tanto a pena transferir o crédito habitação. Reduzimos a prestação mensal de forma muito significativa, sem complicações.",
-  },
-  {
-    name: "Inês & Carlos",
-    context: "Crédito Construção",
-    quote:
-      "Processo transparente do princípio ao fim, com explicações claras em cada etapa da construção da nossa casa.",
-  },
-];
+import testimonials from "../../../data/testimonials.json";
 
 export function Testimonials() {
   return (

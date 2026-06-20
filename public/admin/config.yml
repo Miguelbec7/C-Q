@@ -1,0 +1,112 @@
+backend:
+  name: github
+  repo: Miguelbec7/C-Q # TODO(cliente): confirmar organização/repositório definitivo
+  branch: main # TODO(cliente): confirmar o branch de produção
+  base_url: https://auth.cqfinancas.pt # TODO(cliente): endpoint do provider OAuth GitHub — ver docs/backoffice.md
+
+publish_mode: editorial_workflow
+media_folder: "public/images/blog"
+public_folder: "/images/blog"
+
+collections:
+  - name: "blog"
+    label: "Artigos do Blog"
+    folder: "content/blog"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "mdx"
+    format: "frontmatter"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - label: "Categoria"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Crédito Habitação", value: "credito-habitacao" }
+          - { label: "Transferência de Crédito", value: "transferencia-de-credito" }
+          - { label: "Crédito Construção", value: "credito-construcao" }
+          - { label: "Crédito Pessoal", value: "credito-pessoal" }
+          - { label: "Seguros", value: "seguros" }
+          - { label: "Poupança", value: "poupanca" }
+          - { label: "Investimento", value: "investimento" }
+          - { label: "Fiscalidade", value: "fiscalidade" }
+          - { label: "Mercado Imobiliário", value: "mercado-imobiliario" }
+          - { label: "Banco de Portugal", value: "banco-de-portugal" }
+          - { label: "Dicas Financeiras", value: "dicas-financeiras" }
+      - { label: "Resumo (excerto curto)", name: "excerpt", widget: "text" }
+      - { label: "Descrição para SEO", name: "seoDescription", widget: "text" }
+      - label: "Imagem de capa"
+        name: "coverImage"
+        widget: "image"
+        default: "/images/blog/default-cover.jpg"
+        required: false
+      - { label: "Autor", name: "author", widget: "string", default: "Equipa C&Q Finanças" }
+      - { label: "Data de publicação", name: "publishedAt", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "Data de atualização", name: "updatedAt", widget: "datetime", format: "YYYY-MM-DD", required: false }
+      - { label: "Conteúdo", name: "body", widget: "markdown" }
+
+  - name: "testimonials"
+    label: "Testemunhos"
+    files:
+      - file: "data/testimonials.json"
+        name: "testimonials"
+        label: "Testemunhos de clientes"
+        fields:
+          - label: "Testemunhos"
+            name: "testimonials"
+            widget: "list"
+            fields:
+              - { label: "Nome", name: "name", widget: "string" }
+              - { label: "Contexto (ex: Crédito Habitação)", name: "context", widget: "string" }
+              - { label: "Testemunho", name: "quote", widget: "text" }
+
+  - name: "settings"
+    label: "Definições do site"
+    files:
+      - file: "data/site-settings.json"
+        name: "site-settings"
+        label: "Contacto, registo e parceiros"
+        fields:
+          - label: "Contacto"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Telefone (com indicativo)", name: "phone", widget: "string" }
+              - { label: "Telefone (apresentação)", name: "phoneDisplay", widget: "string" }
+              - { label: "WhatsApp (formato internacional, sem '+')", name: "whatsapp", widget: "string" }
+              - { label: "Email", name: "email", widget: "string" }
+              - label: "Endereço"
+                name: "address"
+                widget: "object"
+                fields:
+                  - { label: "Rua", name: "street", widget: "string" }
+                  - { label: "Código postal", name: "postalCode", widget: "string" }
+                  - { label: "Cidade", name: "city", widget: "string" }
+                  - { label: "País", name: "country", widget: "string" }
+              - { label: "Google Maps (URL de incorporação)", name: "mapsEmbedUrl", widget: "text" }
+              - label: "Horário de funcionamento"
+                name: "schedule"
+                widget: "list"
+                fields:
+                  - { label: "Dias", name: "days", widget: "string" }
+                  - { label: "Horas", name: "hours", widget: "string" }
+          - label: "Banco de Portugal"
+            name: "banking"
+            widget: "object"
+            fields:
+              - { label: "Nº de registo BdP", name: "bdpRegistration", widget: "string" }
+              - { label: "URL de verificação no BdP", name: "bdpUrl", widget: "string" }
+              - { label: "NIPC", name: "nipc", widget: "string" }
+          - label: "Redes sociais"
+            name: "social"
+            widget: "object"
+            fields:
+              - { label: "Instagram", name: "instagram", widget: "string" }
+              - { label: "Facebook", name: "facebook", widget: "string" }
+              - { label: "LinkedIn", name: "linkedin", widget: "string" }
+          - label: "Instituições financeiras parceiras"
+            name: "partners"
+            widget: "list"
+            fields:
+              - { label: "Nome", name: "name", widget: "string" }
