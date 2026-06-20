@@ -36,6 +36,8 @@ const adminCsp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // Build standalone necessário para o adaptador @opennextjs/cloudflare (deploy em Cloudflare Workers).
+  output: "standalone",
   async headers() {
     return [
       {

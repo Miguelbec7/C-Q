@@ -2,7 +2,10 @@ import { promises as fs } from "fs";
 import path from "path";
 
 /**
- * Armazenamento de leads — implementação mínima em ficheiro local.
+ * Armazenamento de leads — implementação mínima em ficheiro local, só para
+ * desenvolvimento/validação (ver /backoffice/leads). Em ambientes sem sistema de
+ * ficheiros persistente (ex.: Cloudflare Workers), a escrita falha silenciosamente
+ * e a entrega real do lead continua a acontecer via forwardLeadToWebhook().
  * Pronta para ser substituída por uma base de dados (ex.: Supabase) ou
  * por um CRM externo, sem alterar a interface usada pela API route.
  */
@@ -30,22 +33,28 @@ async function ensureFile() {
 }
 
 export async function saveLead(lead: Omit<Lead, "id" | "createdAt">): Promise<Lead> {
-  await ensureFile();
-  const leads = await getLeads();
   const newLead: Lead = {
     ...lead,
     id: crypto.randomUUID(),
     createdAt: new Date().toISOString(),
   };
-  leads.unshift(newLead);
-  await fs.writeFile(LEADS_FILE, JSON.stringify(leads, null, 2), "utf-8");
+
+  try {
+    await ensureFile();
+    const leads = await getLeads();
+    leads.unshift(newLead);
+    await fs.writeFile(LEADS_FILE, JSON.stringify(leads, null, 2), "utf-8");
+  } catch (error) {
+    console.error("Armazenamento local de leads indisponível neste ambiente", error);
+  }
+
   return newLead;
 }
 
 export async function getLeads(): Promise<Lead[]> {
-  await ensureFile();
-  const raw = await fs.readFile(LEADS_FILE, "utf-8");
   try {
+    await ensureFile();
+    const raw = await fs.readFile(LEADS_FILE, "utf-8");
     return JSON.parse(raw) as Lead[];
   } catch {
     return [];

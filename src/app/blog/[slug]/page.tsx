@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { LeadForm } from "@/components/forms/LeadForm";
@@ -88,9 +87,10 @@ export default async function BlogPostPage({
           <div className="relative mb-8 aspect-[16/9] w-full overflow-hidden rounded-2xl">
             <Image src={post.coverImage} alt={post.title} fill className="object-cover" />
           </div>
-          <div className="prose prose-navy max-w-none prose-headings:font-bold prose-headings:text-navy-950 prose-a:text-navy-900 prose-a:underline">
-            <MDXRemote source={post.content} />
-          </div>
+          <div
+            className="prose prose-navy max-w-none prose-headings:font-bold prose-headings:text-navy-950 prose-a:text-navy-900 prose-a:underline"
+            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+          />
         </article>
 
         <aside className="space-y-8">
