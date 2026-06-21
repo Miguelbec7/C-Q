@@ -151,7 +151,7 @@ export default function IntermediarioDeCreditoPage() {
                 À {siteConfig.name}, através do preenchimento do livro de reclamações em formato físico
                 disponível na sede ou em formato eletrónico disponível em{" "}
                 <a
-                  href="https://www.livroreclamacoes.pt"
+                  href="https://www.livroreclamacoes.pt/Inicio/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-medium text-gold-600 hover:underline"
@@ -207,8 +207,28 @@ export default function IntermediarioDeCreditoPage() {
               A {siteConfig.name} aderiu aos seguintes meios de resolução alternativa de litígios:
             </p>
             <ul className="mt-2 list-disc space-y-1 pl-5 leading-relaxed">
-              <li>Centro Nacional de Informação e Arbitragem de Conflitos de Consumo - CNIACC</li>
-              <li>Centro de Arbitragem de Conflitos de Consumo de Lisboa – CACCL</li>
+              <li>
+                Centro Nacional de Informação e Arbitragem de Conflitos de Consumo - CNIACC:{" "}
+                <a
+                  href="https://www.cniacc.pt/pt/pedido-adesao-plena-de-empresas-ao-cniacc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-gold-600 hover:underline"
+                >
+                  www.cniacc.pt
+                </a>
+              </li>
+              <li>
+                Centro de Arbitragem de Conflitos de Consumo de Lisboa – CACCL:{" "}
+                <a
+                  href="https://www.centroarbitragemlisboa.pt/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-gold-600 hover:underline"
+                >
+                  www.centroarbitragemlisboa.pt
+                </a>
+              </li>
             </ul>
             <p className="mt-2 leading-relaxed">
               Se os serviços forem concluídos através dos Websites, informa-se, de acordo com o

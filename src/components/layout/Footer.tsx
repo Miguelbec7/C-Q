@@ -131,6 +131,34 @@ export function Footer() {
             </Link>
           </div>
         </div>
+
+        <div className="mt-4 flex flex-col gap-3 border-t border-navy-800 pt-4 text-[11px] text-navy-500 sm:flex-row sm:items-center sm:gap-5">
+          <span className="font-medium text-navy-400">Resolução alternativa de litígios:</span>
+          <a
+            href="https://www.livroreclamacoes.pt/Inicio/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-navy-300"
+          >
+            Livro de Reclamações
+          </a>
+          <a
+            href="https://www.centroarbitragemlisboa.pt/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-navy-300"
+          >
+            CACCL
+          </a>
+          <a
+            href="https://www.cniacc.pt/pt/pedido-adesao-plena-de-empresas-ao-cniacc"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-navy-300"
+          >
+            CNIACC
+          </a>
+        </div>
       </Container>
     </footer>
   );
