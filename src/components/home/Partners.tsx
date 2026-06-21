@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/lib/site-config";
 
@@ -12,9 +13,20 @@ export function Partners() {
           {siteConfig.partners.map((partner) => (
             <div
               key={partner.name}
-              className="flex h-16 items-center justify-center rounded-xl border border-navy-100 bg-white text-sm font-semibold text-navy-400"
+              className="flex h-16 items-center justify-center rounded-xl border border-navy-100 bg-white p-3"
+              title={partner.name}
             >
-              {partner.name}
+              {"logo" in partner && partner.logo ? (
+                <Image
+                  src={partner.logo}
+                  alt={partner.name}
+                  width={140}
+                  height={48}
+                  className="h-full w-auto object-contain"
+                />
+              ) : (
+                <span className="text-center text-sm font-semibold text-navy-400">{partner.name}</span>
+              )}
             </div>
           ))}
         </div>

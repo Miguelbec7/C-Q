@@ -111,3 +111,4 @@ collections:
             widget: "list"
             fields:
               - { label: "Nome", name: "name", widget: "string" }
+              - { label: "Logótipo", name: "logo", widget: "image", required: false }
