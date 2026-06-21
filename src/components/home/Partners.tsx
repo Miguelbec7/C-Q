@@ -3,17 +3,21 @@ import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/lib/site-config";
 
 export function Partners() {
+  const track = [...siteConfig.partners, ...siteConfig.partners];
+
   return (
     <section className="border-y border-navy-100 bg-navy-50/40 py-12">
       <Container>
         <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-navy-400">
           Instituições financeiras parceiras
         </p>
-        <div className="mt-7 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          {siteConfig.partners.map((partner) => (
+      </Container>
+      <div className="group mt-7 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+        <div className="flex w-max animate-marquee gap-4 group-hover:[animation-play-state:paused]">
+          {track.map((partner, index) => (
             <div
-              key={partner.name}
-              className="flex flex-col items-center justify-center gap-2 rounded-xl border border-navy-100 bg-white p-3"
+              key={`${partner.name}-${index}`}
+              className="flex w-44 flex-shrink-0 flex-col items-center justify-center gap-2 rounded-xl border border-navy-100 bg-white p-3"
               title={partner.name}
             >
               {"logo" in partner && partner.logo ? (
@@ -33,7 +37,7 @@ export function Partners() {
             </div>
           ))}
         </div>
-      </Container>
+      </div>
     </section>
   );
 }
