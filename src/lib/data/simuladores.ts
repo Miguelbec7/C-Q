@@ -31,7 +31,7 @@ export const simulators: SimulatorMeta[] = [
   {
     slug: "credito-habitacao",
     icon: Home,
-    title: "Simulador de Comprar Casa",
+    title: "Que casa consigo comprar?",
     shortTitle: "Comprar Casa",
     description: "Descubra quanto pode pedir ao banco e qual a prestação estimada para a sua casa.",
     metaDescription: "Simulador gratuito para comprar casa. Calcule o valor de imóvel, prestação e taxa de esforço estimados pela C&Q Finanças.",
