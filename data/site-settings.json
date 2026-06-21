@@ -26,7 +26,7 @@
     "linkedin": "https://www.linkedin.com/company/c-q-finan%C3%A7as-solu%C3%A7%C3%B5es-lda"
   },
   "partners": [
-    { "name": "ABANCA Portugal, S.A." },
+    { "name": "ABANCA Portugal, S.A.", "logo": "/images/partners/abanca.jpg" },
     { "name": "Bankinter, S.A. - Sucursal em Portugal" },
     { "name": "Banco BPI, S.A.", "logo": "/images/partners/bpi.png" },
     { "name": "Caixa Central de Crédito Agrícola Mútuo, CRL", "logo": "/images/partners/credito-agricola.png" },
