@@ -1,4 +1,4 @@
-import { calcularIMTContinentalHPP, type ImtJovemMode, aplicarImtJovem } from "./imt";
+import { calcularIMTContinentalHPP, type ImtJovemMode, aplicarImtJovem, calcularBeneficioSeloCompra } from "./imt";
 import { calcularImpostoSeloCompra, calcularImpostoSeloCredito } from "./imposto-selo";
 
 export interface CustosBreakdown {
@@ -34,13 +34,12 @@ function calcularCustos(price: number, loan: number, months: number, imtMode: Im
 
   const seloCredito = calcularImpostoSeloCredito(loan, months);
   const imtBase = calcularIMTContinentalHPP(price);
-  const { imtFinal } = aplicarImtJovem(imtBase, imtMode);
+  const { imtFinal } = aplicarImtJovem(price, imtBase, imtMode, calcularIMTContinentalHPP);
   const seloCompraTotal = calcularImpostoSeloCompra(price);
-  const seloCompra = imtMode === "total" ? 0 : imtMode === "parcial" ? seloCompraTotal * 0.5 : seloCompraTotal;
-  const imtFinalAjustado = imtMode === "total" ? 0 : imtFinal;
+  const seloCompra = Math.max(0, seloCompraTotal - calcularBeneficioSeloCompra(price, imtMode));
 
   const custosTotais =
-    commissionAval + commissionFormal + direitoPref + copiaContrato + dpa + seloCredito + imtFinalAjustado + seloCompra;
+    commissionAval + commissionFormal + direitoPref + copiaContrato + dpa + seloCredito + imtFinal + seloCompra;
 
   return {
     custosTotais,
@@ -50,7 +49,7 @@ function calcularCustos(price: number, loan: number, months: number, imtMode: Im
     copiaContrato,
     dpa,
     seloCredito,
-    imtFinal: imtFinalAjustado,
+    imtFinal,
     seloCompra,
   };
 }

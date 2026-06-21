@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { NumberField, ResultStat } from "@/components/simulators/SimulatorShell";
+import { NumberField } from "@/components/simulators/SimulatorShell";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { formatCurrency } from "@/lib/utils";
@@ -10,7 +10,7 @@ import { siteConfig } from "@/lib/site-config";
 
 export function CreditoPessoalSimulator() {
   const [principal, setPrincipal] = useState("10000");
-  const [rate, setRate] = useState("8.50");
+  const [rate, setRate] = useState("13.45");
   const [months, setMonths] = useState("60");
   const [result, setResult] = useState<ReturnType<typeof calcularPrestacao> | null>(null);
 
@@ -45,10 +45,10 @@ export function CreditoPessoalSimulator() {
           <Card className="sticky top-24">
             <p className="text-sm text-navy-400">Prestação mensal estimada</p>
             <p className="mt-1 text-3xl font-bold text-navy-950">{formatCurrency(result.payment)}</p>
-            <div className="mt-5 grid gap-3">
-              <ResultStat label="Total pago no contrato" value={formatCurrency(result.totalPaid)} />
-              <ResultStat label="Total de juros" value={formatCurrency(result.totalInterest)} tone="gold" />
-            </div>
+            <p className="mt-3 text-xs text-navy-400">
+              Valor calculado apenas com a TAN indicada, sem seguros, comissões ou outros encargos. A TAEG (e a
+              prestação real) de uma proposta de crédito é sempre igual ou superior a este valor.
+            </p>
             <Button href={`https://wa.me/${siteConfig.contact.whatsapp}`} external variant="whatsapp" className="mt-5 w-full">
               Pedir proposta personalizada
             </Button>

@@ -32,15 +32,41 @@ export function calcularIMTContinentalSecundaria(price: number): number {
   return price * 0.075;
 }
 
-export function aplicarImtJovem(
-  imtBase: number,
-  mode: ImtJovemMode
-): { imtFinal: number; percentagemBeneficio: number } {
-  if (mode === "total") return { imtFinal: 0, percentagemBeneficio: 100 };
-  if (mode === "parcial") return { imtFinal: imtBase * 0.5, percentagemBeneficio: 50 };
-  return { imtFinal: imtBase, percentagemBeneficio: 0 };
-}
-
 export const IMT_JOVEM_LIMITE_ISENCAO_TOTAL = 316772;
 export const IMT_JOVEM_LIMITE_BENEFICIO_PARCIAL = 633453;
 export const IMT_JOVEM_IDADE_MAXIMA = 35;
+
+/**
+ * Valor do imóvel considerado isento no âmbito do IMT Jovem: isenção total até ao
+ * 1.º limite; entre os dois limites, a isenção cobre apenas essa fração e o
+ * excedente é tributado normalmente; sem benefício a partir do 2.º limite. Em modo
+ * "parcial" (apenas um titular elegível), a fração isenta é reduzida a metade.
+ */
+function valorIsentoImtJovem(price: number, mode: ImtJovemMode): number {
+  if (mode === "nenhum" || !price || price <= 0) return 0;
+  const isento = price <= IMT_JOVEM_LIMITE_BENEFICIO_PARCIAL ? Math.min(price, IMT_JOVEM_LIMITE_ISENCAO_TOTAL) : 0;
+  return mode === "parcial" ? isento / 2 : isento;
+}
+
+/**
+ * Aplica o benefício IMT Jovem ao IMT base, recorrendo à mesma fórmula (HPP ou
+ * secundária) para calcular o imposto correspondente à fração isenta, já que as
+ * fórmulas por escalão são progressivas e contínuas nos limiares.
+ */
+export function aplicarImtJovem(
+  price: number,
+  imtBase: number,
+  mode: ImtJovemMode,
+  calcularImt: (price: number) => number
+): { imtFinal: number; percentagemBeneficio: number } {
+  const isento = valorIsentoImtJovem(price, mode);
+  const beneficio = isento > 0 ? calcularImt(isento) : 0;
+  const imtFinal = Math.max(0, imtBase - beneficio);
+  const percentagemBeneficio = imtBase > 0 ? (beneficio / imtBase) * 100 : 0;
+  return { imtFinal, percentagemBeneficio };
+}
+
+/** Benefício equivalente do IMT Jovem sobre o Imposto de Selo da compra (taxa fixa de 0,8%). */
+export function calcularBeneficioSeloCompra(price: number, mode: ImtJovemMode): number {
+  return valorIsentoImtJovem(price, mode) * 0.008;
+}

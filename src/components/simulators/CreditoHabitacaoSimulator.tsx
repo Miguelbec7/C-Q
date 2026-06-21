@@ -14,7 +14,7 @@ import { calcularMontanteMaximo } from "@/lib/calculations/prestacao";
 import type { ImtJovemMode } from "@/lib/calculations/imt";
 import { siteConfig } from "@/lib/site-config";
 
-const RATE_BY_TYPE: Record<string, string> = { fixa: "4.10", mista: "3.70", variavel: "2.86" };
+const RATE_BY_TYPE: Record<string, string> = { fixa: "4.10", mista: "2.85", variavel: "2.86" };
 
 export function CreditoHabitacaoSimulator() {
   const [netIncome, setNetIncome] = useState("1500");
@@ -23,7 +23,7 @@ export function CreditoHabitacaoSimulator() {
   const [capital, setCapital] = useState("20000");
   const [purpose, setPurpose] = useState("hpp");
   const [rateType, setRateType] = useState("mista");
-  const [rate, setRate] = useState("3.70");
+  const [rate, setRate] = useState("2.85");
   const [maxEffort, setMaxEffort] = useState("35");
   const [imtMode, setImtMode] = useState<ImtJovemMode>("nenhum");
   const [gpConfirm, setGpConfirm] = useState(false);

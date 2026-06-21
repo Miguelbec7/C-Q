@@ -21,8 +21,9 @@ export function ImtSimulator() {
   function handleCalculate() {
     const p = parseFloat(price.replace(",", "."));
     if (isNaN(p) || p <= 0) return;
-    const base = purpose === "hpp" ? calcularIMTContinentalHPP(p) : calcularIMTContinentalSecundaria(p);
-    const { imtFinal } = aplicarImtJovem(base, imtMode);
+    const calcularImt = purpose === "hpp" ? calcularIMTContinentalHPP : calcularIMTContinentalSecundaria;
+    const base = calcularImt(p);
+    const { imtFinal } = aplicarImtJovem(p, base, imtMode, calcularImt);
     setResult({ base, final: imtFinal });
   }
 
