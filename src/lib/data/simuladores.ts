@@ -7,6 +7,9 @@ import {
   Landmark,
   Stamp,
   PiggyBank,
+  Building2,
+  TrendingUp,
+  Banknote,
 } from "lucide-react";
 
 export interface SimulatorMeta {
@@ -74,6 +77,30 @@ export const simulators: SimulatorMeta[] = [
     shortTitle: "Poupança na Transferência",
     description: "Compare o seu crédito atual com uma nova proposta e veja quanto pode poupar.",
     metaDescription: "Simule a poupança ao transferir o seu crédito habitação para outra instituição. Calculadora gratuita da C&Q Finanças.",
+  },
+  {
+    slug: "imi",
+    icon: Building2,
+    title: "Simulador de IMI",
+    shortTitle: "IMI",
+    description: "Calcule o Imposto Municipal sobre Imóveis anual estimado para o seu imóvel.",
+    metaDescription: "Calculadora de IMI 2026. Calcule o imposto municipal sobre imóveis a partir do VPT e da taxa do município, com a C&Q Finanças.",
+  },
+  {
+    slug: "mais-valias-imoveis",
+    icon: TrendingUp,
+    title: "Simulador de Mais-Valias Imobiliárias",
+    shortTitle: "Mais-Valias",
+    description: "Calcule a mais-valia tributável na venda de um imóvel e o impacto do reinvestimento.",
+    metaDescription: "Simulador de mais-valias na venda de imóveis. Calcule a mais-valia tributável em IRS com a C&Q Finanças.",
+  },
+  {
+    slug: "salario-liquido",
+    icon: Banknote,
+    title: "Simulador de Salário Líquido",
+    shortTitle: "Salário Líquido",
+    description: "Calcule o seu salário líquido mensal a partir do salário base, com retenção de IRS e Segurança Social.",
+    metaDescription: "Calculadora de salário líquido 2026. Simule o seu vencimento líquido com a tabela de retenção de IRS em vigor, com a C&Q Finanças.",
   },
 ];
 

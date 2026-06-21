@@ -9,6 +9,9 @@ import { TaxaEsforcoSimulator } from "@/components/simulators/TaxaEsforcoSimulat
 import { ImtSimulator } from "@/components/simulators/ImtSimulator";
 import { ImpostoSeloSimulator } from "@/components/simulators/ImpostoSeloSimulator";
 import { PoupancaTransferenciaSimulator } from "@/components/simulators/PoupancaTransferenciaSimulator";
+import { ImiSimulator } from "@/components/simulators/ImiSimulator";
+import { MaisValiasSimulator } from "@/components/simulators/MaisValiasSimulator";
+import { SalarioLiquidoSimulator } from "@/components/simulators/SalarioLiquidoSimulator";
 import { buildMetadata } from "@/lib/seo";
 
 const SIMULATOR_COMPONENTS: Record<string, React.ComponentType> = {
@@ -19,6 +22,9 @@ const SIMULATOR_COMPONENTS: Record<string, React.ComponentType> = {
   imt: ImtSimulator,
   "imposto-de-selo": ImpostoSeloSimulator,
   "poupanca-transferencia": PoupancaTransferenciaSimulator,
+  imi: ImiSimulator,
+  "mais-valias-imoveis": MaisValiasSimulator,
+  "salario-liquido": SalarioLiquidoSimulator,
 };
 
 export function generateStaticParams() {
