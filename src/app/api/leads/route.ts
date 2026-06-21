@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { saveLead, forwardLeadToWebhook } from "@/lib/leads-store";
+import { saveLead, forwardLeadToWebhook, sendLeadNotificationEmail } from "@/lib/leads-store";
 
 const leadSchema = z.object({
   name: z.string().min(2).max(150),
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   }
 
   const lead = await saveLead(parsed.data);
-  await forwardLeadToWebhook(lead);
+  await Promise.all([forwardLeadToWebhook(lead), sendLeadNotificationEmail(lead)]);
 
   return NextResponse.json({ ok: true }, { status: 201 });
 }

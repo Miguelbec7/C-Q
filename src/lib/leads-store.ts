@@ -5,9 +5,9 @@ import path from "path";
  * Armazenamento de leads — implementação mínima em ficheiro local, só para
  * desenvolvimento/validação (ver /backoffice/leads). Em ambientes sem sistema de
  * ficheiros persistente (ex.: Cloudflare Workers), a escrita falha silenciosamente
- * e a entrega real do lead continua a acontecer via forwardLeadToWebhook().
- * Pronta para ser substituída por uma base de dados (ex.: Supabase) ou
- * por um CRM externo, sem alterar a interface usada pela API route.
+ * e a entrega real do lead continua a acontecer via forwardLeadToWebhook() e/ou
+ * sendLeadNotificationEmail(). Pronta para ser substituída por uma base de dados
+ * (ex.: Supabase) ou por um CRM externo, sem alterar a interface usada pela API route.
  */
 export interface Lead {
   id: string;
@@ -70,4 +70,33 @@ export async function forwardLeadToWebhook(lead: Lead): Promise<void> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(lead),
   }).catch((error) => console.error("Falha ao reencaminhar lead para webhook", error));
+}
+
+export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const notifyTo = process.env.LEADS_NOTIFICATION_EMAIL;
+  if (!apiKey || !notifyTo) return;
+
+  const lines = [
+    `Nome: ${lead.name}`,
+    `Email: ${lead.email}`,
+    `Telefone: ${lead.phone}`,
+    lead.service ? `Serviço: ${lead.service}` : null,
+    lead.source ? `Origem: ${lead.source}` : null,
+    lead.message ? `Mensagem: ${lead.message}` : null,
+  ].filter(Boolean);
+
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: process.env.RESEND_FROM_EMAIL || "C&Q Finanças <leads@cqfinancas.com>",
+      to: notifyTo,
+      subject: `Novo contacto no site: ${lead.name}`,
+      text: lines.join("\n"),
+    }),
+  }).catch((error) => console.error("Falha ao enviar email de notificação de lead", error));
 }
