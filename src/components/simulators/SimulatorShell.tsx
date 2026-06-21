@@ -1,6 +1,6 @@
 import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, HelpCircle } from "lucide-react";
 
 export function SimulatorShell({
   title,
@@ -40,8 +40,30 @@ export function SimulatorShell({
   );
 }
 
-export function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <label className="mb-1.5 block text-sm font-medium text-navy-700">{children}</label>;
+export function HelpTooltip({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="group relative inline-flex">
+      <HelpCircle className="h-3.5 w-3.5 cursor-help text-navy-300" tabIndex={0} />
+      <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 w-72 -translate-x-1/2 rounded-xl border border-navy-100 bg-white p-3 text-left text-xs font-normal leading-relaxed text-navy-600 opacity-0 shadow-premium transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+        {children}
+      </span>
+    </span>
+  );
+}
+
+export function FieldLabel({
+  children,
+  tooltip,
+}: {
+  children: React.ReactNode;
+  tooltip?: React.ReactNode;
+}) {
+  return (
+    <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-navy-700">
+      {children}
+      {tooltip && <HelpTooltip>{tooltip}</HelpTooltip>}
+    </label>
+  );
 }
 
 export function NumberField({
@@ -51,6 +73,7 @@ export function NumberField({
   placeholder,
   suffix,
   step = "any",
+  tooltip,
 }: {
   label: string;
   value: string;
@@ -58,10 +81,11 @@ export function NumberField({
   placeholder?: string;
   suffix?: string;
   step?: string;
+  tooltip?: React.ReactNode;
 }) {
   return (
     <div>
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel tooltip={tooltip}>{label}</FieldLabel>
       <div className="relative">
         <input
           type="number"

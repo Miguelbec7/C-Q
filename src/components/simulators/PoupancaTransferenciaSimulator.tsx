@@ -9,12 +9,16 @@ import { calcularPrestacao } from "@/lib/calculations/prestacao";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/lib/site-config";
 
+const SPREAD_EURIBOR_TOOLTIP =
+  "Taxa composta pelo spread (margem cobrada pelo banco) somado à Euribor de referência do contrato (ex.: Euribor a 6 ou 12 meses).";
+
 export function PoupancaTransferenciaSimulator() {
   const [currentPrincipal, setCurrentPrincipal] = useState("150000");
-  const [currentRate, setCurrentRate] = useState("3.20");
-  const [currentMonths, setCurrentMonths] = useState("300");
-  const [newRate, setNewRate] = useState("2.40");
-  const [newMonths, setNewMonths] = useState("300");
+  const [currentRate, setCurrentRate] = useState("2");
+  const [currentMonths, setCurrentMonths] = useState("360");
+  const [newPrincipal, setNewPrincipal] = useState("150000");
+  const [newRate, setNewRate] = useState("1");
+  const [newMonths, setNewMonths] = useState("360");
 
   const [result, setResult] = useState<{
     diffMensal: number;
@@ -27,13 +31,22 @@ export function PoupancaTransferenciaSimulator() {
     const principal = parseFloat(currentPrincipal.replace(",", "."));
     const cRate = parseFloat(currentRate.replace(",", "."));
     const cMonths = parseInt(currentMonths, 10);
+    const nPrincipal = parseFloat(newPrincipal.replace(",", "."));
     const nRate = parseFloat(newRate.replace(",", "."));
     const nMonths = parseInt(newMonths, 10);
 
-    if (isNaN(principal) || isNaN(cRate) || isNaN(cMonths) || isNaN(nRate) || isNaN(nMonths)) return;
+    if (
+      isNaN(principal) ||
+      isNaN(cRate) ||
+      isNaN(cMonths) ||
+      isNaN(nPrincipal) ||
+      isNaN(nRate) ||
+      isNaN(nMonths)
+    )
+      return;
 
     const atual = calcularPrestacao(principal, cRate, cMonths);
-    const novo = calcularPrestacao(principal, nRate, nMonths);
+    const novo = calcularPrestacao(nPrincipal, nRate, nMonths);
 
     setResult({
       diffMensal: novo.payment - atual.payment,
@@ -48,17 +61,44 @@ export function PoupancaTransferenciaSimulator() {
   return (
     <div className="grid gap-8 lg:grid-cols-5">
       <Card className="lg:col-span-3">
-        <h2 className="text-lg font-semibold text-navy-950">1. Situação atual</h2>
+        <h2 className="text-lg font-semibold text-navy-950">Crédito atual</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
-          <NumberField label="Montante em dívida" value={currentPrincipal} onChange={setCurrentPrincipal} suffix="€" />
-          <NumberField label="TAN anual atual" value={currentRate} onChange={setCurrentRate} suffix="%" />
-          <NumberField label="Prazo remanescente" value={currentMonths} onChange={setCurrentMonths} suffix="meses" />
+          <NumberField label="Capital em dívida" value={currentPrincipal} onChange={setCurrentPrincipal} suffix="€" />
+          <NumberField
+            label="Taxa de juro (spread+euribor)"
+            value={currentRate}
+            onChange={setCurrentRate}
+            suffix="%"
+            tooltip={SPREAD_EURIBOR_TOOLTIP}
+          />
+          <NumberField
+            label="Prestações a pagar (em meses)"
+            value={currentMonths}
+            onChange={setCurrentMonths}
+            suffix="meses"
+          />
         </div>
 
-        <h2 className="mt-6 text-lg font-semibold text-navy-950">2. Nova proposta (simulação C&amp;Q)</h2>
+        <h2 className="mt-6 text-lg font-semibold text-navy-950">Novo crédito</h2>
+        <p className="mt-1 text-xs text-navy-400">
+          O novo crédito pode incluir um montante superior à dívida atual, caso pretenda pedir mais para outras
+          finalidades.
+        </p>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
-          <NumberField label="Nova TAN anual" value={newRate} onChange={setNewRate} suffix="%" />
-          <NumberField label="Novo prazo" value={newMonths} onChange={setNewMonths} suffix="meses" />
+          <NumberField label="Capital em dívida" value={newPrincipal} onChange={setNewPrincipal} suffix="€" />
+          <NumberField
+            label="Taxa de juro (spread+euribor)"
+            value={newRate}
+            onChange={setNewRate}
+            suffix="%"
+            tooltip={SPREAD_EURIBOR_TOOLTIP}
+          />
+          <NumberField
+            label="Prestações a pagar (em meses)"
+            value={newMonths}
+            onChange={setNewMonths}
+            suffix="meses"
+          />
         </div>
 
         <Button className="mt-6 w-full sm:w-auto" onClick={handleCalculate}>

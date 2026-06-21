@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { NumberField, SelectField, ResultStat } from "@/components/simulators/SimulatorShell";
+import { NumberField, SelectField, ResultStat, HelpTooltip } from "@/components/simulators/SimulatorShell";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { formatCurrency, formatPercent } from "@/lib/utils";
@@ -25,6 +25,7 @@ export function CreditoHabitacaoSimulator() {
   const [rateType, setRateType] = useState("mista");
   const [rate, setRate] = useState("2.85");
   const [maxEffort, setMaxEffort] = useState("35");
+  const [numTitulares, setNumTitulares] = useState("1");
   const [imtMode, setImtMode] = useState<ImtJovemMode>("nenhum");
   const [gpConfirm, setGpConfirm] = useState(false);
   const [result, setResult] = useState<ReturnType<typeof resolverCenarioCompra> | null>(null);
@@ -73,6 +74,18 @@ export function CreditoHabitacaoSimulator() {
           <NumberField label="Rendimento líquido mensal do agregado" value={netIncome} onChange={setNetIncome} suffix="€" />
           <NumberField label="Prestações de outros créditos" value={otherLoans} onChange={setOtherLoans} suffix="€" />
           <NumberField label="Idade do titular mais velho" value={age} onChange={setAge} suffix="anos" />
+          <SelectField
+            label="Número de titulares"
+            value={numTitulares}
+            onChange={(v) => {
+              setNumTitulares(v);
+              if (v === "1" && imtMode === "parcial") setImtMode("nenhum");
+            }}
+            options={[
+              { value: "1", label: "1 titular" },
+              { value: "2", label: "2 titulares" },
+            ]}
+          />
           <NumberField label="Capitais próprios disponíveis" value={capital} onChange={setCapital} suffix="€" />
           <SelectField
             label="Finalidade do imóvel"
@@ -112,8 +125,22 @@ export function CreditoHabitacaoSimulator() {
         <div className="mt-5 rounded-xl border border-navy-100 bg-navy-50/60 p-4">
           <label className="flex items-start gap-2.5 text-sm text-navy-700">
             <input type="checkbox" checked={gpConfirm} onChange={(e) => setGpConfirm(e.target.checked)} className="mt-0.5" />
-            Quero considerar a <strong>Garantia Pública Jovem</strong> (até 35 anos, rendimentos dentro dos limites
-            legais e imóvel até 450 000€).
+            <span className="flex items-start gap-1.5">
+              Quero considerar a <strong>Garantia Pública Jovem</strong> (até 35 anos, rendimentos dentro dos limites
+              legais e imóvel até 450 000€).
+              <HelpTooltip>
+                <p className="font-medium text-navy-900">
+                  Para beneficiar da garantia pública de até 15% do valor do imóvel tem de cumprir alguns requisitos:
+                </p>
+                <ul className="mt-2 list-disc space-y-1 pl-4">
+                  <li>Jovens entre os 18 e os 35 anos;</li>
+                  <li>Com rendimentos anuais até ao oitavo escalão (81 199 euros);</li>
+                  <li>Não sejam já proprietários;</li>
+                  <li>Não tenham já beneficiado da garantia pessoal do Estado;</li>
+                  <li>Imóveis até 450 mil euros.</li>
+                </ul>
+              </HelpTooltip>
+            </span>
           </label>
           <div className="mt-4 max-w-xs">
             <SelectField
@@ -123,7 +150,9 @@ export function CreditoHabitacaoSimulator() {
               options={[
                 { value: "nenhum", label: "Sem IMT Jovem" },
                 { value: "total", label: "Isenção total" },
-                { value: "parcial", label: "Benefício parcial" },
+                ...(numTitulares === "2"
+                  ? [{ value: "parcial", label: "Benefício parcial (apenas 1 titular elegível)" }]
+                  : []),
               ]}
             />
           </div>
