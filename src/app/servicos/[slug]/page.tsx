@@ -20,6 +20,7 @@ export async function generateMetadata({
     title: service.title,
     description: service.metaDescription,
     path: `/servicos/${service.slug}`,
+    image: service.heroImage,
   });
 }
 
