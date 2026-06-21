@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { buildChatKnowledgeBase } from "@/lib/chat-knowledge";
+import { siteConfig } from "@/lib/site-config";
 
 /**
- * Stub do Chat IA — pronto para ligar a um modelo (ex.: API da Anthropic).
- * Defina ANTHROPIC_API_KEY para ativar respostas reais; sem chave, devolve
- * respostas estáticas de apoio (com deteção de tópico por palavras-chave)
- * para que o widget funcione desde já.
+ * Chat IA — com ANTHROPIC_API_KEY definida, responde com a API da Anthropic
+ * (Claude), usando o conteúdo do blog, dos serviços e dos simuladores como
+ * contexto. Sem chave, devolve respostas estáticas de apoio (deteção de
+ * tópico por palavras-chave) para que o widget funcione desde já.
  */
 
 interface Topic {
@@ -12,8 +14,6 @@ interface Topic {
   reply: string;
 }
 
-// Base de conhecimento usada tanto para respostas estáticas (sem API key)
-// como, no futuro, como contexto a injetar num system prompt real.
 const TOPICS: Topic[] = [
   {
     keywords: ["mais-valia", "mais valia", "mais-valias", "mais valias"],
@@ -79,10 +79,58 @@ function findTopicReply(message: string): string | null {
   return topic?.reply ?? null;
 }
 
+function buildSystemPrompt(): string {
+  return `Você é o assistente virtual da ${siteConfig.name}, uma empresa de intermediação de crédito registada no Banco de Portugal (${siteConfig.banking.bdpRegistration}). Responda em português de Portugal, de forma clara, breve e simpática, baseando-se apenas no conteúdo abaixo (artigos do blog, serviços e simuladores do site).
+
+Regras:
+- Não invente valores de taxas, impostos ou condições de crédito que não estejam no conteúdo fornecido — remeta para o simulador relevante para um cálculo exato.
+- Quando relevante, inclua o link do simulador, serviço ou artigo do blog mencionado no conteúdo (ex.: /simuladores/imi, /blog/...).
+- Não é mediador de seguros; pode mencionar que existem parcerias para seguros associados ao crédito, mas remeta para contacto direto com a equipa para esse tema.
+- Se a pergunta não tiver relação com crédito, imóveis, impostos associados ou os serviços da empresa, recuse com simpatia e sugira contactar a equipa pelo WhatsApp ou formulário de contacto.
+- Nunca dê aconselhamento jurídico ou fiscal definitivo — apresente a informação como orientação geral e sugira confirmação com a equipa para o caso concreto.
+
+Conteúdo do site:
+${buildChatKnowledgeBase()}`;
+}
+
+interface AnthropicMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+async function callAnthropic(apiKey: string, messages: AnthropicMessage[]): Promise<string> {
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-5",
+      max_tokens: 1024,
+      system: buildSystemPrompt(),
+      messages,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Anthropic API respondeu ${response.status}`);
+  }
+
+  const data = await response.json();
+  const text = data.content?.find((block: { type: string }) => block.type === "text")?.text;
+  if (!text) {
+    throw new Error("Resposta da Anthropic sem conteúdo de texto");
+  }
+  return text;
+}
+
 export async function POST(request: Request) {
   const body = await request.json().catch(() => ({ messages: [] }));
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  const lastUserMessage: string = body.messages?.at(-1)?.content ?? "";
+  const messages: AnthropicMessage[] = Array.isArray(body.messages) ? body.messages : [];
+  const lastUserMessage: string = messages.at(-1)?.content ?? "";
 
   if (!apiKey) {
     const topicReply = findTopicReply(lastUserMessage);
@@ -90,9 +138,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ reply });
   }
 
-  // Integração real fica pronta a ativar aqui quando ANTHROPIC_API_KEY estiver definida.
-  // TOPICS pode ser usado como contexto para um system prompt.
-  return NextResponse.json({
-    reply: `Recebi a sua mensagem: "${lastUserMessage}". (Integração com IA pendente de configuração da chave de API.)`,
-  });
+  try {
+    const reply = await callAnthropic(apiKey, messages);
+    return NextResponse.json({ reply });
+  } catch (error) {
+    console.error("Falha ao chamar a API da Anthropic", error);
+    const topicReply = findTopicReply(lastUserMessage);
+    const reply = topicReply ?? FALLBACK_REPLIES[Math.floor(Math.random() * FALLBACK_REPLIES.length)];
+    return NextResponse.json({ reply });
+  }
 }
