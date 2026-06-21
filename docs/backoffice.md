@@ -1,7 +1,7 @@
 # Backoffice de conteúdos (`/admin`)
 
 O site usa [Decap CMS](https://decapcms.org/) como backoffice de conteúdos sem código,
-acessível em `https://www.cqfinancas.pt/admin`. Permite à equipa da C&Q editar artigos do
+acessível em `https://cqfinancassolucoes.com/admin`. Permite à equipa da C&Q editar artigos do
 blog, testemunhos e definições de contacto sem tocar em código — cada alteração gera um
 commit no repositório GitHub (ou, em modo de fluxo editorial, um pull request para revisão).
 
@@ -45,13 +45,13 @@ backend:
   name: github
   repo: Miguelbec7/C-Q # TODO(cliente): confirmar organização/repositório definitivo
   branch: main # TODO(cliente): confirmar o branch de produção
-  base_url: https://TODO-SUBSTITUIR-PELO-URL-DO-SITE # URL público atual do site
+  base_url: https://cqfinancassolucoes.com # URL público atual do site
   auth_endpoint: api/decap-oauth/auth
 ```
 
-`base_url` deve ser o URL público **atual** do site (o `*.workers.dev` enquanto o domínio
-definitivo não estiver decidido; passa a ser o domínio definitivo depois, bastando atualizar
-esta linha e voltar a publicar).
+`base_url` deve ser o URL público **atual** do site — atualmente `https://cqfinancassolucoes.com`,
+o domínio definitivo. Se o domínio mudar mais tarde, basta atualizar esta linha e voltar a
+publicar.
 
 Passos para ativar (feitos uma única vez, do lado da conta GitHub/Cloudflare do cliente):
 
@@ -76,7 +76,7 @@ e não depende do CMS em runtime.
 
 ## Fluxo de edição
 
-1. Aceder a `https://www.cqfinancas.pt/admin` e autenticar com a conta GitHub autorizada.
+1. Aceder a `https://cqfinancassolucoes.com/admin` e autenticar com a conta GitHub autorizada.
 2. Escolher a coleção (Blog, Testemunhos ou Definições do site).
 3. Editar os campos no formulário e gravar.
 4. Como `publish_mode: editorial_workflow` está ativo, cada alteração fica em rascunho/revisão

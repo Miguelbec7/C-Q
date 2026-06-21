@@ -81,11 +81,11 @@ funciona sem eles (integrações ficam simplesmente inativas).
 ## 4. Domínio personalizado
 
 1. **Workers & Pages → cq-financas → Settings → Domains & Routes** → **Add Custom
-   Domain** → adicionar `cqfinancas.pt` e `www.cqfinancas.pt`.
-2. Se o domínio já estiver na Cloudflare, o DNS é configurado automaticamente; caso
-   contrário, seguir as instruções de CNAME/A apresentadas.
+   Domain** → adicionar `cqfinancassolucoes.com` e `www.cqfinancassolucoes.com`.
+2. Como o domínio já está registado na própria conta Cloudflare, o DNS é configurado
+   automaticamente ao adicionar o Custom Domain.
 3. Confirmar que `siteConfig.url` em `src/lib/site-config.ts` corresponde ao domínio
-   definitivo (atualmente `https://www.cqfinancas.pt`, marcado como `TODO(cliente)`).
+   definitivo (atualmente `https://cqfinancassolucoes.com`).
 
 ## 5. Deploys automáticos a partir do GitHub
 
@@ -105,9 +105,10 @@ de CI à escolha) sempre que se quiser publicar uma nova versão.
 
 ## 6. Provider OAuth para o Decap CMS
 
-O backoffice (`/admin`) depende de um endpoint OAuth separado (`auth.cqfinancas.pt`) — ver
-[`docs/backoffice.md`](backoffice.md) para detalhes. Recomenda-se publicar esse endpoint como
-um Cloudflare Worker independente, com o respetivo subdomínio configurado também na Cloudflare.
+O backoffice (`/admin`) usa um provider OAuth incorporado no próprio site (rotas
+`/api/decap-oauth/auth` e `/api/decap-oauth/callback`, no mesmo Worker) — ver
+[`docs/backoffice.md`](backoffice.md) para os passos de configuração (criar a OAuth App no
+GitHub e definir os secrets `OAUTH_GITHUB_CLIENT_ID`/`OAUTH_GITHUB_CLIENT_SECRET`).
 
 ## 7. Limitações conhecidas do runtime Workers
 

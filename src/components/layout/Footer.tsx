@@ -91,11 +91,38 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-navy-800 pt-6 text-xs text-navy-400 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 border-t border-navy-800 pt-6 text-[11px] leading-relaxed text-navy-500">
+          <p>
+            {siteConfig.name} marca registada da {siteConfig.name}, Lda, com sede na{" "}
+            {siteConfig.contact.address.street}, {siteConfig.contact.address.postalCode}{" "}
+            {siteConfig.contact.address.city}, registado como intermediário de crédito junto do Banco de
+            Portugal sob o {siteConfig.banking.bdpRegistration} (telefone n.º{" "}
+            {siteConfig.contact.phoneDisplay}; email {siteConfig.contact.email}), registo que pode ser
+            confirmado através da hiperligação{" "}
+            <a href={siteConfig.banking.bdpUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-navy-300">
+              {siteConfig.banking.bdpUrl}
+            </a>
+            , intermediário de crédito vinculado sem exclusividade, com contratos com as entidades
+            mutuantes: {siteConfig.partners.map((p) => p.name).join("; ")}. Autorizado a prestar serviços
+            de apresentação ou proposta de contratos de crédito a consumidores, assistência a consumidores,
+            mediante a realização de atos preparatórios ou de outros trabalhos de gestão pré-contratual
+            relativamente a contratos de crédito que não tenham sido por si apresentados ou propostos e
+            autorização para serviços de consultoria. Atividade sujeita à supervisão do Banco de Portugal.
+            Seguros de responsabilidade civil junto da Zurich Insurance Europe AG - Sucursal em Portugal
+            com a apólice nº 010033277 e 010032971 válidas de 16/06/2026 até 16/06/2027 e de 12/06/2026 até
+            12/06/2027. Os serviços prestados, nos termos da legislação aplicável, são gratuitos para o
+            consumidor.
+          </p>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-4 border-t border-navy-800 pt-6 text-xs text-navy-400 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {siteConfig.name}. Todos os direitos reservados.
           </p>
           <div className="flex gap-5">
+            <Link href="/intermediario-de-credito" className="hover:text-white">
+              Intermediário de Crédito
+            </Link>
             <Link href="/politica-privacidade" className="hover:text-white">
               Política de Privacidade
             </Link>

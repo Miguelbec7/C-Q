@@ -2,7 +2,7 @@ backend:
   name: github
   repo: Miguelbec7/C-Q # TODO(cliente): confirmar organização/repositório definitivo
   branch: main # TODO(cliente): confirmar o branch de produção
-  base_url: https://TODO-SUBSTITUIR-PELO-URL-DO-SITE # TODO(cliente): URL público atual do site (ex.: o workers.dev, ou o domínio definitivo depois) — ver docs/backoffice.md
+  base_url: https://cqfinancassolucoes.com # ver docs/backoffice.md — atualizar se o domínio mudar
   auth_endpoint: api/decap-oauth/auth
 
 publish_mode: editorial_workflow

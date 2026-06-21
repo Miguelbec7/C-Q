@@ -4,7 +4,6 @@ import siteSettings from "../../data/site-settings.json";
  * Configuração central do site.
  * Os campos em data/site-settings.json (contacto, registo BdP, redes sociais,
  * parceiros) são editáveis sem código através do backoffice (/admin).
- * TODO(cliente): substituir os restantes valores placeholder (nome de domínio).
  */
 export const siteConfig = {
   name: "C&Q Finanças & Soluções",
@@ -12,7 +11,7 @@ export const siteConfig = {
   tagline: "Intermediários de Crédito",
   description:
     "A C&Q Finanças & Soluções é uma empresa de intermediação de crédito registada no Banco de Portugal, especializada em crédito habitação, transferência de crédito, crédito pessoal e seguros. Simulação gratuita e acompanhamento personalizado.",
-  url: "https://www.cqfinancas.pt", // TODO(cliente): domínio definitivo
+  url: "https://cqfinancassolucoes.com",
   locale: "pt-PT",
 
   contact: siteSettings.contact,

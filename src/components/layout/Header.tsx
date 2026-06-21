@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 const navLinks = [
   { label: "Início", href: "/" },
   { label: "Sobre", href: "/sobre" },
+  { label: "Intermediário de Crédito", href: "/intermediario-de-credito" },
 ];
 
 export function Header() {
