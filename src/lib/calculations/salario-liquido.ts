@@ -36,7 +36,7 @@ export function calcularRetencaoIRS(rendimentoMensal: number, numDependentes: nu
   return Math.max(0, retencao);
 }
 
-export const TAXA_SEGURANCA_SOCIAL = 0.11;
+export const TAXA_SEGURANCA_SOCIAL_DEFAULT = 0.11;
 
 export type SubsidioAlimentacaoTipo = "cartao" | "dinheiro";
 
@@ -51,18 +51,49 @@ export interface SalarioLiquidoInput {
   subsidioDiario: number;
   diasUteis: number;
   tipoSubsidio: SubsidioAlimentacaoTipo;
+  retribuicaoExtraordinaria?: number;
+  outrosRendSujIrsESs?: number;
+  outrosRendSujSoIrs?: number;
+  rendimentosIsentos?: number;
+  taxaSegurancaSocial?: number;
+  /** Valor anual do subsídio de férias (por defeito, um mês de vencimento base). */
+  subsidioFeriasAnual?: number;
+  /** Valor anual do subsídio de Natal (por defeito, um mês de vencimento base). */
+  subsidioNatalAnual?: number;
+  /** Percentagem (0-100) do subsídio de férias paga mensalmente em duodécimos. */
+  duodecimoPercentagemFerias?: number;
+  /** Percentagem (0-100) do subsídio de Natal paga mensalmente em duodécimos. */
+  duodecimoPercentagemNatal?: number;
 }
 
 export interface SalarioLiquidoResult {
   salarioBrutoTotal: number;
+  baseTributavelSs: number;
+  baseTributavelIrs: number;
   segurancaSocial: number;
   retencaoIRS: number;
   subsidioMensal: number;
+  duodecimoMensal: number;
   salarioLiquido: number;
 }
 
 export function calcularSalarioLiquido(input: SalarioLiquidoInput): SalarioLiquidoResult {
-  const { salarioBase, numDependentes, subsidioDiario, diasUteis, tipoSubsidio } = input;
+  const {
+    salarioBase,
+    numDependentes,
+    subsidioDiario,
+    diasUteis,
+    tipoSubsidio,
+    retribuicaoExtraordinaria = 0,
+    outrosRendSujIrsESs = 0,
+    outrosRendSujSoIrs = 0,
+    rendimentosIsentos = 0,
+    taxaSegurancaSocial = TAXA_SEGURANCA_SOCIAL_DEFAULT,
+    subsidioFeriasAnual = salarioBase,
+    subsidioNatalAnual = salarioBase,
+    duodecimoPercentagemFerias = 0,
+    duodecimoPercentagemNatal = 0,
+  } = input;
 
   const teto = TETO_ISENCAO_SUBSIDIO[tipoSubsidio];
   const subsidioMensal = subsidioDiario * diasUteis;
@@ -70,18 +101,34 @@ export function calcularSalarioLiquido(input: SalarioLiquidoInput): SalarioLiqui
   const excessoMensal = excessoDiario * diasUteis;
   const subsidioIsento = subsidioMensal - excessoMensal;
 
-  const baseTributavel = salarioBase + excessoMensal;
-  const segurancaSocial = baseTributavel * TAXA_SEGURANCA_SOCIAL;
-  const retencaoIRS = calcularRetencaoIRS(baseTributavel, numDependentes);
+  const duodecimoFerias = (subsidioFeriasAnual * duodecimoPercentagemFerias) / 100 / 12;
+  const duodecimoNatal = (subsidioNatalAnual * duodecimoPercentagemNatal) / 100 / 12;
+  const duodecimoMensal = duodecimoFerias + duodecimoNatal;
 
-  const liquidoBase = baseTributavel - segurancaSocial - retencaoIRS;
-  const salarioLiquido = liquidoBase + subsidioIsento;
+  const baseTributavelSs = salarioBase + excessoMensal + retribuicaoExtraordinaria + outrosRendSujIrsESs + duodecimoMensal;
+  const baseTributavelIrs = baseTributavelSs + outrosRendSujSoIrs;
+
+  const segurancaSocial = baseTributavelSs * taxaSegurancaSocial;
+  const retencaoIRS = calcularRetencaoIRS(baseTributavelIrs, numDependentes);
+
+  const liquidoBase = baseTributavelIrs - segurancaSocial - retencaoIRS;
+  const salarioLiquido = liquidoBase + subsidioIsento + rendimentosIsentos;
 
   return {
-    salarioBrutoTotal: salarioBase + subsidioMensal,
+    salarioBrutoTotal:
+      salarioBase +
+      subsidioMensal +
+      retribuicaoExtraordinaria +
+      outrosRendSujIrsESs +
+      outrosRendSujSoIrs +
+      rendimentosIsentos +
+      duodecimoMensal,
+    baseTributavelSs,
+    baseTributavelIrs,
     segurancaSocial,
     retencaoIRS,
     subsidioMensal,
+    duodecimoMensal,
     salarioLiquido,
   };
 }
