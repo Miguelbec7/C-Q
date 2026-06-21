@@ -16,7 +16,7 @@ interface ChatMessage {
 const INITIAL_MESSAGE: ChatMessage = {
   role: "assistant",
   content:
-    "Olá! 👋 Sou o assistente virtual da C&Q Finanças. Posso ajudar a esclarecer dúvidas sobre crédito habitação, transferência de crédito, crédito pessoal ou seguros. Em que posso ajudar?",
+    "Olá! 👋 Sou o assistente virtual da C&Q Finanças. Posso ajudar a esclarecer dúvidas sobre crédito habitação, transferência de crédito, crédito pessoal, seguros, IMT, Imposto do Selo, IMI, mais-valias imobiliárias ou salário líquido. Em que posso ajudar?",
 };
 
 export function ChatWidget() {

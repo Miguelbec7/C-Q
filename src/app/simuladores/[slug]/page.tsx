@@ -54,7 +54,7 @@ export default async function SimuladorPage({ params }: { params: Promise<{ slug
   const SimulatorComponent = SIMULATOR_COMPONENTS[sim.slug];
 
   return (
-    <SimulatorShell title={sim.title} description={sim.description} breadcrumbLabel={sim.shortTitle}>
+    <SimulatorShell title={sim.title} description={sim.description} breadcrumbLabel={sim.shortTitle} faqs={sim.faqs}>
       <SimulatorComponent />
     </SimulatorShell>
   );

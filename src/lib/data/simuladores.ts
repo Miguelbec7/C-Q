@@ -12,6 +12,11 @@ import {
   Banknote,
 } from "lucide-react";
 
+export interface SimulatorFaq {
+  question: string;
+  answer: string;
+}
+
 export interface SimulatorMeta {
   slug: string;
   icon: LucideIcon;
@@ -19,6 +24,7 @@ export interface SimulatorMeta {
   shortTitle: string;
   description: string;
   metaDescription: string;
+  faqs?: SimulatorFaq[];
 }
 
 export const simulators: SimulatorMeta[] = [
@@ -93,6 +99,33 @@ export const simulators: SimulatorMeta[] = [
     shortTitle: "Mais-Valias",
     description: "Calcule a mais-valia tributável na venda de um imóvel e o impacto do reinvestimento.",
     metaDescription: "Simulador de mais-valias na venda de imóveis. Calcule a mais-valia tributável em IRS com a C&Q Finanças.",
+    faqs: [
+      {
+        question: "O que é a mais-valia na venda de imóveis?",
+        answer:
+          "A mais-valia imobiliária corresponde ao lucro obtido com a venda de um imóvel — a diferença entre o valor de venda e o valor de aquisição, ajustado pelo coeficiente de desvalorização da moeda e pelas despesas dedutíveis.",
+      },
+      {
+        question: "Quando se aplica imposto sobre mais-valias de imóveis?",
+        answer:
+          "O imposto aplica-se sempre que há lucro na venda. 50% desse lucro é somado aos restantes rendimentos do agregado e tributado em sede de IRS (englobamento obrigatório), salvo isenção aplicável.",
+      },
+      {
+        question: "Posso ficar isento de pagar imposto sobre mais-valias?",
+        answer:
+          "Sim, se o imóvel foi adquirido antes de 1 de janeiro de 1989, ou se era a sua habitação própria e permanente há pelo menos 12 meses e reinvestiu o valor de realização numa nova habitação própria e permanente, entre 24 meses antes e 36 meses depois da venda. A isenção é proporcional ao valor reinvestido. Na venda de uma segunda habitação não há, em regra, direito a esta isenção.",
+      },
+      {
+        question: "Que despesas posso deduzir ao calcular as mais-valias?",
+        answer:
+          "Obras de valorização dos últimos 12 anos, IMT e Imposto do Selo pagos na aquisição, registo predial, escritura, comissões de imobiliária e certificado energético, desde que comprovados por fatura em nome do vendedor.",
+      },
+      {
+        question: "Como declarar as mais-valias no IRS?",
+        answer:
+          "As mais-valias imobiliárias são declaradas no Anexo G da declaração de IRS. Imóveis adquiridos antes de 1989 são declarados no Anexo G1, relativo às transações isentas.",
+      },
+    ],
   },
   {
     slug: "salario-liquido",

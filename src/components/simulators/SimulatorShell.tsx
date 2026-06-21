@@ -1,20 +1,27 @@
 import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
+import { Accordion, type AccordionItemData } from "@/components/ui/Accordion";
+import { faqJsonLd } from "@/lib/seo";
 import { AlertTriangle, HelpCircle } from "lucide-react";
 
 export function SimulatorShell({
   title,
   description,
   breadcrumbLabel,
+  faqs,
   children,
 }: {
   title: string;
   description: string;
   breadcrumbLabel: string;
+  faqs?: AccordionItemData[];
   children: React.ReactNode;
 }) {
   return (
     <div className="bg-white">
+      {faqs && faqs.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqs)) }} />
+      )}
       <Breadcrumbs items={[{ label: "Simuladores", href: "/simuladores" }, { label: breadcrumbLabel, href: "#" }]} />
 
       <div className="bg-navy-950 py-12 sm:py-16">
@@ -35,6 +42,15 @@ export function SimulatorShell({
             contratual. Para uma análise personalizada, fale com a C&amp;Q Finanças.
           </p>
         </div>
+
+        {faqs && faqs.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-2xl font-bold text-navy-950">Perguntas frequentes</h2>
+            <div className="mt-5">
+              <Accordion items={faqs} />
+            </div>
+          </div>
+        )}
       </Container>
     </div>
   );
