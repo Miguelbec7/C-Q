@@ -36,11 +36,9 @@ const values = [
   },
 ];
 
-// TODO(cliente): substituir pela equipa real (nomes, cargos e fotografias).
 const team = [
-  { name: "Membro da Equipa", role: "Direção / Intermediação de Crédito" },
-  { name: "Membro da Equipa", role: "Crédito Habitação" },
-  { name: "Membro da Equipa", role: "Apoio ao Cliente" },
+  { name: "Miguel Conceição", role: "Gerente" },
+  { name: "Daniel Quinta", role: "Gerente" },
 ];
 
 export default function SobrePage() {
@@ -139,16 +137,23 @@ export default function SobrePage() {
         <p className="mx-auto mt-3 max-w-xl text-center text-navy-500">
           Profissionais dedicados a encontrar a melhor solução de crédito para si.
         </p>
-        <div className="mt-10 grid gap-6 sm:grid-cols-3">
-          {team.map((member) => (
-            <div key={member.name} className="rounded-2xl border border-navy-100 p-6 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-navy-100 text-2xl font-bold text-navy-500">
-                {member.name.charAt(0)}
+        <div className="mx-auto mt-10 max-w-md">
+          <div className="relative aspect-[2/3] overflow-hidden rounded-2xl">
+            <Image
+              src="/images/equipa-cq.jpg"
+              alt="Miguel Conceição e Daniel Quinta, gerentes da C&Q Finanças & Soluções"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="mt-6 flex justify-between gap-4 text-center">
+            {team.map((member) => (
+              <div key={member.name} className="flex-1">
+                <p className="font-semibold text-navy-950">{member.name}</p>
+                <p className="text-sm text-navy-500">{member.role}</p>
               </div>
-              <p className="mt-4 font-semibold text-navy-950">{member.name}</p>
-              <p className="text-sm text-navy-500">{member.role}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </Container>
 
