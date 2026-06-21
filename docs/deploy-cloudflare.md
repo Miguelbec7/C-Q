@@ -55,11 +55,22 @@ npx wrangler secret put ANTHROPIC_API_KEY
 npx wrangler secret put BACKOFFICE_USER
 npx wrangler secret put BACKOFFICE_PASSWORD
 npx wrangler secret put LEADS_WEBHOOK_URL
+npx wrangler secret put RESEND_API_KEY
+npx wrangler secret put RESEND_FROM_EMAIL
+npx wrangler secret put LEADS_NOTIFICATION_EMAIL
 npx wrangler secret put NEWSLETTER_WEBHOOK_URL
 npx wrangler secret put TURNSTILE_SECRET_KEY
 npx wrangler secret put OAUTH_GITHUB_CLIENT_ID
 npx wrangler secret put OAUTH_GITHUB_CLIENT_SECRET
 ```
+
+`RESEND_API_KEY`, `RESEND_FROM_EMAIL` e `LEADS_NOTIFICATION_EMAIL` ativam o aviso por
+email a cada lead novo (ver `sendLeadNotificationEmail` em `src/lib/leads-store.ts`):
+criar conta gratuita em [resend.com](https://resend.com), verificar o domínio de envio
+(ex.: `cqfinancassolucoes.com`), e definir `RESEND_FROM_EMAIL` com um remetente nesse
+domínio (ex.: `C&Q Finanças <leads@cqfinancassolucoes.com>`) e `LEADS_NOTIFICATION_EMAIL`
+com o email que deve receber os avisos. Sem estas 3 variáveis definidas, o envio fica
+simplesmente inativo (sem erro visível para o utilizador).
 
 Variáveis públicas (`NEXT_PUBLIC_*`) são embutidas no build do Next.js, pelo que devem
 estar disponíveis no ambiente **no momento do `npm run cf:build`** (ex.: num ficheiro
@@ -122,5 +133,6 @@ aplicação já foi adaptado a estas restrições:
   **apenas para desenvolvimento local** — em produção falha silenciosamente (fica
   registado em log, sem quebrar o pedido) porque não existe sistema de ficheiros no
   Worker. A entrega real de leads em produção é feita via `LEADS_WEBHOOK_URL`
-  (webhook HTTP para o CRM/Email do cliente), que funciona normalmente porque usa
-  `fetch`, não o sistema de ficheiros.
+  (webhook HTTP para o CRM do cliente) e/ou `RESEND_API_KEY`/`RESEND_FROM_EMAIL`/
+  `LEADS_NOTIFICATION_EMAIL` (aviso por email via Resend), ambos por `fetch`, não pelo
+  sistema de ficheiros. Ver secção 3 para os detalhes de configuração.
