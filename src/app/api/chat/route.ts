@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { buildChatKnowledgeBase } from "@/lib/chat-knowledge";
+import { services } from "@/lib/data/services";
+import { simulators } from "@/lib/data/simuladores";
 import { siteConfig } from "@/lib/site-config";
 
 /**
@@ -65,7 +67,82 @@ const TOPICS: Topic[] = [
     reply:
       "Trabalhamos com seguros associados ao crédito habitação (vida, multirriscos) e outros seguros pessoais. Para uma análise personalizada, fale com a nossa equipa pelo WhatsApp.",
   },
+  {
+    keywords: ["crédito construção", "credito construcao", "construir casa", "construção da casa", "construcao da casa"],
+    reply:
+      "O crédito construção financia a construção ou remodelação de uma casa, com o capital libertado em fases à medida que a obra avança. Veja como funciona no nosso serviço de crédito construção (/servicos/credito-construcao).",
+  },
+  {
+    keywords: ["crédito consolidado", "credito consolidado", "consolidar créditos", "consolidar creditos", "juntar créditos", "juntar creditos"],
+    reply:
+      "O crédito consolidado junta vários créditos (pessoal, automóvel, cartões) numa única prestação mensal, normalmente mais baixa. Saiba mais no nosso serviço de crédito consolidado (/servicos/credito-consolidado).",
+  },
 ];
+
+const STOPWORDS = new Set([
+  "para", "como", "quando", "onde", "qual", "quais", "quanto", "quanta", "quantos", "quantas",
+  "este", "esta", "esse", "essa", "isso", "isto", "aquele", "aquela",
+  "credito", "creditos", "financeira", "financeiras", "financeiro", "instituicao", "instituicoes",
+  "banco", "bancos", "simulacao", "simulador", "simuladores", "servico", "servicos",
+  "condicoes", "melhores", "sempre", "pode", "podem", "fazer", "antes", "sobre", "todo",
+  "toda", "todos", "todas", "caso", "perfil", "cliente", "clientes", "preciso", "precisa",
+  "ainda", "depois", "tambem", "outro", "outra", "outros", "outras", "tipo", "forma",
+]);
+
+const DIACRITICS_PATTERN = new RegExp("[\\u0300-\\u036f]", "g");
+
+function normalize(text: string): string {
+  return text.toLowerCase().normalize("NFD").replace(DIACRITICS_PATTERN, "");
+}
+
+function significantTokens(text: string): Set<string> {
+  const words = normalize(text)
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length >= 4 && !STOPWORDS.has(word));
+  return new Set(words);
+}
+
+interface FaqTopic {
+  tokens: Set<string>;
+  reply: string;
+}
+
+const FAQ_TOPICS: FaqTopic[] = [
+  ...services.flatMap((service) =>
+    service.faqs.map((faq) => ({
+      tokens: significantTokens(faq.question),
+      reply: `${faq.answer} Saiba mais em /servicos/${service.slug}.`,
+    }))
+  ),
+  ...simulators.flatMap((sim) =>
+    (sim.faqs ?? []).map((faq) => ({
+      tokens: significantTokens(faq.question),
+      reply: `${faq.answer} Pode simular em /simuladores/${sim.slug}.`,
+    }))
+  ),
+];
+
+function findFaqReply(message: string): string | null {
+  const messageTokens = significantTokens(message);
+  if (messageTokens.size === 0) return null;
+
+  let bestMatch: FaqTopic | null = null;
+  let bestScore = 0;
+
+  for (const faqTopic of FAQ_TOPICS) {
+    let score = 0;
+    for (const token of faqTopic.tokens) {
+      if (messageTokens.has(token)) score++;
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = faqTopic;
+    }
+  }
+
+  return bestScore >= 2 ? bestMatch?.reply ?? null : null;
+}
 
 const FALLBACK_REPLIES = [
   "Posso ajudar a esclarecer dúvidas sobre crédito habitação, transferência de crédito, crédito pessoal, seguros, IMT, Imposto do Selo, IMI, mais-valias imobiliárias ou salário líquido. Para uma análise ao seu caso, recomendo falar com a nossa equipa pelo WhatsApp.",
@@ -76,7 +153,8 @@ const FALLBACK_REPLIES = [
 function findTopicReply(message: string): string | null {
   const normalized = message.toLowerCase();
   const topic = TOPICS.find((t) => t.keywords.some((kw) => normalized.includes(kw)));
-  return topic?.reply ?? null;
+  if (topic) return topic.reply;
+  return findFaqReply(message);
 }
 
 function buildSystemPrompt(): string {
