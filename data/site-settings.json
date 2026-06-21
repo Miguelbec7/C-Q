@@ -27,7 +27,7 @@
   },
   "partners": [
     { "name": "ABANCA Portugal, S.A.", "logo": "/images/partners/abanca.jpg" },
-    { "name": "Bankinter, S.A. - Sucursal em Portugal" },
+    { "name": "Bankinter, S.A. - Sucursal em Portugal", "logo": "/images/partners/bankinter.jpg" },
     { "name": "Banco BPI, S.A.", "logo": "/images/partners/bpi.png" },
     { "name": "Caixa Central de Crédito Agrícola Mútuo, CRL", "logo": "/images/partners/credito-agricola.png" },
     { "name": "Caixa Geral de Depósitos, S.A.", "logo": "/images/partners/cgd.png" },
