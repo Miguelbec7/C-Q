@@ -13,7 +13,7 @@ export function Partners() {
           {siteConfig.partners.map((partner) => (
             <div
               key={partner.name}
-              className="flex h-16 items-center justify-center rounded-xl border border-navy-100 bg-white p-3"
+              className="flex flex-col items-center justify-center gap-2 rounded-xl border border-navy-100 bg-white p-3"
               title={partner.name}
             >
               {"logo" in partner && partner.logo ? (
@@ -22,11 +22,14 @@ export function Partners() {
                   alt={partner.name}
                   width={140}
                   height={48}
-                  className="h-full w-auto object-contain"
+                  className="h-12 w-auto object-contain"
                 />
               ) : (
-                <span className="text-center text-sm font-semibold text-navy-400">{partner.name}</span>
+                <span className="flex h-12 items-center text-center text-sm font-semibold text-navy-400">
+                  {partner.name}
+                </span>
               )}
+              <span className="text-center text-[11px] leading-tight text-navy-400">{partner.name}</span>
             </div>
           ))}
         </div>
