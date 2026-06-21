@@ -149,11 +149,51 @@ export function ImiSimulator() {
             <p className="mt-1 text-3xl font-bold text-navy-950">{formatCurrency(result.imiAnual)}</p>
             {result.deducao > 0 && (
               <p className="mt-2 text-sm text-emerald-600">
-                Já com a dedução de {formatCurrency(result.deducao)} do IMI Familiar.
+                Montante antes da dedução: {formatCurrency(result.imiBase)} — já com a dedução de{" "}
+                {formatCurrency(result.deducao)} do IMI Familiar.
               </p>
             )}
             <div className="mt-5">
               <ResultStat label="Valor mensal equivalente" value={formatCurrency(result.imiMensal)} />
+            </div>
+
+            {result.prestacoes.length > 0 && (
+              <div className="mt-5 border-t border-navy-100 pt-4">
+                <p className="text-sm font-semibold text-navy-700">Plano de pagamentos</p>
+                <div className="mt-2 space-y-1.5">
+                  {result.prestacoes.map((prestacao) => (
+                    <div key={prestacao.mes} className="flex items-center justify-between text-sm text-navy-600">
+                      <span>{prestacao.mes}</span>
+                      <span className="font-medium text-navy-900">{formatCurrency(prestacao.valor)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="mt-5 border-t border-navy-100 pt-4">
+              <p className="text-sm font-semibold text-navy-700">Notas</p>
+              <ul className="mt-2 space-y-2 text-xs leading-relaxed text-navy-400">
+                <li>
+                  {result.imiAnual <= 100 ? (
+                    <>Como o valor de IMI a pagar não excede 100,00€, o pagamento é efetuado numa única prestação, em maio.</>
+                  ) : result.imiAnual <= 500 ? (
+                    <>
+                      Como o valor de IMI a pagar se situa entre 100,00€ e 500,00€, o pagamento pode ser efetuado em
+                      duas mensalidades.
+                    </>
+                  ) : (
+                    <>Como o valor de IMI a pagar é superior a 500,00€, o pagamento pode ser efetuado em três mensalidades.</>
+                  )}{" "}
+                  Despacho n.º 000-A/2019, n.º 2, alínea d). O número de prestações depende do valor final do
+                  imposto: até 100€ paga-se tudo em maio; entre 100€ e 500€ paga-se em 2 prestações (maio e
+                  novembro); mais de 500€ paga-se em 3 prestações (maio, agosto e novembro).
+                </li>
+                <li>
+                  Nem todas as Câmaras Municipais atribuem deduções por agregado familiar. E, nos casos de se tratar
+                  de prédios rústicos, as deduções por agregado não se aplicam.
+                </li>
+              </ul>
             </div>
           </Card>
         ) : (
