@@ -7,12 +7,12 @@ export type ImtJovemMode = "nenhum" | "total" | "parcial";
 export function calcularIMTContinentalHPP(price: number): number {
   if (!price || price <= 0 || isNaN(price)) return 0;
 
-  if (price <= 101917) return 0;
-  if (price <= 139412) return price * 0.02 - 2038.34;
-  if (price <= 190086) return price * 0.05 - 6220.7;
-  if (price <= 316772) return price * 0.07 - 10022.42;
-  if (price <= 633453) return price * 0.08 - 13190.14;
-  if (price <= 1102920) return price * 0.06;
+  if (price <= 106346) return 0;
+  if (price <= 145470) return price * 0.02 - 2126.92;
+  if (price <= 198347) return price * 0.05 - 6491.02;
+  if (price <= 330539) return price * 0.07 - 10457.96;
+  if (price <= 660982) return price * 0.08 - 13763.35;
+  if (price <= 1150853) return price * 0.06;
   return price * 0.075;
 }
 
@@ -23,17 +23,17 @@ export function calcularIMTContinentalHPP(price: number): number {
 export function calcularIMTContinentalSecundaria(price: number): number {
   if (!price || price <= 0 || isNaN(price)) return 0;
 
-  if (price <= 101917) return price * 0.01;
-  if (price <= 139412) return price * 0.02 - 1019.17;
-  if (price <= 190086) return price * 0.05 - 5201.53;
-  if (price <= 316772) return price * 0.07 - 9003.25;
-  if (price <= 633453) return price * 0.08 - 12170.97;
-  if (price <= 1102920) return price * 0.06;
+  if (price <= 106346) return price * 0.01;
+  if (price <= 145470) return price * 0.02 - 1063.46;
+  if (price <= 198347) return price * 0.05 - 5427.56;
+  if (price <= 330539) return price * 0.07 - 9394.5;
+  if (price <= 660982) return price * 0.08 - 12699.89;
+  if (price <= 1150853) return price * 0.06;
   return price * 0.075;
 }
 
-export const IMT_JOVEM_LIMITE_ISENCAO_TOTAL = 316772;
-export const IMT_JOVEM_LIMITE_BENEFICIO_PARCIAL = 633453;
+export const IMT_JOVEM_LIMITE_ISENCAO_TOTAL = 330539;
+export const IMT_JOVEM_LIMITE_BENEFICIO_PARCIAL = 660982;
 export const IMT_JOVEM_IDADE_MAXIMA = 35;
 
 /**

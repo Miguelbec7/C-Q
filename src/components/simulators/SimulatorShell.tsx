@@ -110,15 +110,17 @@ export function SelectField({
   value,
   onChange,
   options,
+  tooltip,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   options: { value: string; label: string }[];
+  tooltip?: React.ReactNode;
 }) {
   return (
     <div>
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel tooltip={tooltip}>{label}</FieldLabel>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
