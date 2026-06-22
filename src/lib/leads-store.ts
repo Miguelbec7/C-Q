@@ -86,18 +86,26 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
     lead.message ? `Mensagem: ${lead.message}` : null,
   ].filter(Boolean);
 
-  await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL || "C&Q Finanças <leads@cqfinancas.com>",
-      to: notifyTo,
-      reply_to: lead.email,
-      subject: `Novo contacto no site: ${lead.name}`,
-      text: lines.join("\n"),
-    }),
-  }).catch((error) => console.error("Falha ao enviar email de notificação de lead", error));
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: process.env.RESEND_FROM_EMAIL || "C&Q Finanças <leads@cqfinancas.com>",
+        to: notifyTo,
+        reply_to: lead.email,
+        subject: `Novo contacto no site: ${lead.name}`,
+        text: lines.join("\n"),
+      }),
+    });
+    if (!response.ok) {
+      const body = await response.text();
+      console.error(`Resend respondeu ${response.status} ao enviar email de notificação de lead: ${body}`);
+    }
+  } catch (error) {
+    console.error("Falha ao enviar email de notificação de lead", error);
+  }
 }
