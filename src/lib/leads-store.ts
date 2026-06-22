@@ -95,6 +95,7 @@ export async function sendLeadNotificationEmail(lead: Lead): Promise<void> {
     body: JSON.stringify({
       from: process.env.RESEND_FROM_EMAIL || "C&Q Finanças <leads@cqfinancas.com>",
       to: notifyTo,
+      reply_to: lead.email,
       subject: `Novo contacto no site: ${lead.name}`,
       text: lines.join("\n"),
     }),
