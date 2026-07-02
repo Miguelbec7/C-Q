@@ -63,11 +63,6 @@ const TOPICS: Topic[] = [
       "Pode simular a prestação mensal estimada do seu crédito pessoal no nosso simulador de crédito pessoal (/simuladores/credito-pessoal).",
   },
   {
-    keywords: ["seguro"],
-    reply:
-      "Trabalhamos com seguros associados ao crédito habitação (vida, multirriscos) e outros seguros pessoais. Para uma análise personalizada, fale com a nossa equipa pelo WhatsApp.",
-  },
-  {
     keywords: ["crédito construção", "credito construcao", "construir casa", "construção da casa", "construcao da casa"],
     reply:
       "O crédito construção financia a construção ou remodelação de uma casa, com o capital libertado em fases à medida que a obra avança. Veja como funciona no nosso serviço de crédito construção (/servicos/credito-construcao).",
@@ -145,7 +140,7 @@ function findFaqReply(message: string): string | null {
 }
 
 const FALLBACK_REPLIES = [
-  "Posso ajudar a esclarecer dúvidas sobre crédito habitação, transferência de crédito, crédito pessoal, seguros, IMT, Imposto do Selo, IMI, mais-valias imobiliárias ou salário líquido. Para uma análise ao seu caso, recomendo falar com a nossa equipa pelo WhatsApp.",
+  "Posso ajudar a esclarecer dúvidas sobre crédito habitação, transferência de crédito, crédito pessoal, IMT, Imposto do Selo, IMI, mais-valias imobiliárias ou salário líquido. Para uma análise ao seu caso, recomendo falar com a nossa equipa pelo WhatsApp.",
   "Essa é uma ótima pergunta para a nossa equipa especializada. Pode pedir uma simulação gratuita ou contactar-nos diretamente pelo WhatsApp para uma resposta detalhada.",
   "Posso indicar-lhe o simulador mais adequado: temos simuladores de crédito habitação, crédito pessoal, taxa de esforço, IMT, imposto do selo, IMI, mais-valias imobiliárias e salário líquido, todos gratuitos.",
 ];

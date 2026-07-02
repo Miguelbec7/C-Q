@@ -10,9 +10,9 @@ import { FinalCta } from "@/components/home/FinalCta";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Intermediário de Crédito Habitação, Pessoal e Seguros",
+  title: "Intermediário de Crédito Habitação e Crédito Pessoal",
   description:
-    "A C&Q Finanças negoceia com várias instituições financeiras para encontrar as melhores condições de crédito habitação, crédito pessoal e seguros. Simulação gratuita.",
+    "A C&Q Finanças negoceia com várias instituições financeiras para encontrar as melhores condições de crédito habitação e crédito pessoal. Simulação gratuita.",
   path: "/",
 });
 

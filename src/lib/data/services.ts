@@ -5,7 +5,6 @@ import {
   Building2,
   Wallet,
   Layers,
-  ShieldCheck,
 } from "lucide-react";
 
 export interface ServiceFaq {
@@ -185,37 +184,6 @@ export const services: ServiceContent[] = [
     faqs: [
       { question: "O crédito consolidado aumenta o custo total do crédito?", answer: "Pode aumentar o total de juros pagos devido ao alargamento do prazo, mas reduz significativamente o encargo mensal. Apresentamos sempre ambos os cenários para uma decisão informada." },
       { question: "Posso consolidar crédito habitação com crédito pessoal?", answer: "Em alguns casos sim, dependendo das garantias associadas. A nossa equipa analisa a melhor estrutura para o seu caso." },
-    ],
-  },
-  {
-    slug: "seguros",
-    icon: ShieldCheck,
-    title: "Seguros",
-    shortTitle: "Seguros",
-    summary:
-      "Seguros de vida, multirriscos habitação e proteção de crédito com as melhores coberturas e preços.",
-    metaDescription:
-      "Seguros associados ao crédito habitação e pessoal com as melhores condições. A C&Q Finanças compara seguradoras parceiras para si.",
-    heroImage: "/images/services/seguros.jpg",
-    intro: [
-      "Os seguros associados ao crédito — vida, multirriscos habitação e, em alguns casos, proteção ao crédito — têm um peso real no custo total do seu financiamento, mas também na proteção da sua família.",
-      "A C&Q Finanças compara as condições de diferentes seguradoras parceiras para encontrar coberturas adequadas às suas necessidades, a um custo competitivo.",
-    ],
-    benefits: [
-      { title: "Comparação entre seguradoras", description: "Não estamos limitados a uma única seguradora, o que nos permite negociar melhores condições." },
-      { title: "Coberturas adequadas ao perfil", description: "Analisamos o seu perfil de risco para recomendar coberturas verdadeiramente úteis, sem sobrecustos desnecessários." },
-      { title: "Revisão periódica", description: "Acompanhamos a evolução das suas apólices, sugerindo ajustes quando há condições mais vantajosas." },
-      { title: "Apoio em caso de sinistro", description: "Damos apoio na fase de participação e acompanhamento de sinistros." },
-    ],
-    process: [
-      { title: "Levantamento de necessidades", description: "Avaliamos o crédito associado e o perfil de risco do cliente e agregado familiar." },
-      { title: "Comparação de propostas", description: "Solicitamos propostas a diferentes seguradoras parceiras." },
-      { title: "Recomendação", description: "Apresentamos a opção com melhor equilíbrio entre cobertura e custo." },
-      { title: "Formalização e acompanhamento", description: "Tratamos da subscrição e acompanhamos a apólice ao longo do tempo." },
-    ],
-    faqs: [
-      { question: "O seguro de vida é obrigatório no crédito habitação?", answer: "Não é uma obrigação legal, mas é exigido pela generalidade das instituições financeiras como condição do crédito." },
-      { question: "Posso transferir o seguro de uma apólice já existente?", answer: "Em muitos casos sim, mantendo a apólice atual associada ao novo crédito, desde que cumpra os requisitos mínimos exigidos pelo banco." },
     ],
   },
 ];

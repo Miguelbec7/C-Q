@@ -24,7 +24,6 @@ const SERVICE_OPTIONS = [
   "Crédito Construção",
   "Crédito Pessoal",
   "Crédito Consolidado",
-  "Seguros",
   "Outro assunto",
 ];
 

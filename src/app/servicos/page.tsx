@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Serviços de Intermediação de Crédito",
   description:
-    "Conheça os serviços da C&Q Finanças: crédito habitação, transferência de crédito, crédito construção, crédito pessoal, crédito consolidado e seguros.",
+    "Conheça os serviços da C&Q Finanças: crédito habitação, transferência de crédito, crédito construção, crédito pessoal e crédito consolidado.",
   path: "/servicos",
 });
 
@@ -22,8 +22,7 @@ export default function ServicosPage() {
             Os nossos serviços
           </h1>
           <p className="mt-4 max-w-2xl text-navy-300">
-            Soluções completas de intermediação de crédito e seguros, adaptadas a cada etapa da sua vida
-            financeira.
+            Soluções completas de intermediação de crédito, adaptadas a cada etapa da sua vida financeira.
           </p>
         </Container>
       </div>

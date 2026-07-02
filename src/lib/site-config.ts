@@ -10,7 +10,7 @@ export const siteConfig = {
   shortName: "C&Q Finanças",
   tagline: "Intermediários de Crédito",
   description:
-    "A C&Q Finanças & Soluções é uma empresa de intermediação de crédito registada no Banco de Portugal, especializada em crédito habitação, transferência de crédito, crédito pessoal e seguros. Simulação gratuita e acompanhamento personalizado.",
+    "A C&Q Finanças & Soluções é uma empresa de intermediação de crédito registada no Banco de Portugal, especializada em crédito habitação, transferência de crédito, crédito pessoal e crédito consolidado. Simulação gratuita e acompanhamento personalizado.",
   url: "https://cqfinancassolucoes.com",
   locale: "pt-PT",
 
