@@ -11,7 +11,7 @@ const baseSecurityHeaders = [
 // CSP do site público: permite GTM/GA4/Meta Pixel e o mapa incorporado do Google.
 const siteCsp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://elfsightcdn.com https://*.elfsight.com",
+  "script-src 'self' 'unsafe-inline' https:",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https:",
   "font-src 'self' data:",
