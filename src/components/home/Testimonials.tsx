@@ -13,7 +13,7 @@ export function Testimonials() {
           title="O que dizem os nossos clientes"
         />
         <div className="mt-12">
-          <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
+          <Script src="https://elfsightcdn.com/platform.js" strategy="afterInteractive" />
           <div className="elfsight-app-a7e2b248-8491-44d2-afcb-d1f9b829fba7" data-elfsight-app-lazy />
         </div>
       </Container>
