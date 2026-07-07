@@ -5,12 +5,12 @@ import { faqJsonLd } from "@/lib/seo";
 
 const faqs = [
   {
-    question: "O serviço da C&Q Finanças tem custos?",
+    question: "O serviço da C&Q Finanças & Soluções tem custos?",
     answer:
-      "Na maioria das soluções de crédito, o nosso serviço de intermediação não tem qualquer custo direto para o cliente — somos remunerados pelas instituições financeiras parceiras.",
+      "O nosso serviço de intermediação não tem qualquer custo direto para o cliente — somos remunerados pelas instituições financeiras parceiras.",
   },
   {
-    question: "A C&Q Finanças é uma entidade autorizada?",
+    question: "A C&Q Finanças & Soluções é uma entidade autorizada?",
     answer:
       "Sim. Somos um Intermediário de Crédito registado no Banco de Portugal, o que garante o cumprimento de todas as obrigações legais e regulatórias.",
   },

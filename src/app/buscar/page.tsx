@@ -9,7 +9,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Pesquisa",
-  description: "Pesquise artigos, serviços e simuladores no website da C&Q Finanças.",
+  description: "Pesquise artigos, serviços e simuladores no website da C&Q Finanças & Soluções.",
   path: "/buscar",
 });
 

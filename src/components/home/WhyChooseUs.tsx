@@ -19,7 +19,7 @@ const reasons = [
     icon: BadgeEuro,
     title: "Sem custos para o cliente",
     description:
-      "Na maioria das soluções, o nosso serviço de intermediação não tem qualquer custo direto para quem procura crédito.",
+      "O nosso serviço de intermediação não tem qualquer custo direto para o cliente — somos remunerados pelas instituições financeiras parceiras.",
   },
   {
     icon: Clock3,

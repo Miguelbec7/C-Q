@@ -7,7 +7,7 @@ export function WhatsAppFloat() {
   return (
     <a
       href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(
-        "Olá! Gostaria de saber mais sobre as soluções de crédito da C&Q Finanças."
+        "Olá! Gostaria de saber mais sobre as soluções de crédito da C&Q Finanças & Soluções."
       )}`}
       target="_blank"
       rel="noopener noreferrer"

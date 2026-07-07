@@ -35,11 +35,11 @@ export const services: ServiceContent[] = [
     summary:
       "Encontramos as melhores condições do mercado para comprar a sua casa, com acompanhamento completo do início ao fim.",
     metaDescription:
-      "Simule o seu crédito habitação com a C&Q Finanças. Comparamos as melhores propostas do mercado e acompanhamos todo o processo, sem custos para si.",
+      "Simule o seu crédito habitação com a C&Q Finanças & Soluções. Comparamos as melhores propostas do mercado e acompanhamos todo o processo, sem custos para si.",
     heroImage: "/images/services/credito-habitacao.jpg",
     intro: [
       "Comprar casa é uma das decisões financeiras mais importantes da sua vida — e escolher o crédito habitação certo pode significar a diferença entre poupar ou pagar milhares de euros a mais em juros.",
-      "Como intermediários de crédito registados no Banco de Portugal, a C&Q Finanças analisa o seu perfil e negocia com múltiplas instituições financeiras para encontrar a proposta mais vantajosa para si — taxa fixa, variável ou mista, consoante o que melhor se adequa ao seu objetivo.",
+      "Como intermediários de crédito registados no Banco de Portugal, a C&Q Finanças & Soluções analisa o seu perfil e negocia com múltiplas instituições financeiras para encontrar a proposta mais vantajosa para si — taxa fixa, variável ou mista, consoante o que melhor se adequa ao seu objetivo.",
     ],
     benefits: [
       { title: "Comparação imparcial", description: "Analisamos propostas de várias instituições financeiras parceiras, sem estar limitados a um único banco." },
@@ -54,7 +54,7 @@ export const services: ServiceContent[] = [
       { title: "Acompanhamento até à escritura", description: "Tratamos da documentação e acompanhamos todo o processo até à assinatura final." },
     ],
     faqs: [
-      { question: "Quanto custa o serviço da C&Q Finanças?", answer: "O nosso serviço de intermediação de crédito não tem qualquer custo para o cliente na maioria das soluções de crédito habitação — somos remunerados pelas instituições financeiras parceiras." },
+      { question: "Quanto custa o serviço da C&Q Finanças & Soluções?", answer: "O nosso serviço de intermediação de crédito não tem qualquer custo para o cliente — somos remunerados pelas instituições financeiras parceiras." },
       { question: "Quanto tempo demora o processo de aprovação?", answer: "Em média, entre 2 a 6 semanas, dependendo da complexidade do processo, da documentação disponível e da instituição financeira escolhida." },
       { question: "Posso simular sem compromisso?", answer: "Sim. A simulação é totalmente gratuita e sem qualquer compromisso de contratação." },
       { question: "Que documentos preciso para começar?", answer: "Tipicamente: documento de identificação, NIF, últimos recibos de vencimento, última declaração de IRS e Mapa de Responsabilidades de Crédito do Banco de Portugal. A nossa equipa indica a lista completa e ajuda a reunir tudo." },
@@ -68,11 +68,11 @@ export const services: ServiceContent[] = [
     summary:
       "Tem um crédito habitação ativo? Avaliamos se vale a pena transferi-lo para condições mais vantajosas.",
     metaDescription:
-      "Descubra quanto pode poupar transferindo o seu crédito habitação. Simulação gratuita com a C&Q Finanças, intermediários de crédito registados no Banco de Portugal.",
+      "Descubra quanto pode poupar transferindo o seu crédito habitação. Simulação gratuita com a C&Q Finanças & Soluções, intermediários de crédito registados no Banco de Portugal.",
     heroImage: "/images/services/transferencia-credito.jpg",
     intro: [
       "Se contratou o seu crédito habitação há alguns anos, é muito provável que existam hoje condições mais vantajosas no mercado — spreads mais baixos, melhores seguros associados ou um regime de taxa mais adequado ao seu momento de vida.",
-      "A transferência de crédito permite mudar o seu empréstimo para outra instituição financeira, mantendo o capital em dívida, mas com condições renegociadas. A C&Q Finanças analisa o seu contrato atual e calcula, de forma transparente, quanto poderia poupar.",
+      "A transferência de crédito permite mudar o seu empréstimo para outra instituição financeira, mantendo o capital em dívida, mas com condições renegociadas. A C&Q Finanças & Soluções analisa o seu contrato atual e calcula, de forma transparente, quanto poderia poupar.",
     ],
     benefits: [
       { title: "Poupança mensal e total", description: "Calculamos o impacto real na sua prestação mensal e no total de juros pagos até final do contrato." },
@@ -100,11 +100,11 @@ export const services: ServiceContent[] = [
     summary:
       "Vai construir ou remodelar a sua casa? Ajudamos a financiar o projeto com libertações de capital adaptadas à obra.",
     metaDescription:
-      "Crédito construção com acompanhamento especializado. A C&Q Finanças ajuda a financiar a construção ou remodelação da sua casa com as melhores condições.",
+      "Crédito construção com acompanhamento especializado. A C&Q Finanças & Soluções ajuda a financiar a construção ou remodelação da sua casa com as melhores condições.",
     heroImage: "/images/services/credito-construcao.jpg",
     intro: [
       "O crédito construção tem características próprias: o capital não é entregue de uma só vez, mas libertado em fases, à medida que a obra avança e é fiscalizada pela instituição financeira.",
-      "A C&Q Finanças acompanha promotores e particulares na estruturação deste tipo de financiamento, desde a aquisição do terreno até à conclusão da obra, garantindo que o plano de libertações de capital se ajusta ao cronograma da construção.",
+      "A C&Q Finanças & Soluções acompanha promotores e particulares na estruturação deste tipo de financiamento, desde a aquisição do terreno até à conclusão da obra, garantindo que o plano de libertações de capital se ajusta ao cronograma da construção.",
     ],
     benefits: [
       { title: "Plano de libertações ajustado", description: "Estruturamos o calendário de libertações de capital de acordo com as fases reais da obra." },
@@ -132,11 +132,11 @@ export const services: ServiceContent[] = [
     summary:
       "Soluções de financiamento rápido para projetos pessoais, com resposta ágil e condições transparentes.",
     metaDescription:
-      "Crédito pessoal com simulação gratuita e resposta rápida. A C&Q Finanças encontra a melhor solução de financiamento para o seu projeto pessoal.",
+      "Crédito pessoal com simulação gratuita e resposta rápida. A C&Q Finanças & Soluções encontra a melhor solução de financiamento para o seu projeto pessoal.",
     heroImage: "/images/services/credito-pessoal.jpg",
     intro: [
       "Seja para um projeto pessoal, uma viagem, equipamento, saúde ou qualquer outra necessidade, o crédito pessoal é uma solução de financiamento flexível e com processos de aprovação mais rápidos do que o crédito habitação.",
-      "A C&Q Finanças compara as condições disponíveis no mercado para lhe apresentar a solução com a taxa anual efetiva global (TAEG) mais vantajosa para o seu perfil.",
+      "A C&Q Finanças & Soluções compara as condições disponíveis no mercado para lhe apresentar a solução com a taxa anual efetiva global (TAEG) mais vantajosa para o seu perfil.",
     ],
     benefits: [
       { title: "Resposta rápida", description: "Processos de decisão normalmente mais ágeis do que no crédito habitação." },
@@ -163,7 +163,7 @@ export const services: ServiceContent[] = [
     summary:
       "Reúna vários créditos numa só prestação mensal, mais baixa e mais fácil de gerir.",
     metaDescription:
-      "Consolide os seus créditos numa única prestação mais baixa. A C&Q Finanças simula gratuitamente a sua poupança com o crédito consolidado.",
+      "Consolide os seus créditos numa única prestação mais baixa. A C&Q Finanças & Soluções simula gratuitamente a sua poupança com o crédito consolidado.",
     heroImage: "/images/services/credito-consolidado.jpg",
     intro: [
       "Se tem vários créditos em simultâneo — pessoal, automóvel, cartões de crédito — é frequente que a soma das prestações represente um peso elevado no orçamento familiar.",

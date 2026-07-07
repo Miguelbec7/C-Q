@@ -34,7 +34,7 @@ export const simulators: SimulatorMeta[] = [
     title: "Que casa consigo comprar?",
     shortTitle: "Comprar Casa",
     description: "Descubra quanto pode pedir ao banco e qual a prestação estimada para a sua casa.",
-    metaDescription: "Simulador gratuito para comprar casa. Calcule o valor de imóvel, prestação e taxa de esforço estimados pela C&Q Finanças.",
+    metaDescription: "Simulador gratuito para comprar casa. Calcule o valor de imóvel, prestação e taxa de esforço estimados pela C&Q Finanças & Soluções.",
   },
   {
     slug: "credito-pessoal",
@@ -42,7 +42,7 @@ export const simulators: SimulatorMeta[] = [
     title: "Simulador de Crédito Pessoal",
     shortTitle: "Crédito Pessoal",
     description: "Calcule a prestação mensal estimada para o seu crédito pessoal.",
-    metaDescription: "Simule o seu crédito pessoal gratuitamente e descubra a prestação mensal estimada com a C&Q Finanças.",
+    metaDescription: "Simule o seu crédito pessoal gratuitamente e descubra a prestação mensal estimada com a C&Q Finanças & Soluções.",
   },
   {
     slug: "prestacao-mensal",
@@ -66,7 +66,7 @@ export const simulators: SimulatorMeta[] = [
     title: "Simulador de IMT",
     shortTitle: "IMT",
     description: "Calcule o Imposto Municipal sobre Transmissões Onerosas de Imóveis para a sua compra.",
-    metaDescription: "Calculadora de IMT 2026 para habitação própria permanente e secundária. Simule gratuitamente com a C&Q Finanças.",
+    metaDescription: "Calculadora de IMT 2026 para habitação própria permanente e secundária. Simule gratuitamente com a C&Q Finanças & Soluções.",
   },
   {
     slug: "imposto-de-selo",
@@ -74,7 +74,7 @@ export const simulators: SimulatorMeta[] = [
     title: "Simulador de Imposto do Selo",
     shortTitle: "Imposto do Selo",
     description: "Calcule o imposto do selo sobre a aquisição e sobre o crédito habitação.",
-    metaDescription: "Calcule o imposto do selo sobre a compra de imóvel e sobre o crédito habitação com o simulador gratuito da C&Q Finanças.",
+    metaDescription: "Calcule o imposto do selo sobre a compra de imóvel e sobre o crédito habitação com o simulador gratuito da C&Q Finanças & Soluções.",
   },
   {
     slug: "poupanca-transferencia",
@@ -82,7 +82,7 @@ export const simulators: SimulatorMeta[] = [
     title: "Poupança na Transferência de Crédito",
     shortTitle: "Poupança na Transferência",
     description: "Compare o seu crédito atual com uma nova proposta e veja quanto pode poupar.",
-    metaDescription: "Simule a poupança ao transferir o seu crédito habitação para outra instituição. Calculadora gratuita da C&Q Finanças.",
+    metaDescription: "Simule a poupança ao transferir o seu crédito habitação para outra instituição. Calculadora gratuita da C&Q Finanças & Soluções.",
   },
   {
     slug: "imi",
@@ -90,7 +90,7 @@ export const simulators: SimulatorMeta[] = [
     title: "Simulador de IMI",
     shortTitle: "IMI",
     description: "Calcule o Imposto Municipal sobre Imóveis anual estimado para o seu imóvel.",
-    metaDescription: "Calculadora de IMI 2026. Calcule o imposto municipal sobre imóveis a partir do VPT e da taxa do município, com a C&Q Finanças.",
+    metaDescription: "Calculadora de IMI 2026. Calcule o imposto municipal sobre imóveis a partir do VPT e da taxa do município, com a C&Q Finanças & Soluções.",
   },
   {
     slug: "mais-valias-imoveis",
@@ -98,7 +98,7 @@ export const simulators: SimulatorMeta[] = [
     title: "Simulador de Mais-Valias Imobiliárias",
     shortTitle: "Mais-Valias",
     description: "Calcule a mais-valia tributável na venda de um imóvel e o impacto do reinvestimento.",
-    metaDescription: "Simulador de mais-valias na venda de imóveis. Calcule a mais-valia tributável em IRS com a C&Q Finanças.",
+    metaDescription: "Simulador de mais-valias na venda de imóveis. Calcule a mais-valia tributável em IRS com a C&Q Finanças & Soluções.",
     faqs: [
       {
         question: "O que é a mais-valia na venda de imóveis?",
@@ -133,7 +133,7 @@ export const simulators: SimulatorMeta[] = [
     title: "Simulador de Salário Líquido",
     shortTitle: "Salário Líquido",
     description: "Calcule o seu salário líquido mensal a partir do salário base, com retenção de IRS e Segurança Social.",
-    metaDescription: "Calculadora de salário líquido 2026. Simule o seu vencimento líquido com a tabela de retenção de IRS em vigor, com a C&Q Finanças.",
+    metaDescription: "Calculadora de salário líquido 2026. Simule o seu vencimento líquido com a tabela de retenção de IRS em vigor, com a C&Q Finanças & Soluções.",
   },
 ];
 

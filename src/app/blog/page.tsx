@@ -10,7 +10,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Blog",
   description:
-    "Artigos sobre crédito habitação, transferência de crédito, seguros, fiscalidade e finanças pessoais pela equipa da C&Q Finanças.",
+    "Artigos sobre crédito habitação, transferência de crédito, fiscalidade e finanças pessoais pela equipa da C&Q Finanças & Soluções.",
   path: "/blog",
 });
 

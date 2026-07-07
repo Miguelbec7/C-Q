@@ -71,7 +71,7 @@ export function LeadForm({
         <CheckCircle2 className="h-10 w-10 text-emerald-600" />
         <p className="font-semibold text-emerald-800">Pedido enviado com sucesso!</p>
         <p className="text-sm text-emerald-700">
-          A nossa equipa irá contactá-lo brevemente. Obrigado por confiar na C&amp;Q Finanças.
+          A nossa equipa irá contactá-lo brevemente. Obrigado por confiar na C&amp;Q Finanças &amp; Soluções.
         </p>
       </div>
     );
@@ -137,7 +137,7 @@ export function LeadForm({
         <a href="/politica-privacidade" className="font-medium text-navy-800 underline">
           Política de Privacidade
         </a>{" "}
-        e autorizo o contacto pela C&amp;Q Finanças.
+        e autorizo o contacto pela C&amp;Q Finanças &amp; Soluções.
       </label>
       {errors.rgpd && <p className="text-xs text-red-600">{errors.rgpd.message}</p>}
 

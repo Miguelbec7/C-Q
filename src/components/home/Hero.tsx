@@ -21,7 +21,7 @@ export function Hero() {
           </h1>
 
           <p className="mt-5 max-w-lg text-balance text-lg text-navy-300">
-            A C&amp;Q Finanças negoceia com várias instituições financeiras para encontrar as melhores
+            A C&amp;Q Finanças &amp; Soluções negoceia com várias instituições financeiras para encontrar as melhores
             condições de crédito habitação e crédito pessoal — com acompanhamento próximo do início ao fim.
           </p>
 

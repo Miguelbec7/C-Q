@@ -39,7 +39,7 @@ export function SimulatorShell({
           <p>
             Simulação meramente indicativa, baseada em pressupostos simplificados. Não dispensa a análise
             detalhada das condições de crédito pelas instituições financeiras nem constitui proposta
-            contratual. Para uma análise personalizada, fale com a C&amp;Q Finanças.
+            contratual. Para uma análise personalizada, fale com a C&amp;Q Finanças &amp; Soluções.
           </p>
         </div>
 

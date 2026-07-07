@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Contactos",
   description:
-    "Contacte a C&Q Finanças por telefone, email ou WhatsApp. Peça já a sua simulação de crédito gratuita e sem compromisso.",
+    "Contacte a C&Q Finanças & Soluções por telefone, email ou WhatsApp. Peça já a sua simulação de crédito gratuita e sem compromisso.",
   path: "/contactos",
 });
 
