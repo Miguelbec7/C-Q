@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { MessageCircle, ShieldCheck, Star } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { siteConfig } from "@/lib/site-config";
-import { HeroSimCard } from "@/components/home/HeroSimCard";
+import { HeroVisual } from "@/components/home/HeroVisual";
 
 export function Hero() {
   return (
@@ -46,18 +45,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-3xl border border-white/10 shadow-premium lg:max-w-none">
-          <Image
-            src="/images/hero-home.jpg"
-            alt="Casal feliz a planear a compra de casa com a C&Q Finanças"
-            fill
-            priority
-            sizes="(min-width: 1024px) 40vw, 90vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-transparent" />
-          <HeroSimCard />
-        </div>
+        <HeroVisual />
       </Container>
     </section>
   );
