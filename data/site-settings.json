@@ -32,6 +32,8 @@
     { "name": "Caixa Central de Crédito Agrícola Mútuo, CRL", "logo": "/images/partners/credito-agricola.png" },
     { "name": "Caixa Geral de Depósitos, S.A.", "logo": "/images/partners/cgd.png" },
     { "name": "Banco Santander Totta, S.A.", "logo": "/images/partners/santander-totta.jpg" },
+    { "name": "Banco CTT, S.A.", "logo": "" },
+    { "name": "Novo Banco, S.A.", "logo": "" },
     { "name": "Union de Créditos Inmobiliários, S.A., EFC (Sociedad Unipersonal) - Sucursal em Portugal", "logo": "/images/partners/uci.png" },
     { "name": "UNICRE - Instituição Financeira de Crédito, S.A.", "logo": "/images/partners/unicre.png" }
   ]
