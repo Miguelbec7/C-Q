@@ -3,6 +3,7 @@ import { MessageCircle, ShieldCheck, Star } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { siteConfig } from "@/lib/site-config";
+import { HeroSimCard } from "@/components/home/HeroSimCard";
 
 export function Hero() {
   return (
@@ -55,11 +56,7 @@ export function Hero() {
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-transparent" />
-          <div className="absolute bottom-5 left-5 right-5 rounded-2xl bg-white/95 p-4 shadow-premium backdrop-blur">
-            <p className="text-xs font-medium uppercase tracking-wide text-navy-400">Prestação estimada</p>
-            <p className="mt-1 text-2xl font-bold text-navy-950">€612<span className="text-sm font-medium text-navy-400">/mês</span></p>
-            <p className="mt-1 text-xs text-emerald-600">Crédito habitação · taxa mista 3,70%</p>
-          </div>
+          <HeroSimCard />
         </div>
       </Container>
     </section>
