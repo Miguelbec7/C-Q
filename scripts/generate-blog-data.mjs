@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import readingTime from "reading-time";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
+import remarkGfm from "remark-gfm";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 
@@ -13,7 +14,7 @@ const OUTPUT_FILE = path.join(process.cwd(), "src", "lib", "data", "blog-posts.g
 // O HTML é compilado em build-time (em vez de em runtime com next-mdx-remote)
 // porque o Cloudflare Workers bloqueia geração de código a partir de strings
 // (new Function/eval), que é como o MDXRemote compila Markdown no servidor.
-const markdownToHtml = unified().use(remarkParse).use(remarkRehype).use(rehypeStringify);
+const markdownToHtml = unified().use(remarkParse).use(remarkGfm).use(remarkRehype).use(rehypeStringify);
 
 function readPost(filename) {
   const slug = filename.replace(/\.mdx?$/, "");
