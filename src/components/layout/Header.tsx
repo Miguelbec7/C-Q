@@ -35,10 +35,10 @@ export function Header() {
             className="h-8 w-auto sm:h-9"
           />
           <span className="flex flex-col leading-tight">
-            <span className="font-display text-[13px] font-bold text-navy-950 sm:text-lg">
-              C&amp;Q Finanças &amp; Soluções
+            <span className="whitespace-nowrap font-display text-[13px] font-bold text-navy-950 sm:text-lg">
+              C&amp;Q Finanças <span className="hidden sm:inline">&amp; Soluções</span>
             </span>
-            <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-gold-600">
+            <span className="whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.14em] text-gold-600">
               Intermediários de Crédito
             </span>
           </span>
