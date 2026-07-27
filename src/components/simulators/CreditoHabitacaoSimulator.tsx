@@ -24,7 +24,7 @@ export function CreditoHabitacaoSimulator() {
   const [purpose, setPurpose] = useState("hpp");
   const [rateType, setRateType] = useState("mista");
   const [rate, setRate] = useState("2.85");
-  const [maxEffort, setMaxEffort] = useState("35");
+  const [maxEffort, setMaxEffort] = useState("40");
   const [numTitulares, setNumTitulares] = useState("1");
   const [imtMode, setImtMode] = useState<ImtJovemMode>("nenhum");
   const [gpConfirm, setGpConfirm] = useState(false);
@@ -116,8 +116,8 @@ export function CreditoHabitacaoSimulator() {
             value={maxEffort}
             onChange={setMaxEffort}
             options={[
-              { value: "35", label: "35% — Cenário recomendado C&Q" },
-              { value: "40", label: "40% — Cenário limite" },
+              { value: "40", label: "40% — Cenário recomendado C&Q" },
+              { value: "45", label: "45% — Cenário limite (máx. BdP)" },
             ]}
           />
         </div>
