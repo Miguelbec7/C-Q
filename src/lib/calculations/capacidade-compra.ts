@@ -111,11 +111,8 @@ export function resolverCenarioCompra(
 }
 
 export function calcularPrazoMaximo(age: number): number {
-  let baseYears: number;
-  if (age < 30) baseYears = 40;
-  else if (age <= 35) baseYears = 37;
-  else baseYears = 35;
-
+  // BdP recommendation effective 1 Aug 2026: ≤35 → 40yr max, >35 → 35yr max
+  const baseYears = age <= 35 ? 40 : 35;
   return Math.max(5, Math.min(baseYears, 75 - age));
 }
 
