@@ -38,6 +38,13 @@ const adminCsp = [
 const nextConfig: NextConfig = {
   // Build standalone necessário para o adaptador @opennextjs/cloudflare (deploy em Cloudflare Workers).
   output: "standalone",
+  async redirects() {
+    return [
+      // O Google crawled /mês como URL a partir do texto "€612/mês" no antigo HeroSimCard.
+      { source: "/m%C3%AAs", destination: "/", permanent: true },
+      { source: "/mês", destination: "/", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {
