@@ -111,8 +111,10 @@ export function resolverCenarioCompra(
 }
 
 export function calcularPrazoMaximo(age: number): number {
-  // BdP recommendation effective 1 Aug 2026: ≤35 → 40yr max, >35 → 35yr max
-  const baseYears = age <= 35 ? 40 : 35;
+  // BdP: até 35 anos inclusive → 40yr, mais de 35 → 35yr.
+  // Simulador usa idade em anos inteiros: quem digita 35 já completou 35 anos
+  // e pode ter meses adicionais, por isso aplica-se o limite conservador de 35yr.
+  const baseYears = age < 35 ? 40 : 35;
   return Math.max(5, Math.min(baseYears, 75 - age));
 }
 
