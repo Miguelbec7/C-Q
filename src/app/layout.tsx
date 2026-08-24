@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { WhatsAppFloat } from "@/components/widgets/WhatsAppFloat";
-import { ChatWidget } from "@/components/widgets/ChatWidget";
-import { CookieBanner } from "@/components/widgets/CookieBanner";
+import { PathAwareShell } from "@/components/layout/PathAwareShell";
 import { AnalyticsScripts } from "@/components/widgets/AnalyticsScripts";
 import { siteConfig } from "@/lib/site-config";
 import { organizationJsonLd } from "@/lib/seo";
@@ -55,13 +51,8 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
         />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <WhatsAppFloat />
-        <ChatWidget />
-        <CookieBanner />
         <AnalyticsScripts />
+        <PathAwareShell>{children}</PathAwareShell>
       </body>
     </html>
   );
