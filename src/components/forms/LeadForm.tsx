@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/Button";
 import { CheckCircle2 } from "lucide-react";
+import { TurnstileWidget } from "@/components/widgets/TurnstileWidget";
 
 const leadSchema = z.object({
   name: z.string().min(2, "Indique o seu nome completo"),
@@ -38,6 +39,12 @@ export function LeadForm({
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  const handleTurnstileSuccess = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
 
   const {
     register,
@@ -55,7 +62,7 @@ export function LeadForm({
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, source }),
+        body: JSON.stringify({ ...values, source, turnstileToken }),
       });
       if (!response.ok) throw new Error("request_failed");
       setSubmitted(true);
@@ -147,7 +154,11 @@ export function LeadForm({
         </p>
       )}
 
-      <Button type="submit" disabled={isSubmitting} className="w-full">
+      {siteKey && (
+        <TurnstileWidget siteKey={siteKey} onSuccess={handleTurnstileSuccess} />
+      )}
+
+      <Button type="submit" disabled={isSubmitting || (!!siteKey && !turnstileToken)} className="w-full">
         {isSubmitting ? "A enviar…" : "Pedir simulação gratuita"}
       </Button>
     </form>

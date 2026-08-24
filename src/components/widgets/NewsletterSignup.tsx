@@ -1,12 +1,16 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useCallback, type FormEvent } from "react";
 import { Mail, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { TurnstileWidget } from "@/components/widgets/TurnstileWidget";
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const handleTurnstileSuccess = useCallback((token: string) => setTurnstileToken(token), []);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -15,7 +19,7 @@ export function NewsletterSignup() {
       const response = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, turnstileToken }),
       });
       if (!response.ok) throw new Error("request_failed");
       setStatus("success");
@@ -48,10 +52,13 @@ export function NewsletterSignup() {
             className="w-full rounded-xl border border-navy-200 py-2.5 pl-10 pr-4 outline-none focus:border-navy-400 focus:ring-2 focus:ring-navy-100"
           />
         </div>
-        <Button type="submit" variant="gold" disabled={status === "loading"}>
+        <Button type="submit" variant="gold" disabled={status === "loading" || (!!siteKey && !turnstileToken)}>
           {status === "loading" ? "A subscrever…" : "Subscrever"}
         </Button>
       </form>
+      {siteKey && status === "idle" && (
+        <TurnstileWidget siteKey={siteKey} onSuccess={handleTurnstileSuccess} />
+      )}
       {status === "error" && (
         <p className="mt-2 text-xs text-red-300">Ocorreu um erro. Tente novamente.</p>
       )}

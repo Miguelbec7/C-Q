@@ -4,12 +4,12 @@ import { services } from "@/lib/data/services";
 import { simulators } from "@/lib/data/simuladores";
 import { siteConfig } from "@/lib/site-config";
 
-/**
- * Chat IA — com ANTHROPIC_API_KEY definida, responde com a API da Anthropic
- * (Claude), usando o conteúdo do blog, dos serviços e dos simuladores como
- * contexto. Sem chave, devolve respostas estáticas de apoio (deteção de
- * tópico por palavras-chave) para que o widget funcione desde já.
- */
+const MAX_MESSAGES = 10;
+const MAX_MESSAGE_LENGTH = 1000;
+const MAX_BODY_BYTES = 20_000;
+
+// System prompt cached at module level — rebuilt only on cold start
+let cachedSystemPrompt: string | null = null;
 
 interface Topic {
   keywords: string[];
@@ -153,7 +153,8 @@ function findTopicReply(message: string): string | null {
 }
 
 function buildSystemPrompt(): string {
-  return `Você é o assistente virtual da ${siteConfig.name}, uma empresa de intermediação de crédito registada no Banco de Portugal (${siteConfig.banking.bdpRegistration}). Responda em português de Portugal, de forma clara, breve e simpática, baseando-se apenas no conteúdo abaixo (artigos do blog, serviços e simuladores do site).
+  if (cachedSystemPrompt) return cachedSystemPrompt;
+  cachedSystemPrompt = `Você é o assistente virtual da ${siteConfig.name}, uma empresa de intermediação de crédito registada no Banco de Portugal (${siteConfig.banking.bdpRegistration}). Responda em português de Portugal, de forma clara, breve e simpática, baseando-se apenas no conteúdo abaixo (artigos do blog, serviços e simuladores do site).
 
 Regras:
 - Não invente valores de taxas, impostos ou condições de crédito que não estejam no conteúdo fornecido — remeta para o simulador relevante para um cálculo exato.
@@ -164,6 +165,7 @@ Regras:
 
 Conteúdo do site:
 ${buildChatKnowledgeBase()}`;
+  return cachedSystemPrompt;
 }
 
 interface AnthropicMessage {
@@ -200,9 +202,24 @@ async function callAnthropic(apiKey: string, messages: AnthropicMessage[]): Prom
 }
 
 export async function POST(request: Request) {
+  const contentLength = Number(request.headers.get("content-length") ?? 0);
+  if (contentLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "payload_too_large" }, { status: 413 });
+  }
+
   const body = await request.json().catch(() => ({ messages: [] }));
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  const messages: AnthropicMessage[] = Array.isArray(body.messages) ? body.messages : [];
+
+  const rawMessages: AnthropicMessage[] = Array.isArray(body.messages) ? body.messages : [];
+  const messages: AnthropicMessage[] = rawMessages
+    .slice(-MAX_MESSAGES)
+    .filter(
+      (m) =>
+        (m.role === "user" || m.role === "assistant") &&
+        typeof m.content === "string" &&
+        m.content.length <= MAX_MESSAGE_LENGTH
+    );
+
   const lastUserMessage: string = messages.at(-1)?.content ?? "";
 
   if (!apiKey) {
