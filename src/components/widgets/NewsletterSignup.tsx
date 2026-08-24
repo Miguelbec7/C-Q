@@ -9,7 +9,7 @@ export function NewsletterSignup() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "0x4AAAAAAEZ_7GNEAngeqPUs";
   const handleTurnstileSuccess = useCallback((token: string) => setTurnstileToken(token), []);
 
   async function handleSubmit(event: FormEvent) {

@@ -40,7 +40,7 @@ export function LeadForm({
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "0x4AAAAAAEZ_7GNEAngeqPUs";
 
   const handleTurnstileSuccess = useCallback((token: string) => {
     setTurnstileToken(token);
