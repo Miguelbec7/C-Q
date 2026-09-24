@@ -6,9 +6,12 @@ const schema = z.object({
   turnstileToken: z.string().optional(),
 });
 
+const MAX_BODY_BYTES = 2_000;
+
 async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true;
+  if (!secret) return false; // fail closed — sem segredo configurado, nenhum pedido passa
+  if (!token) return false;
   const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -19,6 +22,11 @@ async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
 }
 
 export async function POST(request: Request) {
+  const contentLength = Number(request.headers.get("content-length") ?? 0);
+  if (contentLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "payload_too_large" }, { status: 413 });
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = schema.safeParse(body);
 
