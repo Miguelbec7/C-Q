@@ -37,16 +37,16 @@ export function CreditoHabitacaoSimulator() {
   const [stressApplied, setStressApplied] = useState(false);
   const [rateByType, setRateByType] = useState(DEFAULT_RATE_BY_TYPE);
   const [indexTerm, setIndexTerm] = useState("3");
-  const [euriborInfo, setEuriborInfo] = useState<{ euribor: number; spread: number; date: string | null; maturity: number } | null>(null);
+  const [euriborInfo, setEuriborInfo] = useState<{ euribor: number; spread: number; date: string | null; maturity: number; source: string } | null>(null);
   const rateWasDefault = useRef(true);
 
   useEffect(() => {
     fetch(`/api/euribor?maturity=${indexTerm}`)
       .then((res) => res.json())
-      .then((data: { euribor: number; spread: number; date: string | null; maturity: number }) => {
+      .then((data: { euribor: number; spread: number; date: string | null; maturity: number; source: string }) => {
         if (typeof data.euribor !== "number") return;
         const variableRate = (data.euribor + data.spread).toFixed(2);
-        setEuriborInfo({ euribor: data.euribor, spread: data.spread, date: data.date, maturity: data.maturity });
+        setEuriborInfo({ euribor: data.euribor, spread: data.spread, date: data.date, maturity: data.maturity, source: data.source });
         setRateByType((prev) => ({ ...prev, mista: variableRate, variavel: variableRate }));
         if (rateWasDefault.current && (rateType === "mista" || rateType === "variavel")) {
           setRate(variableRate);
@@ -151,9 +151,10 @@ export function CreditoHabitacaoSimulator() {
               suffix="%"
             />
             {rateType !== "fixa" && euriborInfo && (
-              <p className="mt-1.5 text-xs text-navy-400">
-                Euribor {euriborInfo.maturity}M {euriborInfo.date ? `(${euriborInfo.date.split("-").reverse().join("/")})` : ""}{" "}
+              <p className={`mt-1.5 text-xs ${euriborInfo.source === "fallback" ? "text-amber-600" : "text-navy-400"}`}>
+                Euribor {euriborInfo.maturity}M{euriborInfo.date ? ` (${euriborInfo.date.split("-").reverse().join("/")})` : ""}{" "}
                 {formatPercent(euriborInfo.euribor, 2)} + spread médio {formatPercent(euriborInfo.spread, 2)}
+                {euriborInfo.source === "fallback" && " — valor de referência, confirmar manualmente"}
               </p>
             )}
           </div>

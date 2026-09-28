@@ -6,21 +6,24 @@ const SPREAD = 0.75;
 type Maturity = 3 | 6 | 12;
 
 // Séries e páginas de referência do euribor-rates.eu por prazo de indexação.
+// fallback: última cotação confirmada manualmente — atualizar sempre que o fetch em
+// tempo real falhar durante um período prolongado (ver logs do Worker para diagnóstico).
+// Última atualização manual: 25/09/2026.
 const MATURITY_CONFIG: Record<Maturity, { series: string; referer: string; fallback: number }> = {
   3: {
     series: "2",
     referer: "https://www.euribor-rates.eu/en/current-euribor-rates/2/euribor-rate-3-months/",
-    fallback: 2.55,
+    fallback: 2.607,
   },
   6: {
     series: "3",
     referer: "https://www.euribor-rates.eu/en/current-euribor-rates/3/euribor-rate-6-months/",
-    fallback: 2.5,
+    fallback: 3.07,
   },
   12: {
     series: "4",
     referer: "https://www.euribor-rates.eu/en/current-euribor-rates/4/euribor-rate-12-months/",
-    fallback: 2.45,
+    fallback: 3.379,
   },
 };
 
@@ -44,14 +47,26 @@ async function fetchEuribor(maturity: Maturity): Promise<EuriborReading | null> 
   const res = await fetch(url.toString(), {
     headers: {
       Referer: config.referer,
-      "User-Agent": "Mozilla/5.0 (compatible; CQFinancasSimulador/1.0; +https://cqfinancassolucoes.com)",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      Accept: "application/json, text/plain, */*",
     },
   });
-  if (!res.ok) return null;
 
-  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    const bodySnippet = await res.text().catch(() => "");
+    console.error(`Euribor ${maturity}M: fetch falhou com status ${res.status}. Corpo: ${bodySnippet.slice(0, 300)}`);
+    return null;
+  }
+
+  const data = await res.json().catch((err) => {
+    console.error(`Euribor ${maturity}M: resposta não é JSON válido`, err);
+    return null;
+  });
   const points: [number, number][] | undefined = data?.[0]?.Data;
-  if (!points || points.length === 0) return null;
+  if (!points || points.length === 0) {
+    console.error(`Euribor ${maturity}M: estrutura de dados inesperada`, JSON.stringify(data).slice(0, 300));
+    return null;
+  }
 
   const [timestamp, value] = points[points.length - 1];
   if (typeof value !== "number") return null;
