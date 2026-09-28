@@ -1,30 +1,49 @@
 import { NextResponse } from "next/server";
 
-// Spread médio aplicado pela C&Q sobre a Euribor 3M nos cenários de taxa variável/mista.
+// Spread médio aplicado pela C&Q sobre a Euribor nos cenários de taxa variável/mista.
 const SPREAD = 0.75;
 
-// Valor de referência usado apenas se a fonte externa falhar (atualizar manualmente de vez em quando).
-const FALLBACK_EURIBOR_3M = 2.55;
+type Maturity = 3 | 6 | 12;
+
+// Séries e páginas de referência do euribor-rates.eu por prazo de indexação.
+const MATURITY_CONFIG: Record<Maturity, { series: string; referer: string; fallback: number }> = {
+  3: {
+    series: "2",
+    referer: "https://www.euribor-rates.eu/en/current-euribor-rates/2/euribor-rate-3-months/",
+    fallback: 2.55,
+  },
+  6: {
+    series: "3",
+    referer: "https://www.euribor-rates.eu/en/current-euribor-rates/3/euribor-rate-6-months/",
+    fallback: 2.5,
+  },
+  12: {
+    series: "4",
+    referer: "https://www.euribor-rates.eu/en/current-euribor-rates/4/euribor-rate-12-months/",
+    fallback: 2.45,
+  },
+};
 
 interface EuriborReading {
   value: number;
   date: string;
 }
 
-let cache: { reading: EuriborReading; fetchedAt: number } | null = null;
+const cache = new Map<Maturity, { reading: EuriborReading; fetchedAt: number }>();
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
-async function fetchEuribor3M(): Promise<EuriborReading | null> {
+async function fetchEuribor(maturity: Maturity): Promise<EuriborReading | null> {
+  const config = MATURITY_CONFIG[maturity];
   const now = Date.now();
   const start = now - 10 * 24 * 60 * 60 * 1000;
   const url = new URL("https://www.euribor-rates.eu/umbraco/api/euriborpageapi/highchartsdata");
-  url.searchParams.set("series[0]", "2"); // 2 = Euribor 3 meses
+  url.searchParams.set("series[0]", config.series);
   url.searchParams.set("minticks", String(start));
   url.searchParams.set("maxticks", String(now));
 
   const res = await fetch(url.toString(), {
     headers: {
-      Referer: "https://www.euribor-rates.eu/en/current-euribor-rates/2/euribor-rate-3-months/",
+      Referer: config.referer,
       "User-Agent": "Mozilla/5.0 (compatible; CQFinancasSimulador/1.0; +https://cqfinancassolucoes.com)",
     },
   });
@@ -40,20 +59,36 @@ async function fetchEuribor3M(): Promise<EuriborReading | null> {
   return { value, date: new Date(timestamp).toISOString().slice(0, 10) };
 }
 
-export async function GET() {
-  if (cache && Date.now() - cache.fetchedAt < CACHE_TTL_MS) {
-    return NextResponse.json({ euribor3m: cache.reading.value, date: cache.reading.date, spread: SPREAD, source: "cache" });
+function parseMaturity(raw: string | null): Maturity {
+  const num = Number(raw);
+  return num === 6 || num === 12 ? num : 3;
+}
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const maturity = parseMaturity(searchParams.get("maturity"));
+  const config = MATURITY_CONFIG[maturity];
+
+  const cached = cache.get(maturity);
+  if (cached && Date.now() - cached.fetchedAt < CACHE_TTL_MS) {
+    return NextResponse.json({
+      maturity,
+      euribor: cached.reading.value,
+      date: cached.reading.date,
+      spread: SPREAD,
+      source: "cache",
+    });
   }
 
   try {
-    const reading = await fetchEuribor3M();
+    const reading = await fetchEuribor(maturity);
     if (reading) {
-      cache = { reading, fetchedAt: Date.now() };
-      return NextResponse.json({ euribor3m: reading.value, date: reading.date, spread: SPREAD, source: "live" });
+      cache.set(maturity, { reading, fetchedAt: Date.now() });
+      return NextResponse.json({ maturity, euribor: reading.value, date: reading.date, spread: SPREAD, source: "live" });
     }
   } catch (error) {
-    console.error("Falha ao obter Euribor 3M", error);
+    console.error(`Falha ao obter Euribor ${maturity}M`, error);
   }
 
-  return NextResponse.json({ euribor3m: FALLBACK_EURIBOR_3M, date: null, spread: SPREAD, source: "fallback" });
+  return NextResponse.json({ maturity, euribor: config.fallback, date: null, spread: SPREAD, source: "fallback" });
 }

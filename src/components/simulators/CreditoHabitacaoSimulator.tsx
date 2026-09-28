@@ -36,16 +36,17 @@ export function CreditoHabitacaoSimulator() {
   const [guaranteeApplied, setGuaranteeApplied] = useState(false);
   const [stressApplied, setStressApplied] = useState(false);
   const [rateByType, setRateByType] = useState(DEFAULT_RATE_BY_TYPE);
-  const [euriborInfo, setEuriborInfo] = useState<{ euribor3m: number; spread: number; date: string | null } | null>(null);
+  const [indexTerm, setIndexTerm] = useState("3");
+  const [euriborInfo, setEuriborInfo] = useState<{ euribor: number; spread: number; date: string | null; maturity: number } | null>(null);
   const rateWasDefault = useRef(true);
 
   useEffect(() => {
-    fetch("/api/euribor")
+    fetch(`/api/euribor?maturity=${indexTerm}`)
       .then((res) => res.json())
-      .then((data: { euribor3m: number; spread: number; date: string | null }) => {
-        if (typeof data.euribor3m !== "number") return;
-        const variableRate = (data.euribor3m + data.spread).toFixed(2);
-        setEuriborInfo({ euribor3m: data.euribor3m, spread: data.spread, date: data.date });
+      .then((data: { euribor: number; spread: number; date: string | null; maturity: number }) => {
+        if (typeof data.euribor !== "number") return;
+        const variableRate = (data.euribor + data.spread).toFixed(2);
+        setEuriborInfo({ euribor: data.euribor, spread: data.spread, date: data.date, maturity: data.maturity });
         setRateByType((prev) => ({ ...prev, mista: variableRate, variavel: variableRate }));
         if (rateWasDefault.current && (rateType === "mista" || rateType === "variavel")) {
           setRate(variableRate);
@@ -53,7 +54,7 @@ export function CreditoHabitacaoSimulator() {
       })
       .catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [indexTerm]);
 
   function handleCalculate() {
     const income = parseFloat(netIncome.replace(",", "."));
@@ -151,11 +152,26 @@ export function CreditoHabitacaoSimulator() {
             />
             {rateType !== "fixa" && euriborInfo && (
               <p className="mt-1.5 text-xs text-navy-400">
-                Euribor 3M {euriborInfo.date ? `(${euriborInfo.date.split("-").reverse().join("/")})` : ""}{" "}
-                {formatPercent(euriborInfo.euribor3m, 2)} + spread médio {formatPercent(euriborInfo.spread, 2)}
+                Euribor {euriborInfo.maturity}M {euriborInfo.date ? `(${euriborInfo.date.split("-").reverse().join("/")})` : ""}{" "}
+                {formatPercent(euriborInfo.euribor, 2)} + spread médio {formatPercent(euriborInfo.spread, 2)}
               </p>
             )}
           </div>
+          {rateType !== "fixa" && (
+            <SelectField
+              label="Prazo de indexação (Euribor)"
+              value={indexTerm}
+              onChange={(v) => {
+                setIndexTerm(v);
+                rateWasDefault.current = true;
+              }}
+              options={[
+                { value: "3", label: "Euribor 3 meses" },
+                { value: "6", label: "Euribor 6 meses" },
+                { value: "12", label: "Euribor 12 meses" },
+              ]}
+            />
+          )}
           <SelectField
             label="Taxa de esforço a considerar"
             value={maxEffort}
