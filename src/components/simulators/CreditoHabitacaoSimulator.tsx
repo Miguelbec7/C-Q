@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NumberField, SelectField, ResultStat, HelpTooltip } from "@/components/simulators/SimulatorShell";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -14,7 +14,11 @@ import { calcularMontanteMaximo } from "@/lib/calculations/prestacao";
 import type { ImtJovemMode } from "@/lib/calculations/imt";
 import { siteConfig } from "@/lib/site-config";
 
-const RATE_BY_TYPE: Record<string, string> = { fixa: "4.10", mista: "2.85", variavel: "2.86" };
+// Estresse de taxa de juro recomendado pelo Banco de Portugal (+1,5 p.p.) para
+// avaliação de solvabilidade em crédito de taxa variável ou mista.
+const STRESS_BDP = 1.5;
+
+const DEFAULT_RATE_BY_TYPE: Record<string, string> = { fixa: "4.10", mista: "2.85", variavel: "2.86" };
 
 export function CreditoHabitacaoSimulator() {
   const [netIncome, setNetIncome] = useState("1500");
@@ -30,6 +34,26 @@ export function CreditoHabitacaoSimulator() {
   const [gpConfirm, setGpConfirm] = useState(false);
   const [result, setResult] = useState<ReturnType<typeof resolverCenarioCompra> | null>(null);
   const [guaranteeApplied, setGuaranteeApplied] = useState(false);
+  const [stressApplied, setStressApplied] = useState(false);
+  const [rateByType, setRateByType] = useState(DEFAULT_RATE_BY_TYPE);
+  const [euriborInfo, setEuriborInfo] = useState<{ euribor3m: number; spread: number; date: string | null } | null>(null);
+  const rateWasDefault = useRef(true);
+
+  useEffect(() => {
+    fetch("/api/euribor")
+      .then((res) => res.json())
+      .then((data: { euribor3m: number; spread: number; date: string | null }) => {
+        if (typeof data.euribor3m !== "number") return;
+        const variableRate = (data.euribor3m + data.spread).toFixed(2);
+        setEuriborInfo({ euribor3m: data.euribor3m, spread: data.spread, date: data.date });
+        setRateByType((prev) => ({ ...prev, mista: variableRate, variavel: variableRate }));
+        if (rateWasDefault.current && (rateType === "mista" || rateType === "variavel")) {
+          setRate(variableRate);
+        }
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleCalculate() {
     const income = parseFloat(netIncome.replace(",", "."));
@@ -49,7 +73,10 @@ export function CreditoHabitacaoSimulator() {
 
     const maxYears = calcularPrazoMaximo(ageNum);
     const months = maxYears * 12;
-    const maxLoan = calcularMontanteMaximo(maxHousingEffort, rateNum, months);
+    // Capacidade de financiamento calculada com o teste de esforço do BdP (+1,5 p.p.)
+    // sempre que a taxa tenha componente variável — a prestação real (abaixo) usa a taxa contratada.
+    const stressRate = rateType === "fixa" ? rateNum : rateNum + STRESS_BDP;
+    const maxLoan = calcularMontanteMaximo(maxHousingEffort, stressRate, months);
 
     const baseLTV = purpose === "hpp" ? 0.9 : 0.8;
     const baseScenario = resolverCenarioCompra(maxLoan, cap, baseLTV, rateNum, months, income, other, imtMode);
@@ -64,6 +91,7 @@ export function CreditoHabitacaoSimulator() {
       : baseScenario;
 
     setResult(finalScenario);
+    setStressApplied(rateType !== "fixa");
   }
 
   return (
@@ -102,7 +130,8 @@ export function CreditoHabitacaoSimulator() {
             value={rateType}
             onChange={(v) => {
               setRateType(v);
-              setRate(RATE_BY_TYPE[v]);
+              setRate(rateByType[v]);
+              rateWasDefault.current = true;
             }}
             options={[
               { value: "fixa", label: "Fixa" },
@@ -110,7 +139,23 @@ export function CreditoHabitacaoSimulator() {
               { value: "variavel", label: "Variável" },
             ]}
           />
-          <NumberField label="TAN anual estimada" value={rate} onChange={setRate} suffix="%" />
+          <div>
+            <NumberField
+              label="TAN anual estimada"
+              value={rate}
+              onChange={(v) => {
+                setRate(v);
+                rateWasDefault.current = false;
+              }}
+              suffix="%"
+            />
+            {rateType !== "fixa" && euriborInfo && (
+              <p className="mt-1.5 text-xs text-navy-400">
+                Euribor 3M {euriborInfo.date ? `(${euriborInfo.date.split("-").reverse().join("/")})` : ""}{" "}
+                {formatPercent(euriborInfo.euribor3m, 2)} + spread médio {formatPercent(euriborInfo.spread, 2)}
+              </p>
+            )}
+          </div>
           <SelectField
             label="Taxa de esforço a considerar"
             value={maxEffort}
@@ -191,6 +236,13 @@ export function CreditoHabitacaoSimulator() {
             {guaranteeApplied && (
               <p className="mt-4 rounded-lg bg-gold-400/15 p-3 text-xs text-gold-300">
                 Cenário calculado com Garantia Pública Jovem aplicada (financiamento até 15% adicional do valor do imóvel).
+              </p>
+            )}
+
+            {stressApplied && (
+              <p className="mt-3 rounded-lg bg-white/5 p-3 text-xs text-navy-300">
+                Capacidade de financiamento calculada com o teste de esforço do Banco de Portugal (+{formatPercent(STRESS_BDP, 1)}
+                {" "}na taxa), tal como as instituições financeiras avaliam pedidos de taxa variável ou mista.
               </p>
             )}
 
