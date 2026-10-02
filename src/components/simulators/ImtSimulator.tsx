@@ -8,14 +8,18 @@ import { formatCurrency } from "@/lib/utils";
 import {
   calcularIMTContinentalHPP,
   calcularIMTContinentalSecundaria,
+  calcularIMTRegiaoAutonomaHPP,
+  calcularIMTRegiaoAutonomaSecundaria,
   aplicarImtJovem,
   calcularBeneficioSeloCompra,
   type ImtJovemMode,
+  type ImtRegion,
 } from "@/lib/calculations/imt";
 import { calcularImpostoSeloCompra, calcularImpostoSeloCredito } from "@/lib/calculations/imposto-selo";
 
 export function ImtSimulator() {
   const [price, setPrice] = useState("250000");
+  const [region, setRegion] = useState<ImtRegion>("continental");
   const [purpose, setPurpose] = useState("hpp");
   const [numCompradores, setNumCompradores] = useState("1");
   const [imtMode, setImtMode] = useState<ImtJovemMode>("nenhum");
@@ -34,12 +38,19 @@ export function ImtSimulator() {
     const p = parseFloat(price.replace(",", "."));
     if (isNaN(p) || p <= 0) return;
 
-    const calcularImt = purpose === "hpp" ? calcularIMTContinentalHPP : calcularIMTContinentalSecundaria;
+    const calcularImt =
+      region === "autonoma"
+        ? purpose === "hpp"
+          ? calcularIMTRegiaoAutonomaHPP
+          : calcularIMTRegiaoAutonomaSecundaria
+        : purpose === "hpp"
+          ? calcularIMTContinentalHPP
+          : calcularIMTContinentalSecundaria;
     const imtBase = calcularImt(p);
-    const { imtFinal } = aplicarImtJovem(p, imtBase, imtMode, calcularImt);
+    const { imtFinal } = aplicarImtJovem(p, imtBase, imtMode, calcularImt, region);
 
     const seloBase = calcularImpostoSeloCompra(p);
-    const seloBeneficio = calcularBeneficioSeloCompra(p, imtMode);
+    const seloBeneficio = calcularBeneficioSeloCompra(p, imtMode, region);
     const seloFinal = Math.max(0, seloBase - seloBeneficio);
 
     const l = parseFloat(loan.replace(",", ".")) || 0;
@@ -58,6 +69,15 @@ export function ImtSimulator() {
       <Card className="lg:col-span-3">
         <h2 className="text-lg font-semibold text-navy-950">Dados do imóvel</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <SelectField
+            label="Local do imóvel"
+            value={region}
+            onChange={(v) => setRegion(v as ImtRegion)}
+            options={[
+              { value: "continental", label: "Portugal Continental" },
+              { value: "autonoma", label: "Regiões Autónomas (Açores/Madeira)" },
+            ]}
+          />
           <NumberField label="Valor de compra do imóvel" value={price} onChange={setPrice} suffix="€" />
           <SelectField
             label="Finalidade"
@@ -86,7 +106,10 @@ export function ImtSimulator() {
             onChange={(v) => setImtMode(v as ImtJovemMode)}
             options={[
               { value: "nenhum", label: "Sem IMT Jovem" },
-              { value: "total", label: "Isenção total (até 330 539€)" },
+              {
+                value: "total",
+                label: `Isenção total (até ${region === "autonoma" ? "413 174€" : "330 539€"})`,
+              },
               ...(numCompradores === "2"
                 ? [{ value: "parcial", label: "Benefício parcial (apenas 1 comprador elegível)" }]
                 : []),
@@ -103,11 +126,19 @@ export function ImtSimulator() {
                   <li>Ser proprietário de uma parcela de uma habitação;</li>
                   <li>Ter tido uma habitação, ou uma parcela de uma habitação, nos últimos três anos.</li>
                 </ul>
-                <p className="mt-2">
-                  Para isenção total, o imóvel não pode custar mais do que 330 539€. Imóveis entre 330 539€ e
-                  660 982€ têm isenção parcial de IMT e Imposto do Selo. Acima de 660 982€ paga-se IMT e Imposto
-                  do Selo na totalidade.
-                </p>
+                {region === "autonoma" ? (
+                  <p className="mt-2">
+                    Nas Regiões Autónomas, para isenção total, o imóvel não pode custar mais do que 413 174€.
+                    Imóveis entre 413 174€ e 826 228€ têm isenção parcial de IMT e Imposto do Selo. Acima de
+                    826 228€ paga-se IMT e Imposto do Selo na totalidade.
+                  </p>
+                ) : (
+                  <p className="mt-2">
+                    Para isenção total, o imóvel não pode custar mais do que 330 539€. Imóveis entre 330 539€ e
+                    660 982€ têm isenção parcial de IMT e Imposto do Selo. Acima de 660 982€ paga-se IMT e Imposto
+                    do Selo na totalidade.
+                  </p>
+                )}
               </>
             }
           />
