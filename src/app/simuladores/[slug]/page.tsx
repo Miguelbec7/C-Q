@@ -12,6 +12,7 @@ import { PoupancaTransferenciaSimulator } from "@/components/simulators/Poupanca
 import { ImiSimulator } from "@/components/simulators/ImiSimulator";
 import { MaisValiasSimulator } from "@/components/simulators/MaisValiasSimulator";
 import { SalarioLiquidoSimulator } from "@/components/simulators/SalarioLiquidoSimulator";
+import { CustosTotaisSimulator } from "@/components/simulators/CustosTotaisSimulator";
 import { buildMetadata } from "@/lib/seo";
 
 const SIMULATOR_COMPONENTS: Record<string, React.ComponentType> = {
@@ -25,6 +26,7 @@ const SIMULATOR_COMPONENTS: Record<string, React.ComponentType> = {
   imi: ImiSimulator,
   "mais-valias-imoveis": MaisValiasSimulator,
   "salario-liquido": SalarioLiquidoSimulator,
+  "custos-totais-compra-casa": CustosTotaisSimulator,
 };
 
 export function generateStaticParams() {

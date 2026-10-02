@@ -10,6 +10,7 @@ import {
   Building2,
   TrendingUp,
   Banknote,
+  Receipt,
 } from "lucide-react";
 
 export interface SimulatorFaq {
@@ -75,6 +76,14 @@ export const simulators: SimulatorMeta[] = [
     shortTitle: "Imposto do Selo",
     description: "Calcule o imposto do selo sobre a aquisição e sobre o crédito habitação.",
     metaDescription: "Calcule o imposto do selo sobre a compra de imóvel e sobre o crédito habitação com o simulador gratuito da C&Q Finanças & Soluções.",
+  },
+  {
+    slug: "custos-totais-compra-casa",
+    icon: Receipt,
+    title: "Custos Totais da Compra de Casa",
+    shortTitle: "Custos Totais",
+    description: "Some o IMT, o Imposto do Selo e os custos bancários para saber quanto vai precisar na escritura.",
+    metaDescription: "Simulador de custos totais na compra de casa: IMT, Imposto do Selo e custos bancários num só lugar. Gratuito com a C&Q Finanças & Soluções.",
   },
   {
     slug: "poupanca-transferencia",
