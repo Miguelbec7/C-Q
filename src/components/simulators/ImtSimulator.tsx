@@ -12,18 +12,22 @@ import {
   calcularBeneficioSeloCompra,
   type ImtJovemMode,
 } from "@/lib/calculations/imt";
-import { calcularImpostoSeloCompra } from "@/lib/calculations/imposto-selo";
+import { calcularImpostoSeloCompra, calcularImpostoSeloCredito } from "@/lib/calculations/imposto-selo";
 
 export function ImtSimulator() {
   const [price, setPrice] = useState("250000");
   const [purpose, setPurpose] = useState("hpp");
   const [numCompradores, setNumCompradores] = useState("1");
   const [imtMode, setImtMode] = useState<ImtJovemMode>("nenhum");
+  const [loan, setLoan] = useState("200000");
+  const [months, setMonths] = useState("360");
   const [result, setResult] = useState<{
     imtBase: number;
     imtFinal: number;
     seloBase: number;
     seloFinal: number;
+    seloCredito: number;
+    seloCreditoRate: number;
   } | null>(null);
 
   function handleCalculate() {
@@ -38,7 +42,12 @@ export function ImtSimulator() {
     const seloBeneficio = calcularBeneficioSeloCompra(p, imtMode);
     const seloFinal = Math.max(0, seloBase - seloBeneficio);
 
-    setResult({ imtBase, imtFinal, seloBase, seloFinal });
+    const l = parseFloat(loan.replace(",", ".")) || 0;
+    const m = parseInt(months, 10) || 0;
+    const seloCredito = calcularImpostoSeloCredito(l, m);
+    const seloCreditoRate = m >= 60 ? 0.006 : 0.005;
+
+    setResult({ imtBase, imtFinal, seloBase, seloFinal, seloCredito, seloCreditoRate });
   }
 
   const totalFinal = result ? result.imtFinal + result.seloFinal : 0;
@@ -102,6 +111,8 @@ export function ImtSimulator() {
               </>
             }
           />
+          <NumberField label="Montante do financiamento" value={loan} onChange={setLoan} suffix="€" />
+          <NumberField label="Prazo do crédito" value={months} onChange={setMonths} suffix="meses" />
         </div>
         <Button className="mt-6 w-full sm:w-auto" onClick={handleCalculate}>
           Calcular IMT e Imposto do Selo
@@ -132,6 +143,19 @@ export function ImtSimulator() {
         ) : (
           <Card className="flex h-full min-h-[200px] items-center justify-center text-center text-sm text-navy-400">
             Preencha os dados para calcular o IMT e o Imposto do Selo estimados.
+          </Card>
+        )}
+
+        {result && result.seloCredito > 0 && (
+          <Card className="mt-4 border-gold-200 bg-gold-50">
+            <p className="text-sm text-navy-500">
+              Imposto do Selo sobre o financiamento ({(result.seloCreditoRate * 100).toFixed(1).replace(".", ",")}%)
+            </p>
+            <p className="mt-1 text-2xl font-bold text-navy-950">{formatCurrency(result.seloCredito)}</p>
+            <p className="mt-2 text-xs text-navy-400">
+              Incide sobre o montante do crédito, à parte do imposto do selo sobre a compra — soma-se aos custos
+              pagos na escritura.
+            </p>
           </Card>
         )}
       </div>
