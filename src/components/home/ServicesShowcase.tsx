@@ -21,9 +21,9 @@ export function ServicesShowcase() {
               <Link
                 key={service.slug}
                 href={`/servicos/${service.slug}`}
-                className="group flex flex-col rounded-2xl border border-navy-100 bg-white p-6 shadow-premium-sm transition-all hover:-translate-y-1 hover:shadow-premium"
+                className="group flex flex-col rounded-2xl border border-navy-100 bg-white p-6 shadow-premium-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold-200 hover:shadow-premium"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy-50 text-navy-700 transition-colors duration-300 group-hover:bg-gold-400 group-hover:text-navy-950">
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-navy-950">{service.title}</h3>

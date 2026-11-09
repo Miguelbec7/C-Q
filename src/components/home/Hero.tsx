@@ -10,7 +10,7 @@ export function Hero() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(200,154,63,0.16),transparent_45%),radial-gradient(circle_at_80%_0%,rgba(58,96,134,0.35),transparent_45%)]" />
 
       <Container className="relative grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-2 lg:py-32">
-        <div>
+        <div className="animate-fade-in-up">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-navy-200">
             <ShieldCheck className="h-3.5 w-3.5 text-gold-400" />
             Intermediário de Crédito registado no Banco de Portugal
@@ -45,7 +45,9 @@ export function Hero() {
           </div>
         </div>
 
-        <HeroVisual />
+        <div className="animate-fade-in-up [animation-delay:150ms]">
+          <HeroVisual />
+        </div>
       </Container>
     </section>
   );

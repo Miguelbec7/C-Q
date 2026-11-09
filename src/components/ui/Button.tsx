@@ -6,13 +6,13 @@ type ButtonSize = "sm" | "md" | "lg";
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-navy-900 text-white hover:bg-navy-800 focus-visible:outline-navy-900 shadow-premium-sm",
+    "bg-navy-900 text-white hover:bg-navy-800 hover:shadow-premium focus-visible:outline-navy-900 shadow-premium-sm",
   gold:
-    "bg-gold-400 text-navy-950 hover:bg-gold-300 focus-visible:outline-gold-500 shadow-premium-sm",
+    "bg-gold-400 text-navy-950 hover:bg-gold-300 hover:shadow-premium focus-visible:outline-gold-500 shadow-premium-sm",
   outline:
     "border border-navy-200 text-navy-900 hover:border-navy-400 hover:bg-navy-50",
   ghost: "text-navy-900 hover:bg-navy-50",
-  whatsapp: "bg-[#25D366] text-white hover:bg-[#1ebc59] shadow-premium-sm",
+  whatsapp: "bg-[#25D366] text-white hover:bg-[#1ebc59] hover:shadow-premium shadow-premium-sm",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -43,7 +43,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const classes = cn(
-    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap",
+    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:pointer-events-none disabled:hover:translate-y-0 whitespace-nowrap",
     variantClasses[variant],
     sizeClasses[size],
     className

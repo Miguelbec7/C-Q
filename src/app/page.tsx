@@ -7,6 +7,7 @@ import { Testimonials } from "@/components/home/Testimonials";
 import { FaqHome } from "@/components/home/FaqHome";
 import { ContactSection } from "@/components/home/ContactSection";
 import { FinalCta } from "@/components/home/FinalCta";
+import { Reveal } from "@/components/ui/Reveal";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -20,14 +21,28 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <ServicesShowcase />
-      <HowItWorks />
-      <WhyChooseUs />
+      <Reveal>
+        <ServicesShowcase />
+      </Reveal>
+      <Reveal>
+        <HowItWorks />
+      </Reveal>
+      <Reveal>
+        <WhyChooseUs />
+      </Reveal>
       <Partners />
-      <Testimonials />
-      <FaqHome />
-      <ContactSection />
-      <FinalCta />
+      <Reveal>
+        <Testimonials />
+      </Reveal>
+      <Reveal>
+        <FaqHome />
+      </Reveal>
+      <Reveal>
+        <ContactSection />
+      </Reveal>
+      <Reveal>
+        <FinalCta />
+      </Reveal>
     </>
   );
 }

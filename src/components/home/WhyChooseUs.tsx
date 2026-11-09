@@ -43,8 +43,11 @@ export function WhyChooseUs() {
           {reasons.map((reason) => {
             const Icon = reason.icon;
             return (
-              <div key={reason.title} className="rounded-2xl border border-navy-100 p-6">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-50 text-gold-600">
+              <div
+                key={reason.title}
+                className="group rounded-2xl border border-navy-100 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-gold-200 hover:shadow-premium"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-50 text-gold-600 transition-colors group-hover:bg-gold-400 group-hover:text-navy-950">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 font-semibold text-navy-950">{reason.title}</h3>

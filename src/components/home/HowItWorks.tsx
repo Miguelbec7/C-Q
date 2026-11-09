@@ -33,12 +33,16 @@ export function HowItWorks() {
           description="Em três passos, encontra a solução de crédito certa para si — com acompanhamento humano em cada etapa."
         />
 
-        <div className="mt-14 grid gap-8 sm:grid-cols-3">
+        <div className="relative mt-14 grid gap-8 sm:grid-cols-3">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-0 right-0 top-8 hidden h-px bg-[repeating-linear-gradient(to_right,var(--color-navy-200)_0,var(--color-navy-200)_8px,transparent_8px,transparent_16px)] sm:block"
+          />
           {steps.map((step) => {
             const Icon = step.icon;
             return (
-              <div key={step.title} className="relative text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-navy-900 text-gold-400">
+              <div key={step.title} className="group relative text-center">
+                <div className="relative mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-navy-900 text-gold-400 shadow-premium-sm transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-premium">
                   <Icon className="h-7 w-7" />
                 </div>
                 <h3 className="mt-5 text-lg font-semibold text-navy-950">{step.title}</h3>
