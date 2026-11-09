@@ -38,7 +38,7 @@ export function Header() {
             <span className="whitespace-nowrap font-display text-[13px] font-bold text-navy-950 sm:text-lg">
               C&amp;Q Finanças <span className="hidden sm:inline">&amp; Soluções</span>
             </span>
-            <span className="whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.14em] text-gold-600">
+            <span className="whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.14em] text-gold-700">
               Intermediários de Crédito
             </span>
           </span>

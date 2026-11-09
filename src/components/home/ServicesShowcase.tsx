@@ -28,7 +28,7 @@ export function ServicesShowcase() {
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-navy-950">{service.title}</h3>
                 <p className="mt-2 flex-1 text-sm text-navy-500">{service.summary}</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-600">
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-700">
                   Saber mais
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </span>
@@ -40,7 +40,7 @@ export function ServicesShowcase() {
         <div className="mt-10 text-center">
           <Link
             href="/servicos"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-navy-900 hover:text-gold-600"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-navy-900 hover:text-gold-700"
           >
             Ver todos os serviços
             <ArrowRight className="h-4 w-4" />
