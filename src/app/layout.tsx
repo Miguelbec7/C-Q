@@ -25,14 +25,6 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.shortName}`,
   },
   description: siteConfig.description,
-  keywords: [
-    "crédito habitação",
-    "intermediário de crédito",
-    "transferência de crédito",
-    "crédito pessoal",
-    "simulação de crédito",
-    "Banco de Portugal",
-  ],
   verification: siteConfig.integrations.googleSiteVerification
     ? { google: siteConfig.integrations.googleSiteVerification }
     : undefined,

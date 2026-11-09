@@ -11,9 +11,9 @@ import { Reveal } from "@/components/ui/Reveal";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Intermediário de Crédito Habitação e Crédito Pessoal",
+  title: "Intermediário de Crédito em Elvas e no Alentejo",
   description:
-    "A C&Q Finanças & Soluções negoceia com várias instituições financeiras para encontrar as melhores condições de crédito habitação e crédito pessoal. Simulação gratuita.",
+    "Intermediário de crédito registado no Banco de Portugal, em Elvas, a atuar em todo o Alentejo. Negoceiamos com várias instituições financeiras as melhores condições de crédito habitação e crédito pessoal. Simulação gratuita.",
   path: "/",
 });
 

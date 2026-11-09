@@ -21,8 +21,9 @@ export function Hero() {
           </h1>
 
           <p className="mt-5 max-w-lg text-balance text-lg text-navy-300">
-            A C&amp;Q Finanças &amp; Soluções negoceia com várias instituições financeiras para encontrar as melhores
-            condições de crédito habitação e crédito pessoal — com acompanhamento próximo do início ao fim.
+            A C&amp;Q Finanças &amp; Soluções, em Elvas, negoceia com várias instituições financeiras para encontrar
+            as melhores condições de crédito habitação e crédito pessoal em todo o Alentejo — com acompanhamento
+            próximo do início ao fim.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
